@@ -122,7 +122,9 @@
     "." '(find-file :wk "Find file")
     "TAB" '(comment-line :wk "Comment lines")
     "q" '(flymake-show-buffer-diagnostics :wk "Flymake buffer diagnostic")
-    "c" '(eat :wk "Eat terminal")
+	; the "c" is needed for "SPC c f" (CtrlSF-like search)
+	; eat can be opened with "SPC g t" (see the binding below)
+    ; "c" '(eat :wk "Eat terminal")
     "p" '(projectile-command-map :wk "Projectile")
     "s p" '(projectile-discover-projects-in-search-path :wk "Search for projects"))
 
@@ -181,8 +183,17 @@
 
   (start/leader-keys
     ; "c" '(:ignore :wk "Parent c for c f")
-    ; "c f" '(deadgrep :wk "Search with deadgrep")
+    "c f" '(deadgrep :wk "Search with deadgrep")
     "t n" '(tab-new :wk "New tab"))
+
+  (start/leader-keys
+    "g" '(:ignore g :wk "Global commands")
+	;; gt is to switch tabs, but I have this binded to left/right arrows.
+    "g t" '(eat :wk "Eat terminal"))
+
+  ;; gc to comment/uncomment lines
+  (define-key evil-normal-state-map (kbd "g c") 'comment-line)
+  (define-key evil-visual-state-map (kbd "g c") 'comment-line)
 
   ;; Vinegar-style: "-" opens dired in current file's directory
   (define-key evil-normal-state-map (kbd "-") 'dired-jump)
@@ -220,14 +231,10 @@
   ;; M-x toggle-debug-on-error
 
   ;; Some problems with evil and my setup:
-  ;; - C-R commands do not work (for example, C-R C-W in command mode should insert word under cursor)
-  ;;   - solved before with https://github.com/tarao/evil-plugins
+  ;; - vim surround bingings?
+  ;; - which text objects are available?
   ;; - System C-SPC conflict with emacs C-SPC (like C-SPC to start selection and
   ;;   C-x C-SPC to go back to previous mark)
-  ;; - vinegar behavior (- opens dired in the same window)
-  ;; - vim surround bingings?
-  ;; - comment/uncomment with gc?
-  ;; - which text objects are available?
   ;; - jumplist does not work as well as in Vim (also plain Emacs does not have a jumplist)
   ;;   - check https://github.com/gilbertw1/better-jumper
   ;;   - also: https://github.com/ganmacs/jumplist/tree/master
@@ -236,10 +243,27 @@
   ;; - Some useful Emacs bindings are overwritten
   ;;   - For example, I use C-hjkl to move between windows, but C-j executes Lisp
   ;; - LSP does not work in python code
-  ;; - How to save sessions?
   ;; - persistent undo history (to be able to undo or g; after you restart emacs)
-  ;; - C-F in command line mode / search mode to show command buffer (same as shown with q: and q/)
   ;; - autosave files on focus lost?
+
+  ;; Solved
+  ;; - C-R commands do not work (for example, C-R C-W in command mode should insert word under cursor)
+  ;;   - solved in this setup probably by evil-collection
+  ;;   - solved before with https://github.com/tarao/evil-plugins
+  ;; - vinegar behavior (- opens dired in the same window)
+  ;;   - solved with `dired-jump' mapping
+  ;;     Vinegar-style: "-" opens dired in current file's directory
+  ;;     (define-key evil-normal-state-map (kbd "-") 'dired-jump)
+  ;; - comment/uncomment with gc?
+  ;;   (define-key evil-normal-state-map (kbd "g c") 'comment-line)
+  ;;   (define-key evil-visual-state-map (kbd "g c") 'comment-line)
+  ;; - How to save sessions?
+  ;;   This seems to work:
+  ;;   - M-x desktop-write, M-x desktop-read
+  ;;   - M-x desktop-clear
+  ;;   But maybe also projectile- and project- have something similar.
+  ;; - C-F in command line mode / search mode to show command buffer (same as shown with q: and q/)
+  ;;   - works in this setup, maybe evil-collection or evil itself
 
 ;; Fix general.el leader key not working instantly in messages buffer with evil mode
 ;; (use-package emacs
@@ -541,11 +565,19 @@
   :init (ws-butler-global-mode))
 
 ;; Similar to CtrlSF
-;; SPC s g to search with deadgrep
-;; n/p to navigate results
-;; TAB to go to the result
-;; o to open result in a split
-;; M-x deadgrep-edit-mode to switch to edit mode
+;; - SPC s g to search with deadgrep
+;; In the results buffer:
+;; - n/p to navigate results
+;; - TAB to go to the result
+;; - o to open result in a split
+;;   - or M-x deadgrep-vist-result-other-window
+;; - M-x deadgrep-edit-mode to switch to edit mode
+;; The keybindings above work in emacs mode (not in evil).
+;;
+;; May consider re-enabling to get the keybingings (see above):
+;; (evil-set-initial-state 'deadgrep-mode 'emacs)
+;; or maybe adding more custom keybindings.
+;;
 (use-package deadgrep
   :custom
   (deadgrep-display-buffer-function 'switch-to-buffer)  ;; Open in same window
