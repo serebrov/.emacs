@@ -1,6 +1,8 @@
 ;; The default is 800 kilobytes. Measured in bytes.
 (setq gc-cons-threshold (* 50 1000 1000))
 
+;; The init.org does not work for me, maybe because of the way I load
+;; init.el out of the ~/.emacs config?
 (defun start/org-babel-tangle-config ()
   "Automatically tangle our init.org config file and refresh package-quickstart when we save it. Credit to Emacs From Scratch for this one!"
   (interactive)
@@ -79,14 +81,38 @@
          )
   )
 
+  (use-package evil
+    :init
+    (evil-mode)
+    :config
+    (evil-set-initial-state 'eat-mode 'insert) ;; Set initial state in eat terminal to insert mode
+    :custom
+    (evil-want-keybinding nil)    ;; Disable evil bindings in other modes (It's not consistent and not good)
+    (evil-want-C-u-scroll t)      ;; Set C-u to scroll up
+    (evil-want-C-i-jump t)        ;; Enables C-i jump (not sure why it is disabled,
+                                  ;; C-i does not seem to do anything)
+    (evil-undo-system 'undo-redo) ;; C-r to redo
+    ;; Unmap keys in 'evil-maps. If not done, org-return-follows-link will not work
+    :bind (:map evil-motion-state-map
+                ("SPC" . nil)
+                ("RET" . nil)
+                ("TAB" . nil)))
+  (use-package evil-collection
+    :after (evil wgrep)
+    :config
+    ;; Setting where to use evil-collection
+    (setq evil-collection-mode-list '(dired ibuffer magit corfu vertico consult info grep wgrep deadgrep))
+    (evil-collection-init))
+
 (use-package general
   :config
-  ;; (general-evil-setup) ;; <- evil
+  (general-evil-setup) ;; <- evil
   ;; Set up 'C-SPC' as the leader key
   (general-create-definer start/leader-keys
-    ;; :states '(normal insert visual motion emacs) ;; <- evil
+    :states '(normal insert visual motion emacs) ;; <- evil
     :keymaps 'override
-    :prefix "C-SPC"
+    ;; :prefix "C-SPC"
+    :prefix "SPC"
     :global-prefix "C-SPC") ;; Set global leader key so we can access our keybindings from any state
 
   (start/leader-keys
@@ -146,6 +172,69 @@
     "t l" '(display-line-numbers-mode :wk "Toggle line numbers"))
   )
 
+  ;; (with-current-buffer " *load*"
+  ;;  (goto-char (point-max)))
+
+  (start/leader-keys
+    "t n" '(tab-new :wk "New tab"))
+
+  ;; Vinegar-style: "-" opens dired in current file's directory
+  (define-key evil-normal-state-map (kbd "-") 'dired-jump)
+
+  (start/leader-keys
+    "q" '(evil-quit :wk "Close buffer or window"))
+
+  (start/leader-keys
+    "w" '(evil-write :wk "Write this buffer"))
+
+  ;; This will cause windmove functions to create new windows if necessary
+  (setq windmove-create-window t)
+  ;; C-h is the help key
+  (define-key evil-normal-state-map (kbd "C-h") 'windmove-left)
+  (define-key evil-normal-state-map (kbd "C-l") 'windmove-right)
+  (define-key evil-normal-state-map (kbd "C-j") 'windmove-down)
+  (define-key evil-normal-state-map (kbd "C-k") 'windmove-up)
+
+  ;; left and right switch tabs
+  (define-key evil-normal-state-map (kbd "<left>") 'tab-previous)
+  (define-key evil-normal-state-map (kbd "<right>") 'tab-next)
+
+  ;; (start/leader-keys
+  ;;   "g c" '(comment-line :wk "Comment lines"))
+  ;; (define-key evil-normal-state-map (kbd "g c") 'tab-next)
+
+  ;; There is a problem with editing, I am suddently getting into the
+  ;; "Buffer is read-only" state.
+  ;; After doing M-x read-only-mode to switch it off, I am also getting
+  ;; the "Text is read-only" state and then need to also do
+  ;; M-: (let ((inhibit-read-only t)) (set-text-properties (point-min) (point-max) ()))
+  ;; Not sure what cases it, maybe I'am triggering some keybinding accidentally.
+
+  ;; For debugging problems it may be useful to enable stacktrace:
+  ;; M-x toggle-debug-on-error
+
+  ;; Some problems with evil and my setup:
+  ;; - C-R commands do not work (for example, C-R C-W in command mode should insert word under cursor)
+  ;;   - solved before with https://github.com/tarao/evil-plugins
+  ;; - System C-SPC conflict with emacs C-SPC (like C-SPC to start selection and
+  ;;   C-x C-SPC to go back to previous mark)
+  ;; - vinegar behavior (- opens dired in the same window)
+  ;; - vim surround bingings?
+  ;; - comment/uncomment with gc?
+  ;; - which text objects are available?
+  ;; - jumplist does not work as well as in Vim (also plain Emacs does not have a jumplist)
+  ;;   - check https://github.com/gilbertw1/better-jumper
+  ;;   - also: https://github.com/ganmacs/jumplist/tree/master
+  ;;   - related: https://help-gnu-emacs.gnu.narkive.com/G4oeM1kY/vim-s-jumplist-equivalent-in-emacs
+  ;;   - also: https://www.reddit.com/r/emacs/comments/3srwz6/idelike_go_back/
+  ;; - Some useful Emacs bindings are overwritten
+  ;;   - For example, I use C-hjkl to move between windows, but C-j executes Lisp
+  ;; - LSP does not work in python code
+  ;; - How to save sessions?
+  ;; - persistent undo history (to be able to undo or g; after you restart emacs)
+  ;; - C-F in command line mode / search mode to show command buffer (same as shown with q: and q/)
+  ;; - autosave files on focus lost?
+
 ;; Fix general.el leader key not working instantly in messages buffer with evil mode
 ;; (use-package emacs
 ;;   :ghook ('after-init-hook
@@ -158,14 +247,17 @@
 
 (use-package gruvbox-theme
   :config
-  (setq gruvbox-bold-constructs t)
-  (load-theme 'gruvbox-dark-medium t)) ;; We need to add t to trust this package
+  ;; (setq gruvbox-bold-constructs t)
+  ;; (load-theme 'gruvbox-dark-medium t)) ;; We need to add t to trust this package
+  ;; (load-theme 'lueven t))
+  ;; (load-theme 'whiteboard t))
+  (load-theme 'modus-operandi t)) ;; We need to add t to trust this package
 
 (add-to-list 'default-frame-alist '(alpha-background . 90)) ;; For all new frames henceforth
 
 (set-face-attribute 'default nil
                     ;; :font "JetBrains Mono" ;; Set your favorite type of font or download JetBrains Mono
-                    :height 120
+                    :height 150
                     :weight 'medium)
 ;; This sets the default font on all graphical frames created after restarting Emacs.
 ;; Does the same thing as 'set-face-attribute default' above, but emacsclient fonts
