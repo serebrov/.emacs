@@ -86,6 +86,9 @@
     (evil-mode)
     :config
     (evil-set-initial-state 'eat-mode 'insert) ;; Set initial state in eat terminal to insert mode
+    ;; (evil-set-initial-state 'deadgrep-mode 'emacs)
+    ;; (evil-set-initial-state 'wgrep-mode 'emacs) ;; Use emacs state for wgrep editing
+    ;; (evil-set-initial-state 'grep-mode 'emacs)  ;; Use emacs state for grep buffers
     :custom
     (evil-want-keybinding nil)    ;; Disable evil bindings in other modes (It's not consistent and not good)
     (evil-want-C-u-scroll t)      ;; Set C-u to scroll up
@@ -128,7 +131,8 @@
     "s c" '((lambda () (interactive) (find-file "~/.config/emacs/init.org")) :wk "Find emacs Config")
     "s r" '(consult-recent-file :wk "Search recent files")
     "s f" '(consult-fd :wk "Search files with fd")
-    "s g" '(consult-ripgrep :wk "Search with ripgrep")
+    "s g" '(deadgrep :wk "Search with deadgrep")
+    "s G" '(consult-ripgrep :wk "Search with consult-ripgrep")
     "s l" '(consult-line :wk "Search line")
     "s i" '(consult-imenu :wk "Search Imenu buffer locations")) ;; This one is really cool
 
@@ -176,6 +180,8 @@
   ;;  (goto-char (point-max)))
 
   (start/leader-keys
+    ; "c" '(:ignore :wk "Parent c for c f")
+    ; "c f" '(deadgrep :wk "Search with deadgrep")
     "t n" '(tab-new :wk "New tab"))
 
   ;; Vinegar-style: "-" opens dired in current file's directory
@@ -493,6 +499,11 @@
   (setq consult-project-function (lambda (_) (projectile-project-root)))
    ;;;; 5. No project support
   ;; (setq consult-project-function nil)
+
+  ;; Add context lines to ripgrep results (like CtrlSF in vim)
+  ;; -C 3 shows 3 lines before and after each match
+  (setq consult-ripgrep-args
+        "rg --null --line-buffered --color=never --max-columns=1000 --path-separator / --smart-case --no-heading --with-filename --line-number -C 3")
   )
 
 (use-package helpful
@@ -528,6 +539,86 @@
 
 (use-package ws-butler
   :init (ws-butler-global-mode))
+
+;; Similar to CtrlSF
+;; SPC s g to search with deadgrep
+;; n/p to navigate results
+;; TAB to go to the result
+;; o to open result in a split
+;; M-x deadgrep-edit-mode to switch to edit mode
+(use-package deadgrep
+  :custom
+  (deadgrep-display-buffer-function 'switch-to-buffer)  ;; Open in same window
+  :config
+  ;; Add context lines (like CtrlSF)
+  (setq deadgrep-extra-arguments '("--follow" "-C3")))
+
+;; Note: setup below may still be useful, but I added deadgrep plugin above instead
+;; as it is closer to CtrlSF (nicer presentation of the search results)
+;;
+;; Embark+consult+wgrep is like CtrlSF:
+;; - embark can export consult grep results into a full buffer
+;; - wgrep can edit the results buffer directly
+;; 1. Run SPC s g (consult-ripgrep)
+;; 2. Type your search query
+;; 3. Press C-c C-e to export results to a grep buffer
+
+;; In the grep buffer:
+;; - Navigate results with n/p (next/previous)
+;; - Press RET to jump to a result
+;; - Use C-x 4 RET to open in a split
+
+;; Making edits (wgrep):
+;; 1. In the grep buffer, press C-c C-p (or e with evil) to enter wgrep
+;; edit mode
+;; 2. Edit the text directly in the buffer
+;; 3. Press C-c C-c to apply changes to all files
+;; 4. Press C-c C-k to abort
+
+;; Bonus embark bindings:
+;; - C-. (embark-act) - Context menu on any target (file, symbol, etc.)
+;; - C-; (embark-dwim) - "Do what I mean" action
+
+(use-package embark
+  :bind
+  (("C-." . embark-act)         ;; Context actions on target at point
+   ("C-;" . embark-dwim)        ;; "Do what I mean" on target
+   :map minibuffer-local-map
+   ("C-c C-e" . embark-export)  ;; Export results to a buffer
+   ("C-c C-c" . embark-collect))) ;; Collect results in a buffer
+
+(use-package embark-consult
+  :after (embark consult)
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
+
+(use-package wgrep
+  :demand t
+  :custom
+  (wgrep-auto-save-buffer t)  ;; Auto-save changed buffers
+  :config
+  ;; Make wgrep buffer editable with evil - switch to insert state when entering wgrep
+  (advice-add 'wgrep-change-to-wgrep-mode :after
+              (lambda () (evil-insert-state))))
+
+;; Note: this should be working, evil-collection mentions wgrep in the readme:
+;; > For buffers where insert-state doesn’t make sense but buffer can be edited,
+;; > (e.g. wdired or wgrep), pressing i will change into editable state.
+;; But there is either a bug or a version mismatch, the mapping below fixes it:
+
+;; "i" in grep buffer enters wgrep edit mode
+;; Bind in both normal and motion states (evil-collection may use motion state)
+;; Use a wrapper that checks we're actually in grep-mode (not deadgrep which inherits from it)
+(with-eval-after-load 'grep
+  (evil-define-key '(normal motion) 'grep-mode-map "i"
+    (lambda () (interactive)
+      (if (eq major-mode 'grep-mode)
+          (wgrep-change-to-wgrep-mode)
+        (evil-insert 1)))))
+
+;; Old version (causes issues with deadgrep which inherits from grep-mode):
+;; (with-eval-after-load 'grep
+;;   (evil-define-key '(normal motion) 'grep-mode-map "i" 'wgrep-change-to-wgrep-mode))
 
 ;; Make gc pauses faster by decreasing the threshold.
 (setq gc-cons-threshold (* 2 1000 1000))
