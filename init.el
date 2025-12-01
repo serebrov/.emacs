@@ -246,6 +246,14 @@
   ;; - persistent undo history (to be able to undo or g; after you restart emacs)
   ;; - autosave files on focus lost?
 
+  ;; deadgrep vs CtrlSF
+  ;; - CtrlSF edit mode works like dired: does not save anything right about
+  ;;   (deadgrep edits files live)
+  ;; - deadgrep edit mode needs to be explicitely enabled with M-x deadgrep-edit-mode
+  ;;   while CtrlSF naturally starts in vim normal mode and "i" starts editing
+  ;; - CtrlSF opens files by default in a split, deadgrep opens the file by default
+  ;;   (not a problem, deadgrep has the deadgrep-vist-result-other-window command)
+
   ;; Solved
   ;; - C-R commands do not work (for example, C-R C-W in command mode should insert word under cursor)
   ;;   - solved in this setup probably by evil-collection
