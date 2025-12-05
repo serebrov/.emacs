@@ -174,6 +174,7 @@
 
   (start/leader-keys
     "t" '(:ignore t :wk "Toggle")
+	;; related: M-x toggle-truncate-lines (should be similar to :set nowrap in vim)
     "t t" '(visual-line-mode :wk "Toggle truncated lines (wrap)")
     "t l" '(display-line-numbers-mode :wk "Toggle line numbers"))
   )
@@ -255,6 +256,9 @@
   ;;   (not a problem, deadgrep has the deadgrep-vist-result-other-window command)
 
   ;; Solved
+  ;; - how to run second "eat"? C-u M-x eat
+  ;; - "eat" produced some garbage output when entering and then deleting text
+  ;;   - M-x eat-compile-terminfo helped
   ;; - C-R commands do not work (for example, C-R C-W in command mode should insert word under cursor)
   ;;   - solved in this setup probably by evil-collection
   ;;   - solved before with https://github.com/tarao/evil-plugins
@@ -382,6 +386,16 @@
 (use-package eat
   :hook ('eshell-load-hook #'eat-eshell-mode))
 
+
+;; Enable pasting in term-mode with C-c C-y
+;; is there better way? shouldn't this work by default?
+(with-eval-after-load 'term
+  (define-key term-raw-map (kbd "C-c C-y") 'term-paste))
+;; Interesting: seems like after adding this, C-v also works in eat?
+;; It used to show "buffer is read-only"
+(with-eval-after-load 'eat
+  (define-key eat-mode-map (kbd "C-c C-y") 'eat-yank))
+
 ;; (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
 ;; (require 'start-multiFileExample)
@@ -461,7 +475,10 @@
 
 (use-package orderless
   :custom
-  (completion-styles '(orderless basic))
+  ;; flex is fuzzy search
+  ;; orderless style allows patterns like *
+  ;; basic is the fallback
+  (completion-styles '(flex orderless basic))
   (completion-category-overrides '((file (styles basic partial-completion)))))
 
 (use-package vertico
@@ -660,6 +677,35 @@
 ;; (with-eval-after-load 'grep
 ;;   (evil-define-key '(normal motion) 'grep-mode-map "i" 'wgrep-change-to-wgrep-mode))
 
+;; something awesome for elisp navigation
+;; https://nathantypanski.com/blog/2014-08-03-a-vim-like-emacs-config.html
+;; https://github.com/purcell/elisp-slime-nav
+;; With elisp-slime-nav-mode we can see information about current symbol in the
+;; minibuffer (move cursor to the symbol, see the info at the bottom).
+;;
+;; It also provides M-. and M-, to navigate to the symbol at the point and back.
+;; Something similar to gd and then Ctrl-o.
+;;
+;; Note: slime (https://slime.common-lisp.dev/) is another package, providing
+;; extra features to develop Lisp in emacs (debugger, REPL, etc).
+(use-package elisp-slime-nav
+  :init
+  (defun my-lisp-hook ()
+	(elisp-slime-nav-mode)
+	(turn-on-eldoc-mode))
+
+  (add-hook 'emacs-lisp-mode-hook 'my-lisp-hook)
+
+  ;; K to display help for elisp symbols
+  (evil-define-key 'normal emacs-lisp-mode-map (kbd "K")
+	'elisp-slime-nav-describe-elisp-thing-at-point)
+
+  ;; add key for the orginal M-. command
+  ;; the M-, is originally mapped to `pop-tag-mark`, not needed as
+  ;; `C-o` works fine.
+  (evil-define-key 'normal emacs-lisp-mode-map (kbd "gd")
+    'elisp-slime-nav-find-elisp-thing-at-point)
+)
 ;; Make gc pauses faster by decreasing the threshold.
 (setq gc-cons-threshold (* 2 1000 1000))
 ;; Increase the amount of data which Emacs reads from the process
