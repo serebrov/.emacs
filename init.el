@@ -232,6 +232,15 @@
   ;; M-x toggle-debug-on-error
 
   ;; Some problems with evil and my setup:
+  ;; - shortcuts to move windows SPC + Ctrl + hjkl to move
+  ;; - need some fzf-like file finder
+  ;;   - there is SPC-. but it does not search for files recursively
+  ;; - emacs hijacks windows (testing popper as a solution)
+  ;;   - Example: Ctrl-h i to open help then h to get help for help - replaces all windows
+  ;;   - Example: Ctrl-h i to open help then M-n to duplicate it - replaces one of the existing windows
+  ;;   - Workaround: M-x winner-mode adds `M-x winner-mode-undo' (and redo) to undo these changes
+  ;; - Autocompletion uses Enter, so I cannot create a new line without selecting an option
+  ;;   - reconfigure to TAB? or Ctrl-n?
   ;; - vim surround bingings?
   ;; - which text objects are available?
   ;; - System C-SPC conflict with emacs C-SPC (like C-SPC to start selection and
