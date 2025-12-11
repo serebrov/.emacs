@@ -6,6 +6,7 @@
 
 ; don't use tabs for indent
 (setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
 
 ;; https://www.shaneikennedy.xyz/blog/emacs-intro
 
@@ -220,6 +221,12 @@
      ))
   :init
   (global-whitespace-mode 1))
+
+;; Clear trailing space
+;; M-x delete-trailing-whitespace
+
+;; Replace tabs with spaces
+;; M-x untabify
 
 ;; The wrapped line indicator (showbreak in vim)
 (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
