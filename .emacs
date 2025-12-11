@@ -189,6 +189,11 @@
 
 (elisp-slime-nav-mode)
 
+(use-package didyoumean
+  :vc (:url "https://gitlab.com/kisaragi-hiu/didyoumean.el"))
+(didyoumean-mode 1)
+
+
 ;; Alternative for pdf-tools:
 ;; https://www.reddit.com/r/emacs/comments/1pgliu9/a_new_pdf_reader_for_emacs/
 ;; https://codeberg.org/divyaranjan/emacs-reader
