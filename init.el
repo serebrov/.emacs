@@ -53,6 +53,14 @@
   ;;(dired-kill-when-opening-new-dired-buffer t) ;; Dired don't create new buffer
   ;;(recentf-mode t) ;; Enable recent file mode
 
+  (add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1)))
+  ;; something for consult
+  ;; https://github.com/minad/consult/discussions/853
+  ;; (defun display-line-numbers--turn-on ()
+  ;;   "Turn on `display-line-numbers-mode'."
+  ;;   (unless (or (minibufferp) (eq major-mode 'pdf-view-mode))
+  ;;     (display-line-numbers-mode)))
+
   ;;(global-visual-line-mode t)           ;; Enable truncated lines
   ;;(display-line-numbers-type 'relative) ;; Relative line numbers
   (global-display-line-numbers-mode t)  ;; Display line numbers
@@ -65,6 +73,8 @@
 
   (make-backup-files nil) ;; Stop creating ~ backup files
   (auto-save-default nil) ;; Stop creating # auto save files
+  (auto-save-visited-mode t) ;; Automatically save files (different from auto-save that creates backup)
+
   :hook
   (prog-mode . (lambda () (hs-minor-mode t))) ;; Enable folding hide/show globally
   :config
@@ -185,6 +195,7 @@
   (start/leader-keys
     ; "c" '(:ignore :wk "Parent c for c f")
     "c f" '(deadgrep :wk "Search with deadgrep")
+    "f" '(projectile-find-file :wk "Search for file with projectile")
     "t n" '(tab-new :wk "New tab"))
 
   (start/leader-keys
@@ -233,8 +244,6 @@
 
   ;; Some problems with evil and my setup:
   ;; - shortcuts to move windows SPC + Ctrl + hjkl to move
-  ;; - need some fzf-like file finder
-  ;;   - there is SPC-. but it does not search for files recursively
   ;; - emacs hijacks windows (testing popper as a solution)
   ;;   - Example: Ctrl-h i to open help then h to get help for help - replaces all windows
   ;;   - Example: Ctrl-h i to open help then M-n to duplicate it - replaces one of the existing windows
@@ -257,14 +266,31 @@
   ;; - autosave files on focus lost?
 
   ;; deadgrep vs CtrlSF
+  ;; - how to limit the search to a subfolder when searching with deadgrep?
+  ;;   - in the search results window I can enter new directory at the top
+  ;;   - is there a way to limit the search to subdirectory initally? (not critical,
+  ;;     but would be nice)
   ;; - CtrlSF edit mode works like dired: does not save anything right about
   ;;   (deadgrep edits files live)
   ;; - deadgrep edit mode needs to be explicitely enabled with M-x deadgrep-edit-mode
   ;;   while CtrlSF naturally starts in vim normal mode and "i" starts editing
   ;; - CtrlSF opens files by default in a split, deadgrep opens the file by default
   ;;   (not a problem, deadgrep has the deadgrep-vist-result-other-window command)
+  ;;
+  ;; Related: https://www.reddit.com/r/emacs/comments/1pglgou/finally_i_have_my_beloved_quickfix_list_in_emacs/
+  ;; In Emacs, **wgrep** (Writable Grep) brings this experience
+  ;; * Run a search with `M-x grep-find` or something like this
+  ;; * Results appear in a grep buffer — similar to Vim’s quickfix window
+  ;; * Press `i` (in Evil’s Normal mode) to enter wgrep edit mode — the buffer becomes writable
+  ;; * Edit the results directly. You can even run commands like `:%s/old/new/g` across all matches
+  ;; * Save with `ZZ` or `:w`, and wgrep applies all changes back to the original source files automatically
 
   ;; Solved
+  ;; - how to do `:set nowrap`?
+  ;;   - use `M-x toggle-truncate-lines`
+  ;; - need some fzf-like file finder
+  ;;   - there is SPC-. but it does not search for files recursively
+  ;;   - solved: SPC p f calls projectile-find-file and it does fuzzy recursive search
   ;; - how to run second "eat"? C-u M-x eat
   ;; - "eat" produced some garbage output when entering and then deleting text
   ;;   - M-x eat-compile-terminfo helped
@@ -395,6 +421,31 @@
 (use-package eat
   :hook ('eshell-load-hook #'eat-eshell-mode))
 
+;; This supposed to solve "emacs is hijacking my windows problem"
+;; testing...
+;; Popper - manage popup windows like vim
+;; Popups open in a dedicated area and can be dismissed with q
+(use-package popper
+  :bind (("C-`"   . popper-toggle)        ;; Toggle last popup
+         ("M-`"   . popper-cycle)          ;; Cycle through popups
+         ("C-M-`" . popper-toggle-type))   ;; Convert popup <-> regular window
+  :init
+  (setq popper-reference-buffers
+        '("\\*Messages\\*"
+          "\\*Warnings\\*"
+          "\\*Compile-Log\\*"
+          "\\*Backtrace\\*"
+          "\\*evil-registers\\*"
+          "\\*Apropos\\*"
+          "\\*Help\\*"
+          "\\*helpful"
+          "\\*info\\*"
+          "\\*Info\\*"
+          compilation-mode
+          help-mode
+          helpful-mode
+          Info-mode))
+  (popper-mode +1))
 
 ;; Enable pasting in term-mode with C-c C-y
 ;; is there better way? shouldn't this work by default?
@@ -489,6 +540,17 @@
   ;; basic is the fallback
   (completion-styles '(flex orderless basic))
   (completion-category-overrides '((file (styles basic partial-completion)))))
+
+;; Useful to reinstal the package:
+;; (progn
+;;   (car package-alist)
+;; )
+;; (assq 'yasnippet-snippets package-alist)
+
+;; (package-get-descriptor 'vertico)
+;; (package-recompile 'vertico)
+;; (package-delete (package-get-descriptor 'vertico))
+;; (package-delete (package-get-descriptor 'reader))
 
 (use-package vertico
   :init
@@ -715,6 +777,7 @@
   (evil-define-key 'normal emacs-lisp-mode-map (kbd "gd")
     'elisp-slime-nav-find-elisp-thing-at-point)
 )
+
 ;; Make gc pauses faster by decreasing the threshold.
 (setq gc-cons-threshold (* 2 1000 1000))
 ;; Increase the amount of data which Emacs reads from the process
