@@ -285,15 +285,100 @@
   ;; * Edit the results directly. You can even run commands like `:%s/old/new/g` across all matches
   ;; * Save with `ZZ` or `:w`, and wgrep applies all changes back to the original source files automatically
 
+  ;; Emacs terminal emulators
+  ;; What is the difference between terminal emulators? I have
+  ;; term, ansi-term, shell, eshell, also there is eat in my setup
+  ;; and I see recommendations of vterm.
+  ;;
+  ;; shell (M-x shell)
+  ;; - Not a terminal emulator — just runs a shell subprocess
+  ;; with input/output through a regular buffer
+  ;; - Uses comint-mode; full Emacs editing works
+  ;; - No curses/TUI support (can't run htop, vim, etc.)
+  ;; - Good for simple command-line work where you want Emacs
+  ;; keybindings
+  ;;
+  ;; eshell (M-x eshell)
+  ;; - A shell written entirely in Emacs Lisp — not a terminal
+  ;; emulator at all
+  ;; - Can mix shell commands with Lisp expressions
+  ;; - Full Emacs buffer integration (redirect output to
+  ;; buffers, pipe through Emacs functions)
+  ;; - No TUI support
+  ;; - Great for scripting and Emacs integration, but some shell
+  ;;  features behave differently
+  ;;
+  ;; term (M-x term)
+  ;; - Actual terminal emulator using term.el
+  ;; - Supports TUI applications
+  ;; - Single buffer name by default (hence your original issue)
+  ;; - Somewhat slow with heavy output
+  ;;
+  ;; ansi-term (M-x ansi-term)
+  ;; - Wrapper around term with better ANSI color handling
+  ;; - Creates uniquely-named buffers automatically
+  ;; - Same underlying emulation as term
+  ;;
+  ;; External packages
+  ;;
+  ;; vterm
+  ;; - Uses libvterm, a C library — much faster than
+  ;; term/ansi-term
+  ;; - Better terminal compatibility (true terminal emulation)
+  ;; - Handles TUI apps, colors, and performance well
+  ;; - Requires compilation (needs cmake and libvterm)
+  ;; - Popular choice for daily terminal use in Emacs
+  ;;
+  ;; eat (Emulate A Terminal)
+  ;; - Pure Emacs Lisp but optimized for performance
+  ;; - No compilation required (unlike vterm)
+  ;; - Good terminal compatibility
+  ;; - Integrates nicely with eshell (eat-eshell-mode)
+  ;; - Newer project, actively developed
+  ;;
+  ;; Quick summary
+  ;;
+  ;; | Mode           | True terminal? | TUI apps? | Speed |
+  ;; Install       |
+  ;; |----------------|----------------|-----------|-------|----
+  ;; -----------|
+  ;; | shell          | No             | No        | Fast  |
+  ;; Built-in      |
+  ;; | eshell         | No             | No        | Fast  |
+  ;; Built-in      |
+  ;; | term/ansi-term | Yes            | Yes       | Slow  |
+  ;; Built-in      |
+  ;; | vterm          | Yes            | Yes       | Fast  |
+  ;; Needs compile |
+  ;; | eat            | Yes            | Yes       | Good  |
+  ;; Pure Lisp     |
+  ;;
+  ;; - how do I start the new `term` terminal instance?
+  ;;   - `C-u M-x term`
+  ;;   - or use `ansi-term` or `vterm`
+  ;;
+  ;; - how to run second instance of the "eat"?
+  ;;   - C-u M-x eat
+  ;;
+  ;; - "eat" produced some garbage output when entering and then deleting text
+  ;;   - M-x eat-compile-terminfo helped
+  ;;
+  ;; - how do I pass Ctrl-R to the terminal? With ansi-term it seems to be insercepted by emacs
+  ;;  - use C-c C-k to switch to char mode (keys send directly)
+  ;;    the C-c C-j switches back to line mode (Emacs intercepts keys)
+  ;;    use C-q C-r to send the key to the terminal once
+  ;;    the advantage of the line mode is that we can use emacs
+  ;;    keybindings for editing; copy/paste is easier, and we
+  ;;    can also use emacs keybindings to move around, scroll,
+  ;;    copy, etc.
+  ;;    note: vterm should handle this more seamless
+
   ;; Solved
   ;; - how to do `:set nowrap`?
   ;;   - use `M-x toggle-truncate-lines`
   ;; - need some fzf-like file finder
   ;;   - there is SPC-. but it does not search for files recursively
   ;;   - solved: SPC p f calls projectile-find-file and it does fuzzy recursive search
-  ;; - how to run second "eat"? C-u M-x eat
-  ;; - "eat" produced some garbage output when entering and then deleting text
-  ;;   - M-x eat-compile-terminfo helped
   ;; - C-R commands do not work (for example, C-R C-W in command mode should insert word under cursor)
   ;;   - solved in this setup probably by evil-collection
   ;;   - solved before with https://github.com/tarao/evil-plugins
