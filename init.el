@@ -46,6 +46,13 @@
   (delete-selection-mode t)   ;; Select text and delete it by typing.
   (electric-indent-mode nil)  ;; Turn off the weird indenting that Emacs does by default.
   (electric-pair-mode t)      ;; Turns on automatic parens pairing
+  ;; ;; Remove backtick -> quote pairing (keeps other pairs like brackets)
+  ;; ;; Otherwise, entering ` (backtick) resuls in `' (backtick followed by single quote)
+  ;; (setq electric-pair-pairs (assq-delete-all ?\` electric-pair-pairs))
+  ;; (setq electric-pair-text-pairs (assq-delete-all ?\` electric-pair-text-pairs))
+  ;; Make ` pair with ` and ' pair with ' (instead of default ` -> ')
+  (setq electric-pair-pairs '((?\` . ?\`) (?\' . ?\')))
+  (setq electric-pair-text-pairs '((?\` . ?\`) (?\' . ?\')))
 
   (blink-cursor-mode nil)     ;; Don't blink cursor
   (global-auto-revert-mode t) ;; Automatically reload file and show changes if the file has changed
@@ -485,10 +492,10 @@
   (org-mode . org-indent-mode) ;; Indent text
   ;; The following prevents <> from auto-pairing when electric-pair-mode is on.
   ;; Otherwise, org-tempo is broken when you try to <s TAB...
-  ;;(org-mode . (lambda ()
-  ;;              (setq-local electric-pair-inhibit-predicate
-  ;;                          `(lambda (c)
-  ;;                             (if (char-equal c ?<) t (,electric-pair-inhibit-predicate c))))))
+  (org-mode . (lambda ()
+                (setq-local electric-pair-inhibit-predicate
+                            `(lambda (c)
+                               (if (char-equal c ?<) t (,electric-pair-inhibit-predicate c))))))
   )
 
 (use-package toc-org
