@@ -189,10 +189,42 @@
 
 (elisp-slime-nav-mode)
 
+;;  Alternatively, there's a built-in approach using ibuffer:
+;;  1. M-x ibuffer (or SPC d i with your config)
+;;  2. * u to mark all unsaved buffers, or * m to mark by mode
+;;  3. / g to filter by content/name
+;;  4. D to delete marked buffers
+(defun buf-only-visible ()
+  "Kill all buffers not currently shown in a window somewhere."
+  (interactive)
+  (dolist (buf  (buffer-list))
+    (unless (get-buffer-window buf 'visible) (kill-buffer buf))))
+    ;; This should also skip special buffers like *Minibuf-0*
+    ;; (unless (or (get-buffer-window buf 'visible)
+    ;;             (string-prefix-p " " (buffer-name buf)))
+
 (use-package didyoumean
   :vc (:url "https://gitlab.com/kisaragi-hiu/didyoumean.el"))
 (didyoumean-mode 1)
 
+;; Display tabs, trailing spaces
+(use-package whitespace
+  :ensure nil
+  :custom
+  (whitespace-style '(face tabs tab-mark trailing space-before-tab))
+  (whitespace-display-mappings
+   ;; '((tab-mark ?\t [?▸ ?\ ] [?» ?\ ])    ;; tabs: ▸ or »
+   '((tab-mark ?\t [?» ?\ ])    ;; tabs: »
+     ;; (space-mark ?\  [?·] [?.])          ;; spaces (if enabled): ·
+     (newline-mark ?\n [?¬ ?\n] [?$ ?\n]) ;; newlines (if enabled): ¬
+     ))
+  :init
+  (global-whitespace-mode 1))
+
+;; The wrapped line indicator (showbreak in vim)
+(setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
+;; or for non-visual-line mode:
+(set-display-table-slot standard-display-table 'wrap ?↪)
 
 ;; Alternative for pdf-tools:
 ;; https://www.reddit.com/r/emacs/comments/1pgliu9/a_new_pdf_reader_for_emacs/
