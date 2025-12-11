@@ -10,10 +10,10 @@
 					  (expand-file-name user-emacs-directory))
     ;; Dynamic scoping to the rescue
     (let ((org-confirm-babel-evaluate nil))
-	  (org-babel-tangle)
-	  (package-quickstart-refresh)
-	  )
-    ))
+    (org-babel-tangle)
+    (package-quickstart-refresh)
+    )
+  ))
 
 (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'start/org-babel-tangle-config)))
 
@@ -230,6 +230,12 @@
   (define-key evil-normal-state-map (kbd "C-l") 'windmove-right)
   (define-key evil-normal-state-map (kbd "C-j") 'windmove-down)
   (define-key evil-normal-state-map (kbd "C-k") 'windmove-up)
+
+  (start/leader-keys
+    "l" '(evil-window-move-far-right :wk "Move window to the right")
+    "j" '(evil-window-move-very-bottom :wk "Move window to the bottom")
+    "h" '(evil-window-move-far-left :wk "Move window to the left")
+    "k" '(evil-window-move-very-top :wk "Move window to the top"))
 
   ;; left and right switch tabs
   (define-key evil-normal-state-map (kbd "<left>") 'tab-previous)
