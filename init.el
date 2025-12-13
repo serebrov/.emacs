@@ -51,6 +51,7 @@
   ;; (setq electric-pair-pairs (assq-delete-all ?\` electric-pair-pairs))
   ;; (setq electric-pair-text-pairs (assq-delete-all ?\` electric-pair-text-pairs))
   ;; Make ` pair with ` and ' pair with ' (instead of default ` -> ')
+  ;; note: this seemed to work, but doesnot and I get `' when entering backtick
   (setq electric-pair-pairs '((?\` . ?\`) (?\' . ?\')))
   (setq electric-pair-text-pairs '((?\` . ?\`) (?\' . ?\')))
 
@@ -273,12 +274,6 @@
 
   ;; # Problems
   ;; Some problems with evil and my setup:
-  ;; - how to find out current mode keybindings, when they are rebinded by evil or evil collection?
-  ;;   - I expected that M-x describe-keymap would show actual bindings (as in Vim), but emacs shows default emacs keys, not evil bindings
-  ;;    - an obvious way is to find and look in the evil-collection source, but this is not convenient
-  ;;    - I did not find a good solution for this
-  ;;    - the M-x which-key-dump-bindings insers all bingings
-  ;;
   ;; - what is a good way to search help? Like :helpgrep in vim?
   ;; - emacs hijacks windows (testing popper as a solution)
   ;;   - Example: Ctrl-h i to open help then h to get help for help - replaces all windows
@@ -333,6 +328,77 @@
   ;;    M-: (let ((inhibit-read-only t)) (set-text-properties (point-min) (point-max) ()))
   ;;   Not sure what cases it, maybe I'am triggering some keybinding accidentally.
   ;;   - did not see this recently, maybe emacs upgrade (29 to 30) helped
+
+  ;; # Getting help
+  ;;
+  ;; Searching help
+  ;; - M-x info-apropos - search all info manuals for a string
+  ;;   - this is similar to vim's :helpgrep, but does not support wildcards
+  ;; - M-x consult-info - search with consult, fuzzy completion
+  ;;   - C-u M-x consult-info to select manual to search
+  ;; - M-x Info-search (or s in the info buffer) - search in the current manual
+  ;; - Use consult-ripgrep or deadgrep to search /usr/share/info/ (info manuals)
+  ;;   - check where info files are, check with M-: Info-directory-list
+  ;;   - M-x deadgrep RET a.b*c RET
+  ;;     - then change the directory at the top to /usr/share/info/
+  ;;   - C-u M-x consult-ripgrep RET /usr/share/info/ RET a.b*c
+  ;;
+  ;; M-x describe-function - documentation for a function/command, C-h f
+  ;; - M-x helpful-callable gives nicer output
+  ;;
+  ;; M-x describe-variable - variable value and documentation, C-h v
+  ;; - M-x helpful-variable gives nicer output
+  ;; - for example, M-x helpful-variable RET evil-normal-state-map
+  ;; - for example, M-x helpful-variable RET evil-want-C-u-scroll
+  ;;
+  ;; M-x describe-symbol - describes any symbol (function, variable, face, etc.),
+  ;; - a catch-all, C-h o
+  ;;
+  ;; M-x apropos, C-h a - search for commands/variables by regex.
+  ;; - M-x apropos RET evil.*jump finds everything matching that pattern.
+  ;;
+  ;; M-x apropos-command - like apropos but for interactive commands (with M-x).
+  ;;
+  ;; M-x view-lossage, C-h l - last 300 keystrokes you typed.
+  ;; - useful for figuring out "what did I just accidentally press?"
+  ;;
+  ;; C-h e (M-x view-echo-area-messages, C-h e - the *Messages* buffer.
+  ;; - helpful for seeing errors or output you missed.
+  ;;
+  ;; - M-x consult-apropos - fuzzy searchable apropos (with consult)
+  ;;
+  ;; ## Evil help
+  ;; - https://evil.readthedocs.io/en/latest/keymaps.html
+  ;; - https://www.emacswiki.org/emacs/Evil
+
+  ;; # Inspeciting keymaps
+  ;; - how to find out current mode keybindings, when they are rebinded by evil or evil collection?
+  ;;   - something similar to what I see with `:nnoremap` in vim
+  ;;   - an obvious way is to find and look in the evil-collection source, but this is not convenient
+  ;;
+  ;;   - The M-x describe-keybindings seems to work in a similar way to vim :map
+  ;;   - The M-x describe-mode lists all binidings, including evil
+  ;;     - need to scroll down through standard bindings.
+  ;;     - For example, for dired, there are mappings like
+  ;;       <normal-state> RET dired-find-file
+  ;;   - Check evil keybinding maps:
+  ;;     - M-x helpful-variable RET evil-normal-state-map
+  ;;     - M-x helpful-variable RET evil-motion-state-map
+  ;;     - note that `M-x describe-variables` also works, but will show key codes
+  ;;       not actual keys while `M-x helpful-variable` displays it as a keymap
+  ;;     - Lookup key in the map:
+  ;;       - M-: (lookup-key evil-normal-state-map (kbd "your-key"))
+  ;;   - Which key can show top-level mappinngs:
+  ;;     - M-x which-key-show-top-level or M-x which-key-show-major-mode
+  ;;   - the M-x which-key-dump-bindings insers all bingings
+  ;;
+  ;; - how to find out if the command is bound to something?
+  ;;   - M-x where-is RET command-name (or use C-h w)
+  ;;
+  ;; - see which C-h commands are available:
+  ;;   - in emacs state: C-h and wait for which key popup
+  ;;   - in evil state:
+  ;;   - M-x which-key-show-keypmap RET help-command
 
   ;; For debugging problems it may be useful to enable stacktrace:
   ;; M-x toggle-debug-on-error
