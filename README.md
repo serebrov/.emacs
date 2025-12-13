@@ -4,6 +4,7 @@ Config is based on kickstart, the original reamde is down below.
 https://github.com/MiniApollo/kickstart.emacs
 
 The entry point is the [.emacs](.emacs) config where there is non-kickstart stuff.
+It includes the [init.el](.init.el) with modified kickstart config.
 
 Kickstart also has an org mode config, [init.org](init.org) - I don't use it, but it is a good source of information about the initial setup provided by kickstart.
 
@@ -104,32 +105,19 @@ Searching help:
   - M-x deadgrep RET a.b*c RET
     - then change the directory at the top to /usr/share/info/
   - C-u M-x consult-ripgrep RET /usr/share/info/ RET a.b*c
-
-M-x describe-function - documentation for a function/command, C-h f
-- M-x helpful-callable gives nicer output
-
-M-x describe-variable - variable value and documentation, C-h v
-- M-x helpful-variable gives nicer output
-- for example, M-x helpful-variable RET evil-normal-state-map
-- for example, M-x helpful-variable RET evil-want-C-u-scroll
-
-M-x describe-symbol - describes any symbol (function, variable, face, etc.),
-- a catch-all, C-h o
-
-M-x apropos, C-h a - search for commands/variables by regex.
-- M-x apropos RET evil.*jump finds everything matching that pattern.
-
-M-x apropos-command - like apropos but for interactive commands (with M-x).
-
-M-x view-lossage, C-h l - last 300 keystrokes you typed.
-- useful for figuring out "what did I just accidentally press?"
-
-C-h e (M-x view-echo-area-messages, C-h e - the *Messages* buffer.
-- helpful for seeing errors or output you missed.
-
+- M-x apropos, C-h a - search for commands/variables by regex.
+  - M-x apropos RET evil.*jump finds everything matching that pattern.
+- M-x apropos-command - like apropos but for interactive commands (with M-x).
 - M-x consult-apropos - fuzzy searchable apropos (with consult)
 
-It includes the [init.el](.init.el) with modified kickstart config.
+Describing things:
+- M-x describe-function - documentation for a function/command, C-h f
+  - M-x helpful-callable gives nicer output
+- M-x describe-variable - variable value and documentation, C-h v
+  - M-x helpful-variable gives nicer output
+  - for example, M-x helpful-variable RET evil-normal-state-map
+  - for example, M-x helpful-variable RET evil-want-C-u-scroll
+- M-x describe-symbol - describes any symbol (function, variable, face, etc.), a catch-all, C-h o
 
 # Problems to solve
 
@@ -161,10 +149,20 @@ Some problems with evil and my setup:
 - LSP does not work in python code
 - persistent undo history (to be able to undo or g; after you restart emacs)
 
-For debugging problems it may be useful to enable stacktrace:
+# Tips for solving problems
+
+For debugging errors in the config it may be useful to enable stacktrace:
+
 ```
 M-x toggle-debug-on-error
 ```
+
+Useful for figuring out "what did I just accidentally press?":
+- M-x view-lossage, C-h l - last 300 keystrokes you typed.
+
+Checking the `*Messages*` buffer:
+- M-x view-echo-area-messages, C-h e
+- helpful for seeing errors or output you missed
 
 # Solved problems
 
@@ -211,6 +209,7 @@ The `evil-collection` is a package that has many more or less independent sub-pl
 There is no explicit documentation on what keybindings are set by `evil-collection`, see [Inspecting-keymaps below](#inspecting-keymaps) for some hings on how to understand which keys do what.
 
 ## Inspeciting evil keymaps
+
 - how to find out current mode keybindings, when they are rebinded by evil or evil collection?
   - something similar to what I see with `:nnoremap` in vim
   - an obvious way is to find and look in the evil-collection source, but this is not convenient
@@ -293,7 +292,7 @@ In Emacs, **wgrep** (Writable Grep) brings this experience
    copy, etc.
    note: vterm should handle this more seamless
 
-# Emulators overview
+## Emulators overview
 
 What is the difference between terminal emulators? I have
 term, ansi-term, shell, eshell, also there is eat in my setup
