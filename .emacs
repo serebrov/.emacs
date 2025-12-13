@@ -40,6 +40,9 @@
 ;;  - Automatically restores it when you start Emacs
 ;;  - Saves to ~/.emacs.d/.emacs.desktop by default
 ;;
+;; Note: this does not work the same way as autosave in my vim config
+;; where everything is saved when I go from the insert mode to normal or
+;; when vim looses focus. In Emacs saving seems to be on timer.
 (desktop-save-mode 1)
 ;; Disable startup screen so desktop can restore properly
 (setq inhibit-startup-screen t)
