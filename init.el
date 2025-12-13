@@ -19,10 +19,10 @@
 
 (defun start/display-startup-time ()
   (message "Emacs loaded in %s with %d garbage collections."
-           (format "%.2f seconds"
-                   (float-time
-					(time-subtract after-init-time before-init-time)))
-           gcs-done))
+    (format "%.2f seconds"
+      (float-time
+      (time-subtract after-init-time before-init-time)))
+   gcs-done))
 
 (add-hook 'emacs-startup-hook #'start/display-startup-time)
 
@@ -139,8 +139,8 @@
     "." '(find-file :wk "Find file")
     "TAB" '(comment-line :wk "Comment lines")
     "q" '(flymake-show-buffer-diagnostics :wk "Flymake buffer diagnostic")
-	; the "c" is needed for "SPC c f" (CtrlSF-like search)
-	; eat can be opened with "SPC g t" (see the binding below)
+    ; the "c" is needed for "SPC c f" (CtrlSF-like search)
+    ; eat can be opened with "SPC g t" (see the binding below)
     ; "c" '(eat :wk "Eat terminal")
     "p" '(projectile-command-map :wk "Projectile")
     "s p" '(projectile-discover-projects-in-search-path :wk "Search for projects"))
@@ -191,7 +191,7 @@
 
   (start/leader-keys
     "t" '(:ignore t :wk "Toggle")
-	;; related: M-x toggle-truncate-lines (should be similar to :set nowrap in vim)
+    ;; related: M-x toggle-truncate-lines (should be similar to :set nowrap in vim)
     "t t" '(visual-line-mode :wk "Toggle truncated lines (wrap)")
     "t l" '(display-line-numbers-mode :wk "Toggle line numbers"))
   )
@@ -207,7 +207,7 @@
 
   (start/leader-keys
     "g" '(:ignore g :wk "Global commands")
-	;; gt is to switch tabs, but I have this binded to left/right arrows.
+    ;; gt is to switch tabs, but I have this binded to left/right arrows.
     "g t" '(eat :wk "Eat terminal"))
 
   ;; gc to comment/uncomment lines
@@ -245,18 +245,15 @@
   ;;   "g c" '(comment-line :wk "Comment lines"))
   ;; (define-key evil-normal-state-map (kbd "g c") 'tab-next)
 
-  ;; There is a problem with editing, I am suddently getting into the
-  ;; "Buffer is read-only" state.
-  ;; After doing M-x read-only-mode to switch it off, I am also getting
-  ;; the "Text is read-only" state and then need to also do
-  ;; M-: (let ((inhibit-read-only t)) (set-text-properties (point-min) (point-max) ()))
-  ;; Not sure what cases it, maybe I'am triggering some keybinding accidentally.
-
-  ;; For debugging problems it may be useful to enable stacktrace:
-  ;; M-x toggle-debug-on-error
-
+  ;; # Problems
   ;; Some problems with evil and my setup:
-  ;; - shortcuts to move windows SPC + Ctrl + hjkl to move
+  ;; - how to find out current mode keybindings, when they are rebinded by evil or evil collection?
+  ;;   - I expected that M-x describe-keymap would show actual bindings (as in Vim), but emacs shows default emacs keys, not evil bindings
+  ;;    - an obvious way is to find and look in the evil-collection source, but this is not convenient
+  ;;    - I did not find a good solution for this
+  ;;    - the M-x which-key-dump-bindings insers all bingings
+  ;;
+  ;; - what is a good way to search help? Like :helpgrep in vim?
   ;; - emacs hijacks windows (testing popper as a solution)
   ;;   - Example: Ctrl-h i to open help then h to get help for help - replaces all windows
   ;;   - Example: Ctrl-h i to open help then M-n to duplicate it - replaces one of the existing windows
@@ -278,7 +275,43 @@
   ;; - persistent undo history (to be able to undo or g; after you restart emacs)
   ;; - autosave files on focus lost?
 
-  ;; deadgrep vs CtrlSF
+  ;; Solved
+  ;; - shortcuts to move windows with SPC + Ctrl + hjkl
+  ;;   - done
+  ;; - how to do `:set nowrap`?
+  ;;   - use `M-x toggle-truncate-lines`
+  ;; - need some fzf-like file finder
+  ;;   - there is SPC-. but it does not search for files recursively
+  ;;   - solved: SPC p f calls projectile-find-file and it does fuzzy recursive search
+  ;; - C-R commands do not work (for example, C-R C-W in command mode should insert word under cursor)
+  ;;   - solved in this setup probably by evil-collection
+  ;;   - solved before with https://github.com/tarao/evil-plugins
+  ;; - vinegar behavior (- opens dired in the same window)
+  ;;   - solved with `dired-jump' mapping
+  ;;     Vinegar-style: "-" opens dired in current file's directory
+  ;;     (define-key evil-normal-state-map (kbd "-") 'dired-jump)
+  ;; - comment/uncomment with gc?
+  ;;   (define-key evil-normal-state-map (kbd "g c") 'comment-line)
+  ;;   (define-key evil-visual-state-map (kbd "g c") 'comment-line)
+  ;; - How to save sessions?
+  ;;   This seems to work:
+  ;;   - M-x desktop-write, M-x desktop-read
+  ;;   - M-x desktop-clear
+  ;;   But maybe also projectile- and project- have something similar.
+  ;; - C-F in command line mode / search mode to show command buffer (same as shown with q: and q/)
+  ;;   - works in this setup, maybe evil-collection or evil itself
+  ;; - There is a problem with editing, I am suddently getting into the
+  ;;   "Buffer is read-only" state.
+  ;;    After doing M-x read-only-mode to switch it off, I am also getting
+  ;;    the "Text is read-only" state and then need to also do
+  ;;    M-: (let ((inhibit-read-only t)) (set-text-properties (point-min) (point-max) ()))
+  ;;   Not sure what cases it, maybe I'am triggering some keybinding accidentally.
+  ;;   - did not see this recently, maybe emacs upgrade (29 to 30) helped
+
+  ;; For debugging problems it may be useful to enable stacktrace:
+  ;; M-x toggle-debug-on-error
+
+  ;; # deadgrep vs CtrlSF
   ;; - how to limit the search to a subfolder when searching with deadgrep?
   ;;   - in the search results window I can enter new directory at the top
   ;;   - is there a way to limit the search to subdirectory initally? (not critical,
@@ -298,7 +331,7 @@
   ;; * Edit the results directly. You can even run commands like `:%s/old/new/g` across all matches
   ;; * Save with `ZZ` or `:w`, and wgrep applies all changes back to the original source files automatically
 
-  ;; Emacs terminal emulators
+  ;; # Emacs terminal emulators
   ;; What is the difference between terminal emulators? I have
   ;; term, ansi-term, shell, eshell, also there is eat in my setup
   ;; and I see recommendations of vterm.
@@ -385,30 +418,6 @@
   ;;    can also use emacs keybindings to move around, scroll,
   ;;    copy, etc.
   ;;    note: vterm should handle this more seamless
-
-  ;; Solved
-  ;; - how to do `:set nowrap`?
-  ;;   - use `M-x toggle-truncate-lines`
-  ;; - need some fzf-like file finder
-  ;;   - there is SPC-. but it does not search for files recursively
-  ;;   - solved: SPC p f calls projectile-find-file and it does fuzzy recursive search
-  ;; - C-R commands do not work (for example, C-R C-W in command mode should insert word under cursor)
-  ;;   - solved in this setup probably by evil-collection
-  ;;   - solved before with https://github.com/tarao/evil-plugins
-  ;; - vinegar behavior (- opens dired in the same window)
-  ;;   - solved with `dired-jump' mapping
-  ;;     Vinegar-style: "-" opens dired in current file's directory
-  ;;     (define-key evil-normal-state-map (kbd "-") 'dired-jump)
-  ;; - comment/uncomment with gc?
-  ;;   (define-key evil-normal-state-map (kbd "g c") 'comment-line)
-  ;;   (define-key evil-visual-state-map (kbd "g c") 'comment-line)
-  ;; - How to save sessions?
-  ;;   This seems to work:
-  ;;   - M-x desktop-write, M-x desktop-read
-  ;;   - M-x desktop-clear
-  ;;   But maybe also projectile- and project- have something similar.
-  ;; - C-F in command line mode / search mode to show command buffer (same as shown with q: and q/)
-  ;;   - works in this setup, maybe evil-collection or evil itself
 
 ;; Fix general.el leader key not working instantly in messages buffer with evil mode
 ;; (use-package emacs
@@ -860,14 +869,14 @@
 (use-package elisp-slime-nav
   :init
   (defun my-lisp-hook ()
-	(elisp-slime-nav-mode)
-	(turn-on-eldoc-mode))
+    (elisp-slime-nav-mode)
+    (turn-on-eldoc-mode))
 
   (add-hook 'emacs-lisp-mode-hook 'my-lisp-hook)
 
   ;; K to display help for elisp symbols
   (evil-define-key 'normal emacs-lisp-mode-map (kbd "K")
-	'elisp-slime-nav-describe-elisp-thing-at-point)
+    'elisp-slime-nav-describe-elisp-thing-at-point)
 
   ;; add key for the orginal M-. command
   ;; the M-, is originally mapped to `pop-tag-mark`, not needed as
