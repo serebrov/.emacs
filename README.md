@@ -4,7 +4,7 @@ Config is based on kickstart, the original reamde is down below.
 https://github.com/MiniApollo/kickstart.emacs
 
 The entry point is the [.emacs](.emacs) config where there is non-kickstart stuff.
-It includes the [init.el](.init.el) with modified kickstart config.
+It includes the [init.el](init.el) with modified kickstart config.
 
 Kickstart also has an org mode config, [init.org](init.org) - I don't use it, but it is a good source of information about the initial setup provided by kickstart.
 
@@ -12,24 +12,32 @@ Kickstart also has an org mode config, [init.org](init.org) - I don't use it, bu
 
 I use evil, but it is good to know basic keybindings and be able to move around without evil.
 
-Note: "M-" (Meta) in shortcuts is "Opt" or "Alt, or "Esc" followed by letter.
+More information is in the [emacs.md](emacs.md).
 
-Move around:
-- use arrow keys
-- Page up/down: C-v / M-v or actual PgUp / PgDown keys
+Note: "M-" (Meta) in shortcuts is "Opt" or "Alt, or "Esc" followed by letter.
 
 Open/save/quit:
 - Open file: C-x C-f
 - Save: C-x C-s or M-x save-buffers
 - Quit emacs: `C-x C-c`
 
+Move around:
+- use arrow keys
+- Page up/down: C-v / M-v or actual PgUp / PgDown keys
+
+Cancel current operation: C-g (which is usually done with Esc in vim)
+- Close minibuffer
+- Close autocompletion popup
+
 Search in the document: C-s (next C-s, prev C-r)
 
 Cancel current operation: C-g (which is usually done with Esc in vim)
 
-Editing:
+Select, copy/paste:
 - Select text: C-space
 - Copy/Cut/Paste: M-w, C-w, C-y
+
+Undo and redo:
 - `C-/` - Undo, also `C-x u`, also `C-_`
   - Undo also does redo, so `C-/` undoes the undo
   - Also use `C-g` to reverse the direction of undos/redos when doing multiple undos/redos, see https://stackoverflow.com/a/18383455
@@ -48,6 +56,10 @@ Buffers:
 - Close: C-x k (kill-buffer)
 - Switch to buffer: C-x b
 - List buffers: C-x C-b, nicer UI: M-x ibuffer
+
+Repeating commands:
+- `C-u {number} {command}` - repeat the command {number} times
+  - `C-u 4 C-n` - move down 4 lines
 
 Dired: `C-x d`
 
@@ -119,12 +131,79 @@ Describing things:
   - for example, M-x helpful-variable RET evil-want-C-u-scroll
 - M-x describe-symbol - describes any symbol (function, variable, face, etc.), a catch-all, C-h o
 
+# Emacs interacitve commands and prefix system
+
+Interactive commands are special functions that can be executed with `M-x`. These special functions are able to take extra arguments passed via Emacs prefix system.
+
+The prefix is a key combination that you use before executing the actual command, for example, to repeat the "move down" command we do `C-u 4 C-n`. This moves down 4 lines.
+
+In this example the `C-u 4` is the prefix that passes `4` as an argument to the next command (`C-n` that is bound to the `next-line` command).
+
+One more example: the `forward-char` command moves the cursor forward. We can do the following with prefixes:
+- C-f or M-x forward-char → moves forward 1 character
+- M-5 C-f → moves forward 5 characters
+- C-u 10 C-f → moves forward 10 characters
+- C-u C-f → moves forward 4 characters (C-u alone defaults to 4)
+
+Note that the prefix can be passed either with `C-u {n}` or with `M-{n}`.
+
+The `C-u` on its own passes the "default" argument which usually tells the command "do what you usually do, but differently". For example, `M-x run-lisp` starts the default lisp REPL and `C-u M-x run-lisp` will ask which REPL to run before starting it.
+
+The run-lisp function's code basically does this:
+
+```emacs-lisp
+(defun run-lisp (arg)
+  (interactive "P")  ;; "P" means "accept a prefix argument"
+  (if arg
+      ;; If ANY argument was passed, prompt user
+      (read-string "Run lisp: " inferior-lisp-program)
+    ;; Otherwise use default
+    inferior-lisp-program))
+ ```
+
+It does not care what agrument we pass as long as we pass something.
+
+In the case we want to distingish arguments, we can do it like this:
+
+```emacs-lisp
+(defun my-command (arg)
+  (interactive "P")
+  (cond
+   ((null arg) (message "No argument"))
+   ((= arg 1) (message "You passed 1!"))
+   ((= arg 2) (message "You passed 2!"))
+   ((= arg 4) (message "You pressed C-u"))
+   (t (message "You passed: %d" arg))))
+```
+
+Functions can also have multiple agruments. The prefix argument (M-6, C-u, etc.) is special - it's captured before the command runs and is separate from other arguments. All other arguments are gathered by prompting the user through the minibuffer.
+
+So when we do:
+
+```emacs-lisp
+M-5 M-x replace-string RET foo RET bar RET
+```
+
+We have the following sequence of actions:
+- M-5 sets a prefix argument (which replace-string might use to limit replacements, depending on the command)
+- Then it prompts for "foo"
+- Then it prompts for "bar"
+
+To pass a negative argument use `C--5 ...` or `M--5 ...`.  The `C-- ...` works as `-1` (same for `M-- ...`). Also we can use `C-u -5 ...` and `C-u - ...`.
+
 # Problems to solve
 
 Some problems with evil and my setup:
+- SQL mode, something similar to vim's db-ext
+  - have some configuration for available databases
+  - select the database to use
+  - run SQL statements from the buffer
+  - get output in another buffer
 - learn more about projectile and session save/restore
   - currently I have `(desktop-save-mode 1)`, see also related notes in [.emacs](.emacs)
 - learn more about org mode
+- can I switch to emacs state for one command? Like one-time `C-g`
+  - Would be nice to have a prefix like SMTH C-h C-i
 - autosave: make it save on going from insert to normal and on focus lost
   - this is similar to my vim config and it is very reliable, basically
     it reliably saves when expected, each time I finished typing
@@ -202,8 +281,7 @@ Checking the `*Messages*` buffer:
 
 Evil and evil-collection rebind Emacs commands to vim-like keys.
 
-Use `C-g` to switch to `evil-emacs-state` to have original Emacs keys reenabled.
-This is useful in some contexts, such as reading info pages (Emacs has convenient shortcusts for the info mode).
+Use `C-g` to pause/unpause evil mode. It switches to the `evil-emacs-state` to have original Emacs keys reenabled. This is useful in some contexts, such as reading info pages (Emacs has convenient shortcusts for the info mode).
 
 The `evil-collection` is a package that has many more or less independent sub-plugins to provide keybindings in popular contexts (such as dired, ibuffer, etc).
 There is no explicit documentation on what keybindings are set by `evil-collection`, see [Inspecting-keymaps below](#inspecting-keymaps) for some hings on how to understand which keys do what.
@@ -329,7 +407,10 @@ eat (Emulate A Terminal)
 - No compilation required (unlike vterm)
 - Good terminal compatibility
 - Integrates with eshell (eat-eshell-mode)
-# Kickstart Readme
+
+# Original Kickstart Readme
+
+See: https://github.com/MiniApollo/kickstart.emacs
 
 https://github.com/MiniApollo/kickstart.emacs/assets/72389030/5c66130d-66b9-459b-a26d-210f3f937459
 

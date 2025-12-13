@@ -101,51 +101,7 @@
 ;;
 ;; Note: prefixes system works like this
 ;; For example for `forward-char` command (move cursor forward)
-;;
-;;- C-f or M-x forward-char → moves forward 1 character
-;;- M-5 C-f → moves forward 5 characters
-;;- C-u 10 C-f → moves forward 10 characters
-;;- C-u C-f → moves forward 4 characters (C-u alone defaults to 4)
-;;
-;; The run-lisp function's code basically does this:
-;;  (defun run-lisp (arg)
-;;    (interactive "P")  ;; "P" means "accept a prefix argument"
-;;    (if arg
-;;        ;; If ANY argument was passed, prompt user
-;;        (read-string "Run lisp: " inferior-lisp-program)
-;;      ;; Otherwise use default
-;;      inferior-lisp-program))
-;;
-;; Functions can use the argument like this:
-;;  (defun my-command (arg)
-;;    (interactive "P")
-;;    (cond
-;;     ((null arg) (message "No argument"))
-;;     ((= arg 1) (message "You passed 1!"))
-;;     ((= arg 2) (message "You passed 2!"))
-;;     ((= arg 4) (message "You pressed C-u"))
-;;     (t (message "You passed: %d" arg))))
-;;
-;; Functions can also have multiple agruments.
-;; The prefix argument (M-6, C-u, etc.) is special - it's
-;; captured before the command runs and is separate from other
-;; arguments. All other arguments are gathered by prompting the
-;; user through the minibuffer.
-;;
-;; So when you do:
-;; M-5 M-x replace-string RET foo RET bar RET
-;;
-;; - M-5 sets a prefix argument (which replace-string might use
-;; to limit replacements, depending on the command)
-;; - Then it prompts for "foo"
-;; - Then it prompts for "bar"
-;;
-;; To pass a negative argument use `C--5 ...` or `M--5 ...`
-;; `C-- ...` works as `-1` (same for `M-- ...`).
-;; Also can use `C-u -5 ...` and `C-u - ...`.
-;;
-;; For example the evil-state-emacs needs a negative argument to be
-;; disabled: `C-u - C-z` (C-z in evil is bound to evil-state-emacs).
+;; (moved to README.md)
 
 ;; Problem: ESC closes other windows
 ;; I hit ESC often when I am trying to get rid of something and
