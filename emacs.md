@@ -255,7 +255,6 @@ Configuration file is `~/.emacs.d/init.el`.
 Use `M-x eval-buffer` to reload the configuration file.
 Start Emacs with `emacs -q` to ignore the configuration file (if something is broken).
 
-
 ## Emacs Lisp
 
 Lisp intro: `C-h i` to open manual, `m lisp intro` to open Lisp intro or `m elisp` to open Lisp manual.
@@ -457,18 +456,18 @@ to execute code and then return to the original buffer:
        BODY...)
 ```
 
+# TODO: continue
 
-
---
-4.3.1 Body of 'mark-whole-buffer'
+Manual:
+- 4.3.1 Body of 'mark-whole-buffer'
 
 ## Debugging
 
 edebug - Emacs Lisp debugger, `M-x edebug-defun` to start debugging a function.
 
----
-
 TODO: recheck
+
+```
 ;; Emacs lisp
 ;; ;; https://learnxinyminutes.com/docs/elisp/
 ;;
@@ -535,25 +534,21 @@ TODO: recheck
 ;;                          (list 'face 'bold)))
 ;;   (other-window 1))
 ;; (boldify-names)
-
+```
 
 ## Files and Directories, Dired
 
 Recheck:
-;; - Dired: Switch to edit mode in dired with SPC b w -> writable dired
-;;   - Can edit file names
-;;   - Save with C-c C-c
-;;  - Can use `SPC h SPC dired` to see dired settings in spacemacs-base layer
-;;  - Mark files with `m`, R - rename/move, C - copy and `u` to unmark (also undelete)
-;;  - `d` - delete, `u` - undelete, `x` - expunge, apply deletions
-;;  - `+` - create directory
-;;  - Change file/directory permissions with `M`
-;;  - `(` - show / hide file details
-;;  - `s` - change sort mode
-
-## Terminal in Emacs
-
-- `M-x shell` - Open a shell in a buffer
+- Dired: Switch to edit mode in dired with SPC b w -> writable dired
+  - Can edit file names
+  - Save with C-c C-c
+ - Can use `SPC h SPC dired` to see dired settings in spacemacs-base layer
+ - Mark files with `m`, R - rename/move, C - copy and `u` to unmark (also undelete)
+ - `d` - delete, `u` - undelete, `x` - expunge, apply deletions
+ - `+` - create directory
+ - Change file/directory permissions with `M`
+ - `(` - show / hide file details
+ - `s` - change sort mode
 
 ## Org Mode
 
@@ -612,66 +607,3 @@ Agenda:
 - `C-c a t` - Open the agenda for today
 - `C-c a w` - Open the agenda for the week
 - `C-c a m` - Open the agenda for the month
-
-## Configuring Emacs
-
-;; Included plugins:
-;;
-;;   evil-args	motions and text objects for arguments
-;;   evil-exchange	port of vim-exchange
-;;   evil-indent-textobject	add text object based on indentation level
-;;   evil-matchit	port of matchit.vim
-;;   evil-nerd-commenter	port of nerdcommenter
-;;   evil-numbers	like C-a and C-x in vim
-;;   evil-search-highlight-persist	emulation of hlsearch behavior
-;;   evil-surround	port of vim-surround
-;;   evil-visualstar	search for current selection with *
-
-TODO: recheck
-;; - Set the variable
-;;   (setq variable value) ; Syntax
-;;   ;; Setting variables example
-;;   (setq variable1 t ; True
-;;         variable2 nil ; False
-;;         variable3 '("A" "list" "of" "things"))
-;;
-;; - Define the keybinding
-;;   NOTE: SPC o and SPC m o are reserved for user keybindings
-;;   (define-key map new-keybinding function) ; Syntax
-;;   ;; Map H to go to the previous buffer in normal mode
-;;   (define-key evil-normal-state-map (kbd "H") 'previous-buffer)
-;;   ;; Mapping keybinding to another keybinding
-;;   (define-key evil-normal-state-map (kbd "H") (kbd "^")) ; H goes to beginning of the line
-;;   To map <Leader> keybindings, use the spacemacs/set-leader-keys function.
-;;
-;;   (spacemacs/set-leader-keys key function) ; Syntax
-;;   ;; Map killing a buffer to <Leader> b c
-;;   (spacemacs/set-leader-keys "bc" 'spacemacs/kill-this-buffer)
-;;   ;; Map opening a link to <Leader> o l only in org-mode (works for any major-mode)
-;;   (spacemacs/set-leader-keys-for-major-mode 'org-mode
-;;     "ol" 'org-open-at-point)
-;;
-;;   Function:
-;;
-;;   (defun func-name (arg1 arg2)
-;;     "docstring"
-;;     ;; Body
-;;     )
-;;
-;;   Calling a function
-;;   (func-name arg1 arg1)
-;;
-;;   Here is an example of a function that is useful in real life:
-;;   ;; This snippet allows you to run clang-format before saving
-;;   ;; given the current file as the correct filetype.
-;;   ;; This relies on the c-c++ layer being enabled.
-;;   (defun clang-format-for-filetype ()
-;;     "Run clang-format if the current file has a file extensions
-;;   in the filetypes list."
-;;     (let ((filetypes '("c" "cpp")))
-;;       (when (member (file-name-extension (buffer-file-name)) filetypes)
-;;         (clang-format-buffer))))
-
-;; See http://www.gnu.org/software/emacs/manual/html_node/emacs/Hooks.html for
-;; what this line means
-;; (add-hook 'before-save-hook 'clang-format-for-filetype)
