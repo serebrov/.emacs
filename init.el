@@ -124,6 +124,32 @@
     (setq evil-collection-mode-list '(dired ibuffer magit corfu vertico consult info grep wgrep deadgrep))
     (evil-collection-init))
 
+  ;; Surround in visual-state with
+  ;; S<textobject> or gS<textobject>
+  ;; in normal-state with
+  ;; ys<textobject> or yS<textobject>.
+  ;; Change surrounding with cs<old-textobject><new-textobject>.
+  ;; Delete surrounding with ds<textobject>.
+  ;;
+  ;; Note: when adding brackets, the left one will do `( this )` (adds space)
+  ;; and the right one will do `(this)` (no space)
+  (use-package evil-surround
+    :ensure t
+    :config
+    (global-evil-surround-mode 1))
+
+  ;; Vim's C-a / C-x to increment/decrement numbers
+  ;; and g C-a / g C-x for incremental increment, useful for lists of numbers:
+  ;; 1              2
+  ;; 2  -> g C-a -> 3
+  ;; 3              4
+  (use-package evil-numbers
+    :config
+    (global-set-key (kbd "C-a") 'evil-numbers/inc-at-pt)
+    (global-set-key (kbd "C-x") 'evil-numbers/dec-at-pt)
+    (define-key evil-normal-state-map (kbd "g C-a") 'evil-numbers/inc-at-pt-incremental)
+    (define-key evil-visual-state-map (kbd "g C-x") 'evil-numbers/dec-at-pt-incremental))
+
 (use-package general
   :config
   (general-evil-setup) ;; <- evil
