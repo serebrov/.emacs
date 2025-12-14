@@ -217,3 +217,42 @@
 
 ;; (add-hook 'TeX-after-compilation-finished-functions
 ;;   #'TeX-revert-document-buffer)
+
+;;  External packages:
+;;  - markdown-mode — The most popular option, available via MELPA. Provides syntax highlighting, preview, export, and editing commands.
+;;
+;;  To install markdown-mode, add to your config:
+;;
+(use-package markdown-mode
+  :ensure t
+  :mode ("\\.md\\'" . markdown-mode))
+;;
+;;  Or install interactively with M-x package-install RET markdown-mode RET.
+;;
+;;  Useful commands in markdown-mode:
+;;  - C-c C-c p — Preview in browser
+;;  - C-c C-c l — Live preview
+;;  - C-c C-s b — Bold
+;;  - C-c C-s i — Italic
+;;  - C-c C-s c — Code
+;;  - TAB on headings — Cycle visibility (like org-mode)
+;;
+;;  Built-in (Emacs 29+):
+;;  - markdown-ts-mode — Tree-sitter based markdown mode (requires tree-sitter grammar installed)
+;;
+;;   1. Install the tree-sitter grammar:
+;;   M-x treesit-install-language-grammar RET markdown RET
+;;   It will prompt for the grammar source — use the default or specify:
+;;   https://github.com/tree-sitter-grammars/tree-sitter-markdown
+;;
+;;   2. Associate the mode with .md files:
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-ts-mode))
+;;
+;;   3. Verify tree-sitter is available:
+;;   M-: (treesit-available-p) RET
+;;   Should return t.
+;;
+;;   Note: The built-in markdown-ts-mode is quite basic compared to the external markdown-mode package — it mainly provides tree-sitter-based syntax highlighting and indentation. If you want features like preview, export, or editing commands, the external markdown-mode package is more full-featured.
+;;
+;;   You can check if the grammar is installed with:
+;;   M-: (treesit-language-available-p 'markdown) RET
