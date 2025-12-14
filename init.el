@@ -142,13 +142,18 @@
   ;; Vim's C-a / C-x to increment/decrement numbers
   ;; and g C-a / g C-x for incremental increment, useful for lists of numbers:
   ;; 1              2
-  ;; 2  -> g C-a -> 3
-  ;; 3              4
+  ;; 1  -> g C-a -> 3
+  ;; 1              4
   (use-package evil-numbers
     :config
-    (global-set-key (kbd "C-a") 'evil-numbers/inc-at-pt)
-    (global-set-key (kbd "C-x") 'evil-numbers/dec-at-pt)
-    (define-key evil-normal-state-map (kbd "g C-a") 'evil-numbers/inc-at-pt-incremental)
+    (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
+    (define-key evil-normal-state-map (kbd "C-x C-x") 'evil-numbers/dec-at-pt)
+    (define-key evil-visual-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
+    (define-key evil-visual-state-map (kbd "C-x C-x") 'evil-numbers/dec-at-pt)
+    ;; We don't want to shadow C-x as, for example, C-x C-e is useful
+    ;; The C-x C-x is "exchage-point-and-mark", but I am not sure if I'll be
+    ;; using that.
+    (define-key evil-visual-state-map (kbd "g C-a") 'evil-numbers/inc-at-pt-incremental)
     (define-key evil-visual-state-map (kbd "g C-x") 'evil-numbers/dec-at-pt-incremental))
 
 (use-package general
