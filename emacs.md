@@ -12,11 +12,12 @@ The `M` in keyboard shortcuts is "Meta" ("Option" key or "Alt" key). Alternative
 
 # Basic emacs keybindings
 
-Note: "M-" (Meta) in shortcuts is "Opt" or "Alt, or "Esc" followed by letter.
+Note: "M-" (Meta) in shortcuts is "Opt" or "Alt", or "Esc" followed by letter.
 
 Open/save/quit:
 - Open file: C-x C-f
-- Save: C-x C-s or M-x save-buffers
+- Save: C-x C-s or M-x save-buffer
+  - M-x save-some-buffers to save multiple buffers
 - Quit emacs: `C-x C-c`
 
 Move around:
@@ -47,13 +48,19 @@ Search in the document:
 
 Select, copy/paste:
 - Select text: C-space
-- `C-x C-x` - select last pasted text
 - Copy/Cut/Paste: M-w, C-w, C-y
 
 Undo and redo:
-- `C-/` - Undo, also `C-x u`, also `C-_`
+- `C-/` - undo, also `C-x u`, also `C-_`
+- `C-?` - redo
+- Note: originally Emacs did not have redo, related:
   - Undo also does redo, so `C-/` undoes the undo
-  - Also use `C-g` to reverse the direction of undos/redos when doing multiple undos/redos, see https://stackoverflow.com/a/18383455
+  - Use `C-g` to reverse the direction of undos/redos when doing multiple undos/redos
+  - From https://stackoverflow.com/a/18383455:
+    - To redo once, immediately after undoing: C-g C-/
+    - To redo twice, immediately after undoing: C-g C-/ C-/.
+      - Note that C-g is not repeated.
+  - Read M-x Info-goto-emacs-command-node RET undo RET to get confused more
 
 Editing:
 - Delete char/word - `C-d` / `M-d`
@@ -104,11 +111,8 @@ Repeating commands:
 Open dired: `C-x d`
 
 - `C-x d` - Open Dired (directory editor)
+- `C-x C-f {dir name}` - The find-file command opens dired when given a dir.
 - `C-x C-j` - Open Dired and jump to the current file
-- `C-x C-q` - Toggle read-only mode in Dired
-- `C-x C-r` - Rename a file in Dired
-- `C-x C-d` - Create a directory in Dired
-- `C-x C-f` - Open a file
 - `C-x C-d` - Open a directory
 - `C-x C-q` - switch to edit mode (like vidir) - wdired
   - `C-c C-c` to save changes
@@ -117,8 +121,8 @@ Open dired: `C-x d`
 ## Getting help
 
 Emacs manual: C-h r, C-h i
-Search on the manual page: C-h s
-Search globally: C-h S
+Search on the current page: C-h s
+Select a manual and search in it: C-h S
 
 Describe package: C-h P
 Describe current mode: C-h m
@@ -127,6 +131,8 @@ Describe key: M-x describe-key
 
 Quick reference card: M-x help-quick
 
+Help on a topic:
+- M-x Info-goto-emacs-command-node RET {topic} RET
 
 - `C-h a {keyword}` - Search for a keyword in all commands
 - `C-h b` - Show all key bindings
@@ -142,27 +148,63 @@ Quick reference card: M-x help-quick
   - `C-h f forward-char` - Describe the `forward-char` function
 
 - `C-h i` - Open the Info manual
-   - `m Emacs` - Search for a topic
+  - `m Emacs` - Search for a topic
+
+# Reading Help
+
+Note: you can see the current mode in the bottom bar, it says `*Help*` for help buffers and `*Info*` for Info manuals. Keybindings are somewhat different.
+
+In the Help file:
+- scroll up/down: `spc` / `backspace` (or `DEL`).
+- Go to the top: `<`
+- Go to the bottom: `>`
+- Go back: `l`
+- Next / prev page: `n` and `p`
+- Open info page for current topic: `i`
+- View source code: `s`
+- Quit: `q`
+
+# Reading Info manuals
+
+Note: you can see the current mode in the bottom bar, it says `*Help*` for help buffers and `*Info*` for Info manuals. Keybindings are somewhat different.
 
 In the Info manual:
-- scroll up/down: `spc` / `backspace` (or `DEL` or `b`).
+- get quick help: `?`
+  - quit: scroll to the bottom or C-g (or anything that is not bound like `j`)
+- scroll up/down: `spc` / `backspace` (or `DEL`).
   - `spc` at the end of a node to go to the next node.
-- Show menu: `m`
-- Cycle through menu items: `TAB`
+- Go to the top (beginning of the node): `b`
+- Go to the bottom (end of the node): `e`
+- Quit: `q`
+
+Moving between nodes:
 - Go back/forward in history (like jump list): `l` / `r`
   - Note that `l` is a universal back command, it works in many contexts.
   - See the history: `L`
+- Go to nearest node: RET
 - Next/prev node, sequentially:  `[` / `]` (same as space/backspace, but without scrolling)
 - Next/prev node on the same level: `n` and `p` (will skip lower level nodes)
-- Table of contents: `t` (top)
+- First (top) node / last node: `t` and `<` / `>`
+- Table of contents: `T`
 - Parent node: `u` (up one level)
 
-- All manuals (directory): `d` to go to the directory of all manuals.
+Quick jumps:
+- Show menu: `m`, `Ctrl-g` - in new window
+  - Cycle through menu items: `TAB`
+- Show references: `f`
+- Go to node: `g`, in new window - `Ctrl-g`
 
+Search:
 - Search in the document: `s`
   - Incremental search: `C-s` or `C-r`
-  - Search in the index: `i`
+  - Search in the index `i`
 - Search everywhere: M-x info-apropos
+
+Other:
+- All manuals (directory): `d` to go to the directory of all manuals.
+- Open current manual in the browser: `G`
+- `M-x visible-mode` to toggle visible mode (show hidden markup).
+- `M-n` creates a new Info window with the same node (duplicate the current window)
 
 Info has some hints in the top and bottom bars:
 - The mode line at the bottom shows where we are now (*info* (info) NodeName)
@@ -175,24 +217,28 @@ Info has some hints in the top and bottom bars:
 
 Info help: ? or `H` in a standalone reader
 - Note: the ? does not work for me, H works.
-- Note: the manual says whey I go to help from the Info, I can scroll all the way down with SPC and then press SPC one or more times to get back to Info - this does not happen (I am going back through the list of buffers)
+- Note: the manual says when I go to help from the Info, I can scroll all the way down with SPC and then press SPC one or more times to get back to Info - this does not happen (I am going back through the list of buffers)
 - Maybe both problems are related
 
-- `M-x visible-mode` to toggle visible mode (show hidden markup).
+Evil bindings:
+- scroll up/down: `spc` / `backspace` (or `DEL` or `b`).
+- Quit: `q`
+- Go to nearest node: RET
+- Parent node: `u`
+- Search: `s`
+- Directory: `d`
+- Go back/forward in history: `C-o` / `TAB`
+- Next/prev node, sequentially:  `C-j` / `C-k`
+- Next/prev node on the same level: `g j` and `g k`
+- First (top) node / last node: `g t` and ?
+- Table of contents: `g T`
 
-- `f` to select a cross-reference link.
-  - `f?` to see a list of all cross-references.
-- `TAB` cycles through cross-reference links.
-
-- Help: `h` for help.
- -- is it "H"?
-
-- `g` to go to a specific node by name, `C-u g` to go to a node in a new window.
-- `m` to go to a menu item, `C-u m` to go to a menu item in a new window.
-
-- `M-n` creates a new Info window with the same node (duplicate the current window)
-
-- `q` to quit the Info manual.
+Quick jumps (evil):
+- Show menu: `J`
+  - Cycle through menu items: `g ]` and `g [`
+- Show references: `g f`
+- Go to node: `g G`
+- Virtual index: `I`
 
 ## Managing Windows
 
@@ -313,8 +359,8 @@ Show message (also demonstrates the string interpolation):
 ```
 
 Useful string functions:
-- `concat(str1 str2)` - Concatenate strings
-- `substring(str start end)` - Get a substring
+- `(concat str1 str2)` - Concatenate strings
+- `(substring str start end)` - Get a substring
 
 The variable can be set with `setq` or `let`:
 
@@ -375,7 +421,7 @@ Full function definition:
 
 Comments start with a semicolon.
 
-Functions with (interative ..) right after the documentation can be executed with `M-x fn-name`.
+Functions with (interactive ..) right after the documentation can be executed with `M-x fn-name`.
 
 Interactive function example:
 
@@ -389,7 +435,7 @@ Interactive function example:
 The `"p"` in `interactive` means that the function will prompt the user for a prefix
 argument (a number). Other options are: `"f"` - file, `"b"` - buffer, `"r"` - region.
 
-The `(messsage "string")` function is used to show a message in the minibuffer.
+The `(message "string")` function is used to show a message in the minibuffer.
 
 A `let` is used to define a local variable or a set of variables for the body  of the let:
 
@@ -446,7 +492,7 @@ Region is the text between point and mark.
 ```
 
 Also, `save-excursion` saves the current buffer, window, and frame and restores them after
-(so if the inner code jumps to another buffer, the current one will be reopend after `save-excursion`).
+(so if the inner code jumps to another buffer, the current one will be reopened after `save-excursion`).
 
 Alternatively, when we need to temporarily switch to another buffer, the `with-current-buffer` can be used
 to execute code and then return to the original buffer:

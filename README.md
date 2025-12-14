@@ -1,6 +1,6 @@
 # Intro
 
-Config is based on kickstart, the original reamde is down below.
+Config is based on kickstart, the original readme is down below.
 https://github.com/MiniApollo/kickstart.emacs
 
 The entry point is the [.emacs](.emacs) config where there is non-kickstart stuff.
@@ -14,11 +14,12 @@ I use evil, but it is good to know basic keybindings and be able to move around 
 
 More information is in the [emacs.md](emacs.md).
 
-Note: "M-" (Meta) in shortcuts is "Opt" or "Alt, or "Esc" followed by letter.
+Note: "M-" (Meta) in shortcuts is "Opt" or "Alt", or "Esc" followed by letter.
 
 Open/save/quit:
 - Open file: C-x C-f
-- Save: C-x C-s or M-x save-buffers
+- Save: C-x C-s or M-x save-buffer
+  - M-x save-some-buffers to save multiple buffers
 - Quit emacs: `C-x C-c`
 
 Move around:
@@ -31,16 +32,16 @@ Cancel current operation: C-g (which is usually done with Esc in vim)
 
 Search in the document: C-s (next C-s, prev C-r)
 
-Cancel current operation: C-g (which is usually done with Esc in vim)
-
 Select, copy/paste:
 - Select text: C-space
 - Copy/Cut/Paste: M-w, C-w, C-y
 
 Undo and redo:
-- `C-/` - Undo, also `C-x u`, also `C-_`
-  - Undo also does redo, so `C-/` undoes the undo
-  - Also use `C-g` to reverse the direction of undos/redos when doing multiple undos/redos, see https://stackoverflow.com/a/18383455
+- `C-/` - undo, also `C-x u`, also `C-_`
+- `C-?` - redo
+- Note: originally Emacs did not have redo, related:
+  - M-x Info-goto-emacs-command-node RET undo RET
+  - https://stackoverflow.com/a/18383455:
 
 Running commands and code:
 - Run emacs function ("interactive command"): M-x {function name}
@@ -63,27 +64,59 @@ Repeating commands:
 
 Dired: `C-x d`
 
+# Reading Help
+
+Note: you can see the current mode in the bottom bar, it says `*Help*` for help buffers and `*Info*` for Info manuals. Keybindings are somewhat different.
+
+In the Help file:
+- scroll up/down: `spc` / `backspace` (or `DEL`).
+- Go to the top: `<`
+- Go to the bottom: `>`
+- Go back: `l`
+- Next / prev page: `n` and `p`
+- Open info page for current topic: `i`
+- View source code: `s`
+- Quit: `q`
+
 # Reading Info manuals
 
+Note: you can see the current mode in the bottom bar, it says `*Help*` for help buffers and `*Info*` for Info manuals. Keybindings are somewhat different.
+
 In the Info manual:
-- scroll up/down: `spc` / `backspace` (or `DEL` or `b`).
+- get quick help: `?`
+  - quit: scroll to the bottom or C-g (or anything that is not bound like `j`)
+- scroll up/down: `spc` / `backspace` (or `DEL`).
   - `spc` at the end of a node to go to the next node.
-- Show menu: `m`
-- Cycle through menu items: `TAB`
+- Go to the top (beginning of the node): `b`
+- Go to the bottom (end of the node): `e`
+- Quit: `q`
+
+Moving between nodes:
 - Go back/forward in history (like jump list): `l` / `r`
   - Note that `l` is a universal back command, it works in many contexts.
   - See the history: `L`
+- Go to nearest node: RET
 - Next/prev node, sequentially:  `[` / `]` (same as space/backspace, but without scrolling)
 - Next/prev node on the same level: `n` and `p` (will skip lower level nodes)
-- Table of contents: `t` (top)
+- First (top) node / last node: `t` and `<` / `>`
+- Table of contents: `T`
 - Parent node: `u` (up one level)
 
-- All manuals (directory): `d` to go to the directory of all manuals.
+Quick jumps:
+- Show menu: `m`
+  - Cycle through menu items: `TAB`
+- Show references: `f`
+- Go to node: `g`
 
+Search:
 - Search: `s`
   - Incremental search: `C-s` or `C-r`
   - Search in the index: `i` (`I` to create a page with results)
 - Search everywhere: M-x info-apropos
+
+Other:
+- All manuals (directory): `d` to go to the directory of all manuals.
+- Open current manual in the browser: `G`
 
 Info has some hints in the top and bottom bars:
 - The "Prev: ..." in the header shows where "p" would take you
@@ -104,7 +137,7 @@ Shortcuts (in emacs state):
  - Quick help, show a reference card - M-x help-quick
   - This will show emacs keybindings
 
-Note on key shortcuts: default Emacs shortcuts such as `C-h r` to display the manual do not work in Evil mode. The unified way is to use `M-x` commands. Alternatively, press `C-g` to swich to `evil-emacs-state` then evil keys are disabled and native Emacs shortcuts are working.
+Note on key shortcuts: default Emacs shortcuts such as `C-h r` to display the manual do not work in Evil mode. The unified way is to use `M-x` commands. Alternatively, press `C-z` to switch to `evil-emacs-state` then evil keys are disabled and native Emacs shortcuts are working.
 
 Searching help:
 - M-x info-apropos - search all info manuals for a string
@@ -131,7 +164,7 @@ Describing things:
   - for example, M-x helpful-variable RET evil-want-C-u-scroll
 - M-x describe-symbol - describes any symbol (function, variable, face, etc.), a catch-all, C-h o
 
-# Emacs interacitve commands and prefix system
+# Emacs interactive commands and prefix system
 
 Interactive commands are special functions that can be executed with `M-x`. These special functions are able to take extra arguments passed via Emacs prefix system.
 
@@ -161,9 +194,9 @@ The run-lisp function's code basically does this:
     inferior-lisp-program))
  ```
 
-It does not care what agrument we pass as long as we pass something.
+It does not care what argument we pass as long as we pass something.
 
-In the case we want to distingish arguments, we can do it like this:
+In the case we want to distinguish arguments, we can do it like this:
 
 ```emacs-lisp
 (defun my-command (arg)
@@ -176,7 +209,7 @@ In the case we want to distingish arguments, we can do it like this:
    (t (message "You passed: %d" arg))))
 ```
 
-Functions can also have multiple agruments. The prefix argument (M-6, C-u, etc.) is special - it's captured before the command runs and is separate from other arguments. All other arguments are gathered by prompting the user through the minibuffer.
+Functions can also have multiple arguments. The prefix argument (M-6, C-u, etc.) is special - it's captured before the command runs and is separate from other arguments. All other arguments are gathered by prompting the user through the minibuffer.
 
 So when we do:
 
@@ -194,6 +227,7 @@ To pass a negative argument use `C--5 ...` or `M--5 ...`.  The `C-- ...` works a
 # Problems to solve
 
 Some problems with evil and my setup:
+- setup spellchecking
 - SQL mode, something similar to vim's db-ext
   - have some configuration for available databases
   - select the database to use
@@ -202,7 +236,7 @@ Some problems with evil and my setup:
 - learn more about projectile and session save/restore
   - currently I have `(desktop-save-mode 1)`, see also related notes in [.emacs](.emacs)
 - learn more about org mode
-- can I switch to emacs state for one command? Like one-time `C-g`
+- can I switch to emacs state for one command? Like one-time `C-z`
   - Would be nice to have a prefix like SMTH C-h C-i
 - autosave: make it save on going from insert to normal and on focus lost
   - this is similar to my vim config and it is very reliable, basically
@@ -211,10 +245,13 @@ Some problems with evil and my setup:
 - emacs hijacks windows (testing popper as a solution)
   - Example: Ctrl-h i to open help then h to get help for help - replaces all windows
   - Example: Ctrl-h i to open help then M-n to duplicate it - replaces one of the existing windows
-  - Workaround: M-x winner-mode adds `M-x winner-mode-undo' (and redo) to undo these changes
+  - Workaround: M-x winner-mode adds `M-x winner-undo' (and redo) to undo these changes
+- I have `tn` to open new tab, it also opens the active buffer in it.
+  - who do I make it open empty buffer instead? (I used to this in vim - is this really necessary though?)
 - Autocompletion uses Enter, so I cannot create a new line without selecting an option
   - reconfigure to TAB? or Ctrl-n?
-- vim surround bingings?
+  - note: popup can be cancelled with `Ctrl-g`
+- vim surround bindings?
 - which text objects are available?
 - System C-SPC conflict with emacs C-SPC (like C-SPC to start selection and
   C-x C-SPC to go back to previous mark)
@@ -269,24 +306,24 @@ Checking the `*Messages*` buffer:
   But maybe also projectile- and project- have something similar.
 - C-F in command line mode / search mode to show command buffer (same as shown with q: and q/)
   - works in this setup, maybe evil-collection or evil itself
-- There is a problem with editing, I am suddently getting into the
+- There is a problem with editing, I am suddenly getting into the
   "Buffer is read-only" state.
    After doing M-x read-only-mode to switch it off, I am also getting
    the "Text is read-only" state and then need to also do
    M-: (let ((inhibit-read-only t)) (set-text-properties (point-min) (point-max) ()))
-  Not sure what cases it, maybe I'am triggering some keybinding accidentally.
+  Not sure what causes it, maybe I'm triggering some keybinding accidentally.
   - did not see this recently, maybe emacs upgrade (29 to 30) helped
 
 # Evil notes
 
 Evil and evil-collection rebind Emacs commands to vim-like keys.
 
-Use `C-g` to pause/unpause evil mode. It switches to the `evil-emacs-state` to have original Emacs keys reenabled. This is useful in some contexts, such as reading info pages (Emacs has convenient shortcusts for the info mode).
+Use `C-z` to pause/unpause evil mode. It switches to the `evil-emacs-state` to have original Emacs keys reenabled. This is useful in some contexts, such as reading info pages (Emacs has convenient shortcuts for the info mode).
 
 The `evil-collection` is a package that has many more or less independent sub-plugins to provide keybindings in popular contexts (such as dired, ibuffer, etc).
-There is no explicit documentation on what keybindings are set by `evil-collection`, see [Inspecting-keymaps below](#inspecting-keymaps) for some hings on how to understand which keys do what.
+There is no explicit documentation on what keybindings are set by `evil-collection`, see [Inspecting-keymaps below](#inspecting-keymaps) for some hints on how to understand which keys do what.
 
-## Inspeciting evil keymaps
+## Inspecting evil keymaps
 
 - how to find out current mode keybindings, when they are rebinded by evil or evil collection?
   - something similar to what I see with `:nnoremap` in vim
@@ -294,7 +331,7 @@ There is no explicit documentation on what keybindings are set by `evil-collecti
 
 Here are some options:
 - The M-x describe-keybindings seems to work in a similar way to vim :map
-- The M-x describe-mode lists all binidings, including evil
+- The M-x describe-mode lists all bindings, including evil
   - need to scroll down through standard bindings.
   - For example, for dired, there are mappings like
     <normal-state> RET dired-find-file
@@ -305,9 +342,9 @@ Here are some options:
     not actual keys while `M-x helpful-variable` displays it as a keymap
   - Lookup key in the map:
     - M-: (lookup-key evil-normal-state-map (kbd "your-key"))
-- Which key can show top-level mappinngs:
+- Which key can show top-level mappings:
   - M-x which-key-show-top-level or M-x which-key-show-major-mode
-- the M-x which-key-dump-bindings insers all bingings
+- the M-x which-key-dump-bindings inserts all bindings
 
 - how to find out if the command is bound to something?
   - M-x where-is RET command-name (or use C-h w)
@@ -315,7 +352,7 @@ Here are some options:
 - see which C-h commands are available:
   - in emacs state: C-h and wait for which key popup
   - in evil state:
-  - M-x which-key-show-keypmap RET help-command
+  - M-x which-key-show-keymap RET help-command
 
 Evil information:
 - https://evil.readthedocs.io/en/latest/keymaps.html
@@ -329,14 +366,14 @@ I mostly use `CtrlSF` in vim to find things in the project.
 
 - how to limit the search to a subfolder when searching with deadgrep?
   - in the search results window I can enter new directory at the top
-  - is there a way to limit the search to subdirectory initally? (not critical,
+  - is there a way to limit the search to subdirectory initially? (not critical,
     but would be nice)
-- CtrlSF edit mode works like dired: does not save anything right about
-  (deadgrep edits files live)
-- deadgrep edit mode needs to be explicitely enabled with M-x deadgrep-edit-mode
+- CtrlSF edit mode works like dired: does not save anything right away
+  and there is a separate save operation (deadgrep edits files live)
+- deadgrep edit mode needs to be explicitly enabled with M-x deadgrep-edit-mode
   while CtrlSF naturally starts in vim normal mode and "i" starts editing
 - CtrlSF opens files by default in a split, deadgrep opens the file by default
-  (not a problem, deadgrep has the deadgrep-vist-result-other-window command)
+  (not a problem, deadgrep has the deadgrep-visit-result-other-window command)
 
 Related: https://www.reddit.com/r/emacs/comments/1pglgou/finally_i_have_my_beloved_quickfix_list_in_emacs/
 In Emacs, **wgrep** (Writable Grep) brings this experience
@@ -348,7 +385,7 @@ In Emacs, **wgrep** (Writable Grep) brings this experience
 
 # Emacs terminal emulators
 
-## Problems and solutions
+## Questions and answers
 
 - how do I start the new `term` terminal instance?
   - `C-u M-x term`
@@ -360,7 +397,7 @@ In Emacs, **wgrep** (Writable Grep) brings this experience
 - "eat" produced some garbage output when entering and then deleting text
   - M-x eat-compile-terminfo helped
 
-- how do I pass Ctrl-R to the terminal? With ansi-term it seems to be insercepted by emacs
+- how do I pass Ctrl-R to the terminal? With ansi-term it seems to be intercepted by emacs
  - use C-c C-k to switch to char mode (keys send directly)
    the C-c C-j switches back to line mode (Emacs intercepts keys)
    use C-q C-r to send the key to the terminal once
@@ -403,7 +440,7 @@ vterm
 - Requires compilation (needs cmake and libvterm)
 
 eat (Emulate A Terminal)
-- Wirtten in Emacs Lisp
+- Written in Emacs Lisp
 - No compilation required (unlike vterm)
 - Good terminal compatibility
 - Integrates with eshell (eat-eshell-mode)
