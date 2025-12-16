@@ -210,9 +210,9 @@
     "e v b" '(eval-buffer :wk "Evaluate elisp in buffer")
     "e v r" '(eval-region :wk "Evaluate elisp in region"))
 
-  (start/leader-keys
-    "g" '(:ignore t :wk "Git")
-    "g s" '(magit-status :wk "Magit status"))
+  ;; (start/leader-keys
+  ;;   "g" '(:ignore t :wk "Git")
+  ;;   "g s" '(magit-status :wk "Magit status"))
 
   (start/leader-keys
     "h" '(:ignore t :wk "Help") ;; To get more help use C-h commands (describe variable, function, etc.)
@@ -239,7 +239,10 @@
 
   (start/leader-keys
     "g" '(:ignore g :wk "Global commands")
-    ;; gt is to switch tabs, but I have this binded to left/right arrows.
+    "g s" '(magit-status :wk "Magit status")
+    "g x" '(execute-extended-command :wk "Execute command (M-x)")
+    ;; gt in vim is to switch tabs, but I have this bound to left/right arrows,
+    ;; so reassign it to start the terminal.
     "g t" '(eat :wk "Eat terminal"))
 
   ;; gc to comment/uncomment lines

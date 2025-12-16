@@ -8,11 +8,21 @@ Buffer is similar to the Vim buffer (file loaded in memory, can be displayed in 
 
 Frame opens a new GUI window in GUI Emacs (and something similar to a tab in terminal Emacs).
 
-The `M` in keyboard shortcuts is "Meta" ("Option" key or "Alt" key). Alternatively, "Esc" can be used as meta, for example, press "Esc" and then "v" to move up one screen.
+The `M-` in keyboard shortcuts is "Meta" ("Option" key or "Alt" key). Alternatively, "Esc" can be used as meta, for example, press "Esc" and then "v" to move up one screen.
+
+# Running emacs in terminal
+
+```
+emacs -nw ./file-name
+```
+
+If there is the GUI Emacs running at the same time, `--no-desktop` is helpful to avoid confict with the running emacs:
+
+```
+emacs -nw --no-deskop ./file-name
+```
 
 # Basic emacs keybindings
-
-Note: "M-" (Meta) in shortcuts is "Opt" or "Alt", or "Esc" followed by letter.
 
 Open/save/quit:
 - Open file: C-x C-f

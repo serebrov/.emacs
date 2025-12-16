@@ -256,3 +256,51 @@
 ;;
 ;;   You can check if the grammar is installed with:
 ;;   M-: (treesit-language-available-p 'markdown) RET
+
+;; Spell checking
+;; Note: emacs has standard support for ispell/aspell (needs to be installed with
+;; homebrew, brew install aspell) and `flyspell-mode' that highlights misspelt words.
+;; Note: aspell seems to be newer/better than ispell.
+;; But it still does not see some errors like "the the something".
+;; - update: jinx did not help with this (but neovim highlights that error,
+;;   so maybe check how my neovim setup does this and see how I can get this
+;;   in emacs)
+;; https://github.com/minad/jinx
+;; Requires brew install enchant
+(use-package jinx
+  :hook (emacs-startup . global-jinx-mode)
+  ;; M-$ triggers correction for the misspelled word before point.
+  ;; C-u M-$ or M-x jinx-correct-all spell-checks the entire buffer.
+  ;; C-u C-u M-$ or M-x jinx-correct-word forces correction of the word at point,
+  ;; even if it is not misspelled.
+  :bind (("M-$" . jinx-correct)
+         ("C-M-$" . jinx-languages))
+)
+
+;;  Try
+;;  1. writegood-mode (simple, catches repeated words)
+;;
+;;  This is lightweight and specifically detects duplicate words like "the the":
+;;
+;;  (use-package writegood-mode
+;;    :hook ((text-mode . writegood-mode)
+;;           (org-mode . writegood-mode)
+;;           (markdown-mode . writegood-mode)))
+;;
+;;  2. langtool (comprehensive grammar checking)
+;;
+;;  Uses LanguageTool for full grammar checking including repeated words, passive voice, etc.:
+;;
+;;  ;; Requires: brew install languagetool
+;;  ;; GitHub: https://github.com/languagetool-org/languagetool
+;;  ;; Note: their site (languagetool.org) is confusing, seems that it sells an AI tool.
+;;  ;; the information about it being open source is hidden, but present
+;;  ;; https://languagetool.org/dev
+;;  (use-package langtool
+;;    :config
+;;    (setq langtool-language-tool-jar "/opt/homebrew/opt/languagetool/libexec/languagetool-commandline.jar")
+;;    (setq langtool-default-language "en-US")
+;;    :bind (("C-x 4 w" . langtool-check)
+;;           ("C-x 4 W" . langtool-check-done)
+;;           ("C-x 4 n" . langtool-goto-next-error)
+;;           ("C-x 4 p" . langtool-goto-previous-error)))
