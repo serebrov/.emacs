@@ -304,3 +304,18 @@
 ;;           ("C-x 4 W" . langtool-check-done)
 ;;           ("C-x 4 n" . langtool-goto-next-error)
 ;;           ("C-x 4 p" . langtool-goto-previous-error)))
+
+;; Every now and then I have *projectile-files-errors* buffer popping up with
+;; the errors like this:
+;;   fatal: No url found for submodule path
+;;   'folder/subfolder' in .gitmodules
+;; The most annoying part is that it replaces the current buffer.
+;; This makes it to appear below the current buffer.
+(add-to-list 'display-buffer-alist
+             '("\\*projectile-files-errors\\*"
+               (display-buffer-below-selected)
+               (window-height . 0.25)))
+;; And this can be used to suppress it.
+;; (add-to-list 'display-buffer-alist
+;;              '("\\*projectile-files-errors\\*"
+;;               (display-buffer-no-window)))
