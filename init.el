@@ -790,16 +790,16 @@ The code is taken from here: https://github.com/skeeto/.emacs.d/blob/master/lisp
 (use-package deadgrep
   :custom
   (deadgrep-display-buffer-function 'switch-to-buffer)  ;; Open in same window
-  :config
-  ;; Add context lines (like CtrlSF)
-  (setq deadgrep-extra-arguments '("--follow" "-C3"))
   ;; Swap RET and S-RET in deadgrep buffer
   ;; From the ‘modes/unimpaired/evil-collection-deadgrep.el’.
   (evil-collection-define-key 'normal 'deadgrep-edit-mode-map
     (kbd "<S-return>") 'deadgrep-visit-result)
   (evil-collection-define-key 'normal 'deadgrep-mode-map
     (kbd "<S-return>") 'deadgrep-visit-result
-    (kbd "RET") 'deadgrep-visit-result-other-window))
+    (kbd "RET") 'deadgrep-visit-result-other-window)
+  :config
+  ;; Add context lines (like CtrlSF)
+  (setq deadgrep-extra-arguments '("--follow" "-C3")))
 
 ;; Note: setup below may still be useful, but I added deadgrep plugin above instead
 ;; as it is closer to CtrlSF (nicer presentation of the search results)
