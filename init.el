@@ -113,6 +113,7 @@
     (evil-want-C-i-jump t)        ;; Enables C-i jump (C-i and TAB are the same in Emacs
                                   ;; so this also disables TAB).
     (evil-undo-system 'undo-redo) ;; C-r to redo
+    (evil-shift-round nil)        ;; preserve indentation when << and >>
     ;; Unmap keys in 'evil-maps. If not done, org-return-follows-link will not work
     :bind (:map evil-motion-state-map
                 ("SPC" . nil)
