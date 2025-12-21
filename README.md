@@ -227,9 +227,8 @@ To pass a negative argument use `C--5 ...` or `M--5 ...`.  The `C-- ...` works a
 # Problems to solve
 
 Some problems with evil and my setup:
-- undo after restar
+- undo after restart
 - "z=" does not replace explicitely with correct spelling (or I don't know how)
-- The ">" in normal mode messes up indentation
 - Add of find a ":GBrowse" command
 - The "Enter" in normal mode creates new line
   - In Vim it folds/unfolds the code (but I don't use it much, so NOOP is also fine)
@@ -237,9 +236,6 @@ Some problems with evil and my setup:
   - in my vim setup in normal mode pressing `*` searches for the word under the cursor
     it also stays on the current word
     this should be a piece of custom setup, need to find and replicate it in emacs config
-- LSP setup
-  - "gt" in python source suggests to find tags table
-    - in my vim setup that triggers the "go to definition" action.
 - setup spellchecking
 - SQL mode, something similar to vim's db-ext
   - have some configuration for available databases
@@ -299,6 +295,12 @@ Checking the `*Messages*` buffer:
 
 # Solved problems
 
+- LSP setup
+  - "gt" in python source suggests to find tags table
+    - in my vim setup that triggers the "go to definition" action.
+  - this now works (at least for python)
+- The ">" in normal mode messes up indentation
+  - Solved with (evil-shift-round nil)
 - autocompletion behavior
   - When I type something in the regular buffer and the auto-complete pops up,
   Enter selects the top suggesion and inserts it. In the minibuffer, Enter
