@@ -148,6 +148,23 @@
 (winner-mode)
 
 (elisp-slime-nav-mode)
+(add-hook 'emacs-lisp-mode-hook #'flymake-mode)
+
+;; Structural editing that prevents unbalanced parens:
+;;  1. In strict mode, you can't delete a paren without its match.
+;; (use-package smartparens
+;;   :hook (emacs-lisp-mode . smartparens-strict-mode))
+;;
+;;  2. Check parens on save:
+;; (add-hook 'emacs-lisp-mode-hook
+;;           (lambda ()
+;;             (add-hook 'before-save-hook #'check-parens nil t)))
+;; This will error and prevent saving if parens are unbalanced.
+;;
+;; 3. aggressive-indent-mode - Auto-reindents as you type, making unbalanced
+;; parens visually obvious (code suddenly indents wrong):
+(use-package aggressive-indent
+  :hook (emacs-lisp-mode . aggressive-indent-mode))
 
 ;;  Alternatively, there's a built-in approach using ibuffer:
 ;;  1. M-x ibuffer (or SPC d i with your config)
