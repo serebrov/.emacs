@@ -227,6 +227,19 @@ To pass a negative argument use `C--5 ...` or `M--5 ...`.  The `C-- ...` works a
 # Problems to solve
 
 Some problems with evil and my setup:
+- undo after restar
+- "z=" does not replace explicitely with correct spelling (or I don't know how)
+- The ">" in normal mode messes up indentation
+- Add of find a ":GBrowse" command
+- The "Enter" in normal mode creates new line
+  - In Vim it folds/unfolds the code (but I don't use it much, so NOOP is also fine)
+- The "*" behavoir
+  - in my vim setup in normal mode pressing `*` searches for the word under the cursor
+    it also stays on the current word
+    this should be a piece of custom setup, need to find and replicate it in emacs config
+- LSP setup
+  - "gt" in python source suggests to find tags table
+    - in my vim setup that triggers the "go to definition" action.
 - setup spellchecking
 - SQL mode, something similar to vim's db-ext
   - have some configuration for available databases
@@ -265,6 +278,10 @@ Some problems with evil and my setup:
 - LSP does not work in python code
 - persistent undo history (to be able to undo or g; after you restart emacs)
 
+Dired:
+- How to have a more minimal view?
+- Is dual pane-style file managment possible?
+
 # Tips for solving problems
 
 For debugging errors in the config it may be useful to enable stacktrace:
@@ -282,6 +299,14 @@ Checking the `*Messages*` buffer:
 
 # Solved problems
 
+- autocompletion behavior
+  - When I type something in the regular buffer and the auto-complete pops up,
+  Enter selects the top suggesion and inserts it. In the minibuffer, Enter
+  does not select the suggestion and instead confirms whatever was typed so far.
+  I want the opposite behavior: Enter in regular buffer should insert the new
+  line and Enter in minibuffer should select the completion.
+  - Solution 1: configure corfu-map to set RET to nil (except the evil command line)
+  - Solution 2: configure vertico with `(vertico-preselect 'first)`
 - shortcuts to move windows with SPC + Ctrl + hjkl
   - done, using `evil-window-move-far-right` and similar commands
 - how to do `:set nowrap`?

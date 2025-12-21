@@ -258,6 +258,7 @@ Window is the Emacs term for a Vim split or a tmux pane.
 - `C-x 3` - Split the window vertically
 - `C-x 0` - Close the current window
 - `C-x 1` - Close all windows except the current one
+  - Note: can go back with `M-x winner-undo`.
 - `C-x o` - Move to the next window
 - `C-M-v` - Scroll other window (useful for reading help)
 
@@ -605,6 +606,32 @@ Recheck:
  - Change file/directory permissions with `M`
  - `(` - show / hide file details
  - `s` - change sort mode
+
+## Dired: interactive replacemend mode
+
+`Q` in direcd starts the regexp replace in marked files (on in current directory under cursor).
+
+It opens two buffers: search results and current buffer with replacements. Key mappings are:
+- Type SPC or y to replace one match, Delete or n to skip to next,
+- RET or q to exit, Period to replace one match and exit,
+- , to replace but not move point immediately,
+- ! to replace all remaining matches in this buffer with no more questions,
+- C-r to enter recursive edit (C-M-c to get out again),
+- C-w to delete match and then enter recursive edit,
+- ^ to move point back to previous match,
+- u to undo previous replacement,
+- U to undo all replacements,
+- e to edit the replacement string.
+- E to edit the replacement string with exact case.
+- C-l to clear the screen, redisplay, and offer same replacement again,
+- Y to replace all remaining matches in all remaining buffers (in
+- multi-buffer replacements) with no more questions,
+- N (in multi-buffer replacements) to skip to the next buffer without
+replacing remaining matches in the current buffer.
+
+Any other character exits the interactive replacement loop, and is then
+re-executed as a normal key sequence.
+* Question: how to re-enable the ineractive mode?
 
 ## Org Mode
 

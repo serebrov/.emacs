@@ -110,8 +110,8 @@
     :custom
     (evil-want-keybinding nil)    ;; Disable evil bindings in other modes (It's not consistent and not good)
     (evil-want-C-u-scroll t)      ;; Set C-u to scroll up
-    (evil-want-C-i-jump t)        ;; Enables C-i jump (not sure why it is disabled,
-                                  ;; C-i does not seem to do anything)
+    (evil-want-C-i-jump t)        ;; Enables C-i jump (C-i and TAB are the same in Emacs
+                                  ;; so this also disables TAB).
     (evil-undo-system 'undo-redo) ;; C-r to redo
     ;; Unmap keys in 'evil-maps. If not done, org-return-follows-link will not work
     :bind (:map evil-motion-state-map
@@ -471,7 +471,31 @@
   ;; be used globally (M-/).  See also the customization variable
   ;; `global-corfu-modes' to exclude certain modes.
   :init
-  (global-corfu-mode))
+  (global-corfu-mode)
+)
+
+;; Corfu manages autocompletion in buffers and I want it to NOT insert the
+;; completion on Enter (Enter creates new line, TAB inserts the completion).
+;; This is easy to configure by setting RET to nil in the corfu-map, but the
+;; problem is that it also affects the evil command mode (:) where I want
+;; Enter to select the suggestion automatically (we don't have new lines there,
+;; so usually selecting the completion is what we want).
+;; This behavior needs more complex solution below.
+(progn
+  ;; RET completes in minibuffer, inserts newline elsewhere
+  (defun my-corfu-ret ()
+    "Complete in minibuffer, insert newline in regular buffers."
+    (interactive)
+    (if (minibufferp)
+        (progn
+          (corfu-insert) ;; select the suggested completion
+          (execute-kbd-macro (kbd "RET")) ;; add Enter after to apply it
+                                          ;; this is the same as it works for M-x commands
+        )
+      (progn (corfu-quit) (newline))))
+  (define-key corfu-map (kbd "RET") #'my-corfu-ret)
+  (define-key corfu-map (kbd "<return>") #'my-corfu-ret)
+)
 
 (use-package nerd-icons-corfu
   :after corfu
@@ -521,6 +545,10 @@
 ;; (package-delete (package-get-descriptor 'reader))
 
 (use-package vertico
+  ;;
+ :custom
+  ;; Always preselect the first candidate so RET selects it
+  (vertico-preselect 'first)
   :init
   (vertico-mode))
 
