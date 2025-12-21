@@ -257,6 +257,27 @@
 ;;   You can check if the grammar is installed with:
 ;;   M-: (treesit-language-available-p 'markdown) RET
 
+;; debugging
+(add-variable-watcher
+   'display-buffer-alist
+   (lambda (sym val op where)
+     (message "display-buffer-alist %s to %S in %S" op val where)))
+
+;; Every now and then I have *projectile-files-errors* buffer popping up with
+;; the errors like this:
+;;   fatal: No url found for submodule path
+;;   'folder/subfolder' in .gitmodules
+;; The most annoying part is that it replaces the current buffer.
+;; This makes it to appear below the current buffer.
+(add-to-list 'display-buffer-alist
+             '("\\*projectile-files-errors\\*"
+               (display-buffer-below-selected)
+               (window-height . 0.25)))
+;; And this can be used to suppress it.
+;; (add-to-list 'display-buffer-alist
+;;              '("\\*projectile-files-errors\\*"
+;;               (display-buffer-no-window)))
+
 ;; Spell checking
 ;; Note: emacs has standard support for ispell/aspell (needs to be installed with
 ;; homebrew, brew install aspell) and `flyspell-mode' that highlights misspelt words.
