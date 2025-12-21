@@ -10,7 +10,43 @@ Frame opens a new GUI window in GUI Emacs (and something similar to a tab in ter
 
 The `M-` in keyboard shortcuts is "Meta" ("Option" key or "Alt" key). Alternatively, "Esc" can be used as meta, for example, press "Esc" and then "v" to move up one screen.
 
-# Running emacs in terminal
+# Lisp Code Style
+
+Lisp code is usually formatted like this:
+
+```
+(use-package embark
+  :bind
+  (("C-." . embark-act)         ;; Context actions on target at point
+   ("C-;" . embark-dwim)        ;; "Do what I mean" on target
+   :map minibuffer-local-map
+   ("C-c C-e" . embark-export)  ;; Export results to a buffer
+   ("C-c C-c" . embark-collect))) ;; Collect results in a buffer
+```
+
+Practically it seems to be inconvenient as it is not easy to add new code after end line and before closing parenthesis:
+
+```
+(use-package embark
+  :bind
+  (("C-." . embark-act)         ;; Context actions on target at point
+   ("C-;" . embark-dwim)        ;; "Do what I mean" on target
+   :map minibuffer-local-map
+   ("C-c C-e" . embark-export)  ;; Export results to a buffer
+   ("C-c C-c" . embark-collect) ;; Collect results in a buffer
+   (i-can-add_more-stuff-here_easily)  ;; <--- add more code here
+ )
+ (and-here-to-if-i-want)               ;; <--- and more here
+)
+```
+
+The Lisp style seems to be to put parenthesis on the same line. Practically it means:
+* Pay attention to the identation, not at the parens
+* Structural editing: use extra tools to work with code
+
+Tools: [paredit](https://paredit.org/), [smartparens](https://smartparens.readthedocs.io/en/latest/), [show-paren](https://www.gnu.org/software/emacs/manual/html_node/emacs/Matching.html), [rainbow-delimiters](https://github.com/Fanael/rainbow-delimiters).
+
+# Running emacs in a terminal
 
 ```
 emacs -nw ./file-name
