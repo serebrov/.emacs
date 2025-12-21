@@ -386,48 +386,46 @@
 
 (use-package vue-mode)
 
+;; LSP server paths
+(defvar my-lsp-dir (expand-file-name "~/.emacs.conf/lsp_servers/")
+  "Base directory for LSP server installations.")
+
+(defun my-lsp (server &rest paths)
+  "Return expanded path under SERVER directory, joining PATHS."
+  (expand-file-name (mapconcat #'identity paths "/")
+                    (expand-file-name server my-lsp-dir)))
+
 (use-package eglot
   :ensure nil ;; Don't install eglot because it's now built-in
   :hook ((c-mode c++-mode ;; Autostart lsp servers for a given mode
                  lua-mode ;; Lua-mode needs to be installed
           python-mode
-          typescript-mode tsx-mode
-          sh-mode bash-ts-mode)
+          typescript-ts-mode tsx-ts-mode
+          sh-mode bash-ts-mode
+          vue-mode)
          . eglot-ensure)
   :custom
   ;; Good default
   (eglot-events-buffer-size 0) ;; No event buffers (LSP server logs)
-  (eglot-autoshutdown t);; Shutdown unused servers.
-  (eglot-report-progress nil) ;; Disable LSP server logs (Don't show lsp messages at the bottom, java)
+  (eglot-autoshutdown t)       ;; Shutdown unused servers.
+  (eglot-report-progress nil)  ;; Disable LSP server logs (Don't show lsp messages at the bottom, java)
   ;; Manual lsp servers
   :config
   (add-to-list 'eglot-server-programs
-               `(python-mode . ("~/.emacs.conf/lsp_servers/python/node_modules/.bin/pyright-langserver" "--stdio")))
-  ;; (add-to-list 'eglot-server-programs
-  ;;              `((sh-mode bash-ts-mode) . ("~/.emacs.conf/lsp_servers/bash/node_modules/.bin/bash-language-server" "start")))
+               `(python-mode . (,(my-lsp "python" "node_modules/.bin/pyright-langserver") "--stdio")))
   (add-to-list 'eglot-server-programs
-               `(sh-mode . ("~/.emacs.conf/lsp_servers/bash/node_modules/.bin/bash-language-server" "start")))
+               `(sh-mode . (,(my-lsp "bash" "node_modules/.bin/bash-language-server") "start")))
   (add-to-list 'eglot-server-programs
-               `(bash-ts-mode . ("~/.emacs.conf/lsp_servers/bash/node_modules/.bin/typescript-language-server" "start")))
+               `(bash-ts-mode . (,(my-lsp "bash" "node_modules/.bin/bash-language-server") "start")))
   (add-to-list 'eglot-server-programs
-               `(typescript-mode . ("~/.emacs.conf/lsp_servers/ts/node_modules/.bin/typescript-language-server" "--stdio")))
+               `(typescript-ts-mode . (,(my-lsp "ts" "node_modules/.bin/typescript-language-server") "--stdio")))
   (add-to-list 'eglot-server-programs
-               `(tsx-mode . ("~/.emacs.conf/lsp_servers/ts/node_modules/.bin/bash-language-server" "--stdio")))
+               `(tsx-ts-mode . (,(my-lsp "ts" "node_modules/.bin/typescript-language-server") "--stdio")))
   (add-to-list 'eglot-server-programs
-               `(vue-mode . (,(expand-file-name "~/.emacs.conf/lsp_servers/volar/node_modules/.bin/vue-language-server") "--stdio"
+               `(vue-mode . (,(my-lsp "volar" "node_modules/.bin/vue-language-server") "--stdio"
                              :initializationOptions
-                             (:typescript (:tsdk ,(expand-file-name "~/.emacs.conf/lsp_servers/volar/node_modules/typescript/lib"))))))
-  ;;(add-to-list 'eglot-server-programs
-  ;;             `(lua-mode . ("PATH_TO_THE_LSP_FOLDER/bin/lua-language-server" "-lsp"))) ;; Adds our lua lsp server to eglot's server list
+                             (:typescript (:tsdk ,(my-lsp "volar" "node_modules/typescript/lib"))))))
   )
-
-(use-package eglot
-  :config
-  (add-to-list 'eglot-server-programs '((sh-mode bash-ts-mode) . ("bash-language-server" "start")))
-
-  :hook
-  (sh-mode . eglot-ensure)
-  (bash-ts-mode . eglot-ensure))
 
 (use-package sideline-flymake
   :hook (flymake-mode . sideline-mode)
