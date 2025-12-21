@@ -350,6 +350,31 @@
   (projectile-switch-project-action #'projectile-dired) ;; Open dired when switching to a project
   (projectile-project-search-path '("~/projects/" "~/work/" ("~/github" . 1)))) ;; . 1 means only search the first subdirectory level for projects
 
+
+;; This is needed to fix a problem with pyright langserver: I have node installed with `nvm'
+;; and when Emacs launces pyright, it cannot find node and fails with and error:
+;;  [stderr]  env: node: No such file or directory
+;;  [jsonrpc] D[22:56:30.749] Connection state change: `exited abnormally with code 127
+;; Note: the error can be seen in the *EGLOT ... events* buffer.
+;; nvm allows to install several node versions, but it requires special bootstrap call
+;; to sent environment variables, for example in ~/.zshrc I have this:
+;;   export NVM_DIR="$HOME/.nvm"
+;;   [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
+;; Below sets node path manually to one of the node versions managed by nvm
+;; Note: this is easy to break (if I remove that version with nvim, it will stop working)
+(let ((node-path (expand-file-name "~/.nvm/versions/node/v24.10.0/bin")))
+  (setenv "PATH" (concat node-path ":" (getenv "PATH")))
+  (add-to-list 'exec-path node-path))
+;; Alternative fix would be to use the `exec-path-from-shell' package which should
+;; take whatever shell variables we have and pass to Emacs.
+;; https://emacs.stackexchange.com/questions/34201/emacs-cant-find-node-when-node-was-installed-using-nvm
+;; https://emacs.stackexchange.com/questions/63947/emacs-cant-find-node-when-node-was-installed-using-nvm-again
+;; (use-package exec-path-from-shell
+;;   :vc (:url "https://github.com/purcell/exec-path-from-shell")
+;; )
+;; (exec-path-from-shell-initialize)
+;; (setq exec-path (append exec-path '("~/.nvm/versions/node/v24.10.0/bin")))
+
 (use-package eglot
   :ensure nil ;; Don't install eglot because it's now built-in
   :hook ((c-mode c++-mode ;; Autostart lsp servers for a given mode
@@ -361,7 +386,9 @@
   (eglot-autoshutdown t);; Shutdown unused servers.
   (eglot-report-progress nil) ;; Disable LSP server logs (Don't show lsp messages at the bottom, java)
   ;; Manual lsp servers
-  ;;:config
+  :config
+  (add-to-list 'eglot-server-programs
+               `(python-mode . ("~/.emacs.conf/lsp_servers/python/node_modules/.bin/pyright-langserver" "--stdio")))
   ;;(add-to-list 'eglot-server-programs
   ;;             `(lua-mode . ("PATH_TO_THE_LSP_FOLDER/bin/lua-language-server" "-lsp"))) ;; Adds our lua lsp server to eglot's server list
   )
