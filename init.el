@@ -221,12 +221,28 @@
               (load-file "~/.config/emacs/init.el"))
             :wk "Reload Emacs config"))
 
+  ;; Find out which function evil executes for the ex command
+  ;; (cdr (assoc "tabclose" evil-ex-commands)) -> tab-bar-close-tab
+  ;; But it would be cool to be able to map EX command directly, it is
+  ;; clearer this way, also maybe more flexible if I need to use some
+  ;; custom input.
+  (defun tabclose ()
+    (evil-ex "tabclose"))
+
   (start/leader-keys
-    "t" '(:ignore t :wk "Toggle")
+    "t" '(:ignore t :wk "Toggle and Tabs")
     ;; related: M-x toggle-truncate-lines (should be similar to :set nowrap in vim)
     "t t" '(visual-line-mode :wk "Toggle truncated lines (wrap)")
-    "t l" '(display-line-numbers-mode :wk "Toggle line numbers"))
-  )
+    "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
+    "t n" '(tab-new :wk "New tab")
+    "t c" '(tab-bar-close-tab :wk "Close current tab")
+    ;; Experimental - another way to close tab would be via `evil-ex`,
+    ;; but this fails with and error
+    ;; Wrong type argument: commandp, tabclose
+    ;; Note: function call should be replaceable with lambda
+    ;; '((lambda () (evil-ex "tabclose")))
+    "t C" '(tabclose :wk "Close current tab (not working)"))
+)
 
   ;; (with-current-buffer " *load*"
   ;;  (goto-char (point-max)))
@@ -234,8 +250,7 @@
   (start/leader-keys
     ; "c" '(:ignore :wk "Parent c for c f")
     "c f" '(deadgrep :wk "Search with deadgrep")
-    "f" '(projectile-find-file :wk "Search for file with projectile")
-    "t n" '(tab-new :wk "New tab"))
+    "f" '(projectile-find-file :wk "Search for file with projectile"))
 
   (start/leader-keys
     "g" '(:ignore g :wk "Global commands")
