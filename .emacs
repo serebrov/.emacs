@@ -298,6 +298,43 @@
          ("C-M-$" . jinx-languages))
 )
 
+;; debugging
+(message "After jinx = %S" display-buffer-alist)
+
+;; Declutter Dired, from
+;; https://www.n16f.net/blog/decluttering-dired-for-peace-of-mind/
+(progn
+  (setq g-dired-minimal-view t)
+
+  (defun g-dired-setup-view ()
+    (dired-hide-details-mode (if g-dired-minimal-view 1 -1)))
+
+  (defun g-dired-switch-view ()
+    (interactive)
+    (setq g-dired-minimal-view (not g-dired-minimal-view))
+    (g-dired-setup-view))
+
+  (use-package dired
+    ;; dired is core, does not need to be uninstalled
+    ;; because of the `use-package-always-ensure' in init.el we need
+    ;; to explicitly disable the installation.
+    :ensure nil
+    :config
+    (setq dired-hide-details-hide-symlink-targets nil)
+
+    :hook
+    ((dired-mode-hook . g-dired-setup-view))
+
+    :bind
+    (:map dired-mode-map
+          ("<tab>" . g-dired-switch-view)))
+
+  (message "Inside dired = %S" g-dired-minimal-view)
+  )
+
+;; debugging
+(message "After dired = %S" g-dired-minimal-view)
+
 ;;  Try
 ;;  1. writegood-mode (simple, catches repeated words)
 ;;
@@ -325,18 +362,3 @@
 ;;           ("C-x 4 W" . langtool-check-done)
 ;;           ("C-x 4 n" . langtool-goto-next-error)
 ;;           ("C-x 4 p" . langtool-goto-previous-error)))
-
-;; Every now and then I have *projectile-files-errors* buffer popping up with
-;; the errors like this:
-;;   fatal: No url found for submodule path
-;;   'folder/subfolder' in .gitmodules
-;; The most annoying part is that it replaces the current buffer.
-;; This makes it to appear below the current buffer.
-(add-to-list 'display-buffer-alist
-             '("\\*projectile-files-errors\\*"
-               (display-buffer-below-selected)
-               (window-height . 0.25)))
-;; And this can be used to suppress it.
-;; (add-to-list 'display-buffer-alist
-;;              '("\\*projectile-files-errors\\*"
-;;               (display-buffer-no-window)))
