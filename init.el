@@ -99,63 +99,64 @@
          )
   )
 
-  (use-package evil
-    :init
-    (evil-mode)
-    :config
-    (evil-set-initial-state 'eat-mode 'insert) ;; Set initial state in eat terminal to insert mode
-    ;; (evil-set-initial-state 'deadgrep-mode 'emacs)
-    ;; (evil-set-initial-state 'wgrep-mode 'emacs) ;; Use emacs state for wgrep editing
-    ;; (evil-set-initial-state 'grep-mode 'emacs)  ;; Use emacs state for grep buffers
-    :custom
-    (evil-want-keybinding nil)    ;; Disable evil bindings in other modes (It's not consistent and not good)
-    (evil-want-C-u-scroll t)      ;; Set C-u to scroll up
-    (evil-want-C-i-jump t)        ;; Enables C-i jump (C-i and TAB are the same in Emacs
-                                  ;; so this also disables TAB).
-    (evil-undo-system 'undo-redo) ;; C-r to redo
-    (evil-shift-round nil)        ;; preserve indentation when << and >>
-    ;; Unmap keys in 'evil-maps. If not done, org-return-follows-link will not work
-    :bind (:map evil-motion-state-map
-                ("SPC" . nil)
-                ("RET" . nil)
-                ("TAB" . nil)))
-  (use-package evil-collection
-    :after (evil wgrep)
-    :config
-    ;; Setting where to use evil-collection
-    (setq evil-collection-mode-list '(dired ibuffer magit corfu vertico consult info grep wgrep deadgrep))
-    (evil-collection-init))
+(use-package evil
+  :init
+  (evil-mode)
+  :config
+  (evil-set-initial-state 'eat-mode 'insert) ;; Set initial state in eat terminal to insert mode
+  (evil-select-search-module 'evil-search-module 'evil-search)
+  ;; (evil-set-initial-state 'deadgrep-mode 'emacs)
+  ;; (evil-set-initial-state 'wgrep-mode 'emacs) ;; Use emacs state for wgrep editing
+  ;; (evil-set-initial-state 'grep-mode 'emacs)  ;; Use emacs state for grep buffers
+  :custom
+  (evil-want-keybinding nil)    ;; Disable evil bindings in other modes (It's not consistent and not good)
+  (evil-want-C-u-scroll t)      ;; Set C-u to scroll up
+  (evil-want-C-i-jump t)        ;; Enables C-i jump (C-i and TAB are the same in Emacs
+  ;; so this also disables TAB).
+  (evil-undo-system 'undo-redo) ;; C-r to redo
+  (evil-shift-round nil)        ;; preserve indentation when << and >>
+  ;; Unmap keys in 'evil-maps. If not done, org-return-follows-link will not work
+  :bind (:map evil-motion-state-map
+              ("SPC" . nil)
+              ("RET" . nil)
+              ("TAB" . nil)))
+(use-package evil-collection
+  :after (evil wgrep)
+  :config
+  ;; Setting where to use evil-collection
+  (setq evil-collection-mode-list '(dired ibuffer magit corfu vertico consult info grep wgrep deadgrep))
+  (evil-collection-init))
 
-  ;; Surround in visual-state with
-  ;; S<textobject> or gS<textobject>
-  ;; in normal-state with
-  ;; ys<textobject> or yS<textobject>.
-  ;; Change surrounding with cs<old-textobject><new-textobject>.
-  ;; Delete surrounding with ds<textobject>.
-  ;;
-  ;; Note: when adding brackets, the left one will do `( this )` (adds space)
-  ;; and the right one will do `(this)` (no space)
-  (use-package evil-surround
-    :ensure t
-    :config
-    (global-evil-surround-mode 1))
+;; Surround in visual-state with
+;; S<textobject> or gS<textobject>
+;; in normal-state with
+;; ys<textobject> or yS<textobject>.
+;; Change surrounding with cs<old-textobject><new-textobject>.
+;; Delete surrounding with ds<textobject>.
+;;
+;; Note: when adding brackets, the left one will do `( this )` (adds space)
+;; and the right one will do `(this)` (no space)
+(use-package evil-surround
+  :ensure t
+  :config
+  (global-evil-surround-mode 1))
 
-  ;; Vim's C-a / C-x to increment/decrement numbers
-  ;; and g C-a / g C-x for incremental increment, useful for lists of numbers:
-  ;; 1              2
-  ;; 1  -> g C-a -> 3
-  ;; 1              4
-  (use-package evil-numbers
-    :config
-    (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
-    (define-key evil-normal-state-map (kbd "C-x C-x") 'evil-numbers/dec-at-pt)
-    (define-key evil-visual-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
-    (define-key evil-visual-state-map (kbd "C-x C-x") 'evil-numbers/dec-at-pt)
-    ;; We don't want to shadow C-x as, for example, C-x C-e is useful
-    ;; The C-x C-x is "exchage-point-and-mark", but I am not sure if I'll be
-    ;; using that.
-    (define-key evil-visual-state-map (kbd "g C-a") 'evil-numbers/inc-at-pt-incremental)
-    (define-key evil-visual-state-map (kbd "g C-x") 'evil-numbers/dec-at-pt-incremental))
+;; Vim's C-a / C-x to increment/decrement numbers
+;; and g C-a / g C-x for incremental increment, useful for lists of numbers:
+;; 1              2
+;; 1  -> g C-a -> 3
+;; 1              4
+(use-package evil-numbers
+  :config
+  (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
+  (define-key evil-normal-state-map (kbd "C-x C-x") 'evil-numbers/dec-at-pt)
+  (define-key evil-visual-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
+  (define-key evil-visual-state-map (kbd "C-x C-x") 'evil-numbers/dec-at-pt)
+  ;; We don't want to shadow C-x as, for example, C-x C-e is useful
+  ;; The C-x C-x is "exchage-point-and-mark", but I am not sure if I'll be
+  ;; using that.
+  (define-key evil-visual-state-map (kbd "g C-a") 'evil-numbers/inc-at-pt-incremental)
+  (define-key evil-visual-state-map (kbd "g C-x") 'evil-numbers/dec-at-pt-incremental))
 
 (use-package general
   :config
@@ -172,9 +173,9 @@
     "." '(find-file :wk "Find file")
     "TAB" '(comment-line :wk "Comment lines")
     "q" '(flymake-show-buffer-diagnostics :wk "Flymake buffer diagnostic")
-    ; the "c" is needed for "SPC c f" (CtrlSF-like search)
-    ; eat can be opened with "SPC g t" (see the binding below)
-    ; "c" '(eat :wk "Eat terminal")
+                                        ; the "c" is needed for "SPC c f" (CtrlSF-like search)
+                                        ; eat can be opened with "SPC g t" (see the binding below)
+                                        ; "c" '(eat :wk "Eat terminal")
     "p" '(projectile-command-map :wk "Projectile")
     "s p" '(projectile-discover-projects-in-search-path :wk "Search for projects"))
 
@@ -243,7 +244,7 @@
     ;; Note: function call should be replaceable with lambda
     ;; '((lambda () (evil-ex "tabclose")))
     "t C" '(tabclose :wk "Close current tab (not working)"))
-)
+  )
 
   ;; (with-current-buffer " *load*"
   ;;  (goto-char (point-max)))

@@ -295,6 +295,10 @@ Checking the `*Messages*` buffer:
 
 # Solved problems
 
+- When searching with `/`, up/down arrows do not work
+  - Up/down should scroll through the search history, it just exists the search mode
+  - Solution: add `(evil-select-search-module 'evil-search-module 'evil-search)`
+  - See https://emacs.stackexchange.com/a/31337
 - LSP setup
   - "gt" in python source suggests to find tags table
     - in my vim setup that triggers the "go to definition" action.
