@@ -209,6 +209,9 @@
 ;; or for non-visual-line mode:
 (set-display-table-slot standard-display-table 'wrap ?↪)
 
+(use-package vterm
+  :ensure t)
+
 ;; Alternative for pdf-tools:
 ;; https://www.reddit.com/r/emacs/comments/1pgliu9/a_new_pdf_reader_for_emacs/
 ;; https://codeberg.org/divyaranjan/emacs-reader
