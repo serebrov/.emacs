@@ -382,3 +382,68 @@
 ;;           ("C-x 4 W" . langtool-check-done)
 ;;           ("C-x 4 n" . langtool-goto-next-error)
 ;;           ("C-x 4 p" . langtool-goto-previous-error)))
+
+;; SQL-mode configuration
+;; 1. Connect to a named connection:
+;; M-x sql-connect RET local-postgres RET
+;; 2. Quick connect (prompts for details):
+;; M-x sql-postgres    ;; for PostgreSQL
+;; M-x sql-mysql       ;; for MySQL
+;; 3. From a SQL buffer, send queries to the connection:
+;; - C-c C-c - Send current paragraph
+;; - C-c C-r - Send region
+;; - C-c C-b - Send entire buffer
+(use-package sql
+  :ensure nil  ;; built-in
+  :custom
+  ;; Default clients (adjust paths if needed)
+  (sql-postgres-program "/Applications/Postgres.app/Contents/Versions/16/bin/psql")
+  (sql-mysql-program "mysql")
+
+  :config
+  ;; Define your database connections
+  (setq sql-connection-alist
+        '((local-postgres-postgres
+           (sql-product 'postgres)
+           (sql-server "localhost")
+           (sql-port 5432)
+           (sql-database "postgres")
+           (sql-user "pguser"))))
+
+  ;; Don't save passwords in history
+  (setq sql-password-wallet nil))
+
+;; This has closer experience to what dbext.vim provides:
+;; The output buffer only displays the last command output.
+;; I am not sure if I like the sql-mode behavior more or
+;; want it to be dbext.vim-like, so keeping this just in case
+;; For now I have "s e" bound (in init.el) to `sql-send-region`.
+(defun my-sql-send-region-to-result ()
+  "Send paragraph and show result in a dedicated buffer."
+  (interactive)
+  (when (and (boundp 'sql-buffer)
+             sql-buffer
+             (get-buffer sql-buffer))
+    (with-current-buffer sql-buffer
+      (comint-clear-buffer)))
+  (sql-send-region (region-beginning) (region-end)))
+
+;; Load project-local config from .git/.emacs.local if it exists
+;; This way we can, for example, define sql-mode configurations per project:
+;;
+;; in the project's .git/.emacs.local:
+;; (setq sql-connection-alist
+;;       '((project-db
+;;          (sql-product 'postgres)
+;;          (sql-server "localhost")
+;;          (sql-port 5533)
+;;          (sql-database "remote_db")
+;;          (sql-user "remote_user"))))
+(defun my-load-local-config ()
+  "Load .git/.emacs.local from current project root."
+  (let* ((root (or (projectile-project-root) default-directory))
+         (local-config (expand-file-name ".git/.emacs.local.el" root)))
+    (when (file-exists-p local-config)
+      (load local-config))))
+
+(add-hook 'find-file-hook #'my-load-local-config)

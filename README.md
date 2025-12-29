@@ -237,11 +237,6 @@ Some problems with evil and my setup:
     it also stays on the current word
     this should be a piece of custom setup, need to find and replicate it in emacs config
 - setup spellchecking
-- SQL mode, something similar to vim's db-ext
-  - have some configuration for available databases
-  - select the database to use
-  - run SQL statements from the buffer
-  - get output in another buffer
 - learn more about projectile and session save/restore
   - currently I have `(desktop-save-mode 1)`, see also related notes in [.emacs](.emacs)
 - learn more about org mode
@@ -295,6 +290,17 @@ Checking the `*Messages*` buffer:
 
 # Solved problems
 
+- SQL mode, something similar to vim's dbext.vim
+  - Update: added config for sql-mode in .emacs - not the same as dbext, but very close.
+  - have some configuration for available databases
+    -- this can be configured in .git/.emacs.local.el (similar to my vim setup with .git/.vimrc.local - this gives no chance to accidentally commit DB parameters as they are under .git)
+    -- the local file is automatically loaded when we open some file from the folder with `.git` directory
+  - select the database to use
+    -- sql-mode does this, run M-x sql-connect
+  - run SQL statements from the buffer
+    -- sql-mode provides commands for that, `sql-send-xxx`
+  - get output in another buffer
+    -- sql-mode opens the buffer with running db client and we have output there
 - When searching with `/`, up/down arrows do not work
   - Up/down should scroll through the search history, it just exists the search mode
   - Solution: add `(evil-select-search-module 'evil-search-module 'evil-search)`

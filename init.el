@@ -180,14 +180,16 @@
     "s p" '(projectile-discover-projects-in-search-path :wk "Search for projects"))
 
   (start/leader-keys
-    "s" '(:ignore t :wk "Search")
+    "s" '(:ignore t :wk "Search and SQL")
     "s c" '((lambda () (interactive) (find-file "~/.config/emacs/init.org")) :wk "Find emacs Config")
     "s r" '(consult-recent-file :wk "Search recent files")
     "s f" '(consult-fd :wk "Search files with fd")
     "s g" '(deadgrep :wk "Search with deadgrep")
     "s G" '(consult-ripgrep :wk "Search with consult-ripgrep")
     "s l" '(consult-line :wk "Search line")
-    "s i" '(consult-imenu :wk "Search Imenu buffer locations")) ;; This one is really cool
+    "s i" '(consult-imenu :wk "Search Imenu buffer locations")
+    "s e" '(sql-send-region :wk "Send region to SQL-mode")
+    ) ;; This one is really cool
 
   (start/leader-keys
     "d" '(:ignore t :wk "Buffers & Dired")
