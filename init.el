@@ -266,7 +266,7 @@
 
 ;; gc to comment/uncomment lines
 (define-key evil-normal-state-map (kbd "g c") 'comment-line)
-(define-key evil-visual-state-map (kbd "g c") 'comment-region)
+(define-key evil-visual-state-map (kbd "g c") 'comment-or-uncomment-region)
 
 ;; Vinegar-style: "-" opens dired in current file's directory
 (define-key evil-normal-state-map (kbd "-") 'dired-jump)
