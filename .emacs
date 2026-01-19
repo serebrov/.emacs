@@ -428,6 +428,29 @@
       (comint-clear-buffer)))
   (sql-send-region (region-beginning) (region-end)))
 
+;; There is a problem with postgresql, the output in the psql buffer looks like this:
+;;   mydb=> mydb=> mydb-> mydb-> mydb->     a     |      b       |   c
+;;   ----------+--------------+-------
+;;   1 | 2015-01-05   | 59120
+;;
+;; The snippet below "fixes" it by asking PostgreSQL to print queries back
+;; that also solves the problem with the lack of new line.
+;; Overall looks like a bug in sql-mode.
+;; Related:
+;; - https://www.emacswiki.org/emacs/SqlMode#h5o-5
+;; - https://emacs.stackexchange.com/questions/13315/sql-send-paragraph-results-in-mis-aligned-headers/18403#18403
+;; - https://www.reddit.com/r/emacs/comments/579lvs/work_around_newline_issue_in_sqlpostgres/
+(add-hook 'sql-login-hook 'my-sql-login-hook)
+(defun my-sql-login-hook ()
+  "Custom SQL log-in behaviours. See `sql-login-hook'."
+  ;; n.b. If you are looking for a response and need to parse the
+  ;; response, use `sql-redirect-value' instead of `comint-send-string'.
+  (when (eq sql-product 'postgres)
+    (let ((proc (get-buffer-process (current-buffer))))
+      ;; Output each query before executing it. (n.b. this also avoids
+      ;; the psql prompt breaking the alignment of query results.)
+      (comint-send-string proc "\\set ECHO queries\n"))))
+
 ;; Load project-local config from .git/.emacs.local if it exists
 ;; This way we can, for example, define sql-mode configurations per project:
 ;;
@@ -447,3 +470,11 @@
       (load local-config))))
 
 (add-hook 'find-file-hook #'my-load-local-config)
+
+;; Emacs comes with a built-in world clock: M-x world-clock
+;; To customize displayed timezones, use:
+(setq world-clock-list '(("America/New_York" "New York")
+                         ("America/Los_Angeles" "Los Angeles")
+                         ("Europe/London" "London")
+                         ("Europe/Kyiv" "Kyiv")
+                         ("Asia/Tokyo" "Tokyo")))
