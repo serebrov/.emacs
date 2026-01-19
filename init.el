@@ -248,56 +248,56 @@
     "t C" '(tabclose :wk "Close current tab (not working)"))
   )
 
-  ;; (with-current-buffer " *load*"
-  ;;  (goto-char (point-max)))
+;; (with-current-buffer " *load*"
+;;  (goto-char (point-max)))
 
-  (start/leader-keys
-    ; "c" '(:ignore :wk "Parent c for c f")
-    "c f" '(deadgrep :wk "Search with deadgrep")
-    "f" '(projectile-find-file :wk "Search for file with projectile"))
+(start/leader-keys
+                                        ; "c" '(:ignore :wk "Parent c for c f")
+  "c f" '(deadgrep :wk "Search with deadgrep")
+  "f" '(projectile-find-file :wk "Search for file with projectile"))
 
-  (start/leader-keys
-    "g" '(:ignore g :wk "Global commands")
-    "g s" '(magit-status :wk "Magit status")
-    "g x" '(execute-extended-command :wk "Execute command (M-x)")
-    ;; gt in vim is to switch tabs, but I have this bound to left/right arrows,
-    ;; so reassign it to start the terminal.
-    "g t" '(eat :wk "Eat terminal"))
+(start/leader-keys
+  "g" '(:ignore g :wk "Global commands")
+  "g s" '(magit-status :wk "Magit status")
+  "g x" '(execute-extended-command :wk "Execute command (M-x)")
+  ;; gt in vim is to switch tabs, but I have this bound to left/right arrows,
+  ;; so reassign it to start the terminal.
+  "g t" '(eat :wk "Eat terminal"))
 
-  ;; gc to comment/uncomment lines
-  (define-key evil-normal-state-map (kbd "g c") 'comment-line)
-  (define-key evil-visual-state-map (kbd "g c") 'comment-region)
+;; gc to comment/uncomment lines
+(define-key evil-normal-state-map (kbd "g c") 'comment-line)
+(define-key evil-visual-state-map (kbd "g c") 'comment-region)
 
-  ;; Vinegar-style: "-" opens dired in current file's directory
-  (define-key evil-normal-state-map (kbd "-") 'dired-jump)
+;; Vinegar-style: "-" opens dired in current file's directory
+(define-key evil-normal-state-map (kbd "-") 'dired-jump)
 
-  (start/leader-keys
-    "q" '(evil-quit :wk "Close buffer or window"))
+(start/leader-keys
+  "q" '(evil-quit :wk "Close buffer or window"))
 
-  (start/leader-keys
-    "w" '(evil-write :wk "Write this buffer"))
+(start/leader-keys
+  "w" '(evil-write :wk "Write this buffer"))
 
-  ;; This will cause windmove functions to create new windows if necessary
-  (setq windmove-create-window t)
-  ;; C-h is the help key
-  (define-key evil-normal-state-map (kbd "C-h") 'windmove-left)
-  (define-key evil-normal-state-map (kbd "C-l") 'windmove-right)
-  (define-key evil-normal-state-map (kbd "C-j") 'windmove-down)
-  (define-key evil-normal-state-map (kbd "C-k") 'windmove-up)
+;; This will cause windmove functions to create new windows if necessary
+(setq windmove-create-window t)
+;; C-h is the help key
+(define-key evil-normal-state-map (kbd "C-h") 'windmove-left)
+(define-key evil-normal-state-map (kbd "C-l") 'windmove-right)
+(define-key evil-normal-state-map (kbd "C-j") 'windmove-down)
+(define-key evil-normal-state-map (kbd "C-k") 'windmove-up)
 
-  (start/leader-keys
-    "l" '(evil-window-move-far-right :wk "Move window to the right")
-    "j" '(evil-window-move-very-bottom :wk "Move window to the bottom")
-    "h" '(evil-window-move-far-left :wk "Move window to the left")
-    "k" '(evil-window-move-very-top :wk "Move window to the top"))
+(start/leader-keys
+  "l" '(evil-window-move-far-right :wk "Move window to the right")
+  "j" '(evil-window-move-very-bottom :wk "Move window to the bottom")
+  "h" '(evil-window-move-far-left :wk "Move window to the left")
+  "k" '(evil-window-move-very-top :wk "Move window to the top"))
 
-  ;; left and right switch tabs
-  (define-key evil-normal-state-map (kbd "<left>") 'tab-previous)
-  (define-key evil-normal-state-map (kbd "<right>") 'tab-next)
+;; left and right switch tabs
+(define-key evil-normal-state-map (kbd "<left>") 'tab-previous)
+(define-key evil-normal-state-map (kbd "<right>") 'tab-next)
 
-  ;; (start/leader-keys
-  ;;   "g c" '(comment-line :wk "Comment lines"))
-  ;; (define-key evil-normal-state-map (kbd "g c") 'tab-next)
+;; (start/leader-keys
+;;   "g c" '(comment-line :wk "Comment lines"))
+;; (define-key evil-normal-state-map (kbd "g c") 'tab-next)
 
 ;; Fix general.el leader key not working instantly in messages buffer with evil mode
 ;; (use-package emacs
