@@ -212,6 +212,67 @@
 ;;   (dolist (buf (buffer-list))
 ;;     (unless (get-buffer-window buf 'visible) (kill-buffer buf))))
 
+;; https://github.com/nex3/perspective-el?tab=readme-ov-file#some-musings-on-emacs-window-layouts
+;;
+;; This seems to work closer to vim: "popup" occurs in the same window, so
+;; if I expect something to open, I can split the window first, then open.
+;;
+;; These settings do the following:
+;;
+;; 1. Tell display-buffer to reuse existing windows as much as possible,
+;; including in other frames. For example, if there is already a *compilation*
+;; buffer in a visible window, switch to that window.
+;; This means that Emacs will usually switch windows in a "do what I mean" manner
+;; for a warmed-up workflow (one with, say, a couple of source windows,
+;; a compilation output window, and a Magit window).
+;; 2. Prevent splits by telling display-buffer to switch to the target buffer
+;; in the current window. For example, if there is no *compilation* buffer visible,
+;; then the buffer in whichever window was current when compile was run will be
+;; replaced with *compilation*. This may seem intrusive, since it changes out the
+;; current buffer, but keep in mind that most buffers popped up in this manner are
+;; easy to dismiss, either with a dedicated keybinding (often q) or the
+;; universally-applicable kill-buffer. This is easier than restoring window
+;; arrangements. It is also easier to handle for pre-arranged window layouts,
+;; since the appropriate command can simply be run in a window prepared for it in
+;; advance. (If this is a step too far, then replace
+;; display-buffer-same-window with display-buffer-pop-up-window.)
+(customize-set-variable 'display-buffer-base-action
+                        '((display-buffer-reuse-window display-buffer-same-window)
+                          (reusable-frames . t)))
+
+(customize-set-variable 'even-window-sizes nil)     ; avoid resizing
+
+;; Related: https://emacsninja.com/posts/design-is-hard.html
+
+;; Update: I am not sure about popper, it feels more like a workaround than a
+;; proper solution.
+;; ;; ;; This supposed to solve "emacs is hijacking my windows problem"
+;; ;; testing...
+;; ;; Popper - manage popup windows like vim
+;; ;; Popups open in a dedicated area and can be dismissed with q
+;; (use-package popper
+;;   :bind (("C-`"   . popper-toggle)        ;; Toggle last popup
+;;          ("M-`"   . popper-cycle)          ;; Cycle through popups
+;;          ("C-M-`" . popper-toggle-type))   ;; Convert popup <-> regular window
+;;   :init
+;;   (setq popper-reference-buffers
+;;         '("\\*Messages\\*"
+;;           "\\*Warnings\\*"
+;;           "\\*Compile-Log\\*"
+;;           "\\*Backtrace\\*"
+;;           "\\*evil-registers\\*"
+;;           "\\*Apropos\\*"
+;;           "\\*Help\\*"
+;;           "\\*helpful"
+;;           "\\*info\\*"
+;;           "\\*Info\\*"
+;;           "\\*projectile\\*"
+;;           compilation-mode
+;;           help-mode
+;;           helpful-mode
+;;           Info-mode))
+;;   (popper-mode +1))
+
 (use-package didyoumean
   :vc (:url "https://gitlab.com/kisaragi-hiu/didyoumean.el"))
 (didyoumean-mode 1)

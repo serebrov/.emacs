@@ -496,45 +496,6 @@ The code is taken from here: https://github.com/skeeto/.emacs.d/blob/master/lisp
              (if dedicated "no longer " "")
              (BUFFER-NAME))))
 
-;;
-;; This seems to work closer to vim: "popup" occurs in the same window, so
-;; if I expect something to open, I can split the window first, then open.
-(customize-set-variable 'display-buffer-base-action
-                        '((display-buffer-reuse-window display-buffer-same-window)
-                          (reusable-frames . t)))
-
-;; Related: https://emacsninja.com/posts/design-is-hard.html
-
-;; Update: I am not sure about popper, it feels more like a workaround than a
-;; proper solution.
-;; ;; ;; This supposed to solve "emacs is hijacking my windows problem"
-;; ;; testing...
-;; ;; Popper - manage popup windows like vim
-;; ;; Popups open in a dedicated area and can be dismissed with q
-;; (use-package popper
-;;   :bind (("C-`"   . popper-toggle)        ;; Toggle last popup
-;;          ("M-`"   . popper-cycle)          ;; Cycle through popups
-;;          ("C-M-`" . popper-toggle-type))   ;; Convert popup <-> regular window
-;;   :init
-;;   (setq popper-reference-buffers
-;;         '("\\*Messages\\*"
-;;           "\\*Warnings\\*"
-;;           "\\*Compile-Log\\*"
-;;           "\\*Backtrace\\*"
-;;           "\\*evil-registers\\*"
-;;           "\\*Apropos\\*"
-;;           "\\*Help\\*"
-;;           "\\*helpful"
-;;           "\\*info\\*"
-;;           "\\*Info\\*"
-;;           "\\*projectile\\*"
-;;           compilation-mode
-;;           help-mode
-;;           helpful-mode
-;;           Info-mode))
-;;   (popper-mode +1))
-
-
 ;; Enable pasting in term-mode with C-c C-y
 ;; is there better way? shouldn't this work by default?
 (with-eval-after-load 'term
