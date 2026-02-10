@@ -527,3 +527,17 @@
 ;; (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
 ;; (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
 (define-key copilot-completion-map (kbd "C-j") 'copilot-accept-completion)
+
+;; By default, Emacs uses the same *info* buffer for all info pages, so when you open a new info page,
+;; it replaces the content of the existing *info* buffer.
+;; To have independent *info* buffers for each window, we advise the `Info` function to create a new buffer
+;; with a unique name each time it's called.
+;; (add-hook 'Info-mode-hook #'rename-uniquely)
+;; Also this is useful:
+;; - `M-n` creates a new Info window with the same node (duplicate the current window)
+(advice-add 'info :before
+            (lambda (&rest _)
+              (let ((buf (get-buffer "*info*")))
+                (when buf
+                  (with-current-buffer buf
+                    (rename-uniquely))))))
