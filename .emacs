@@ -166,19 +166,51 @@
 (use-package aggressive-indent
   :hook (emacs-lisp-mode . aggressive-indent-mode))
 
+(defun buf--window-state-buffer-names (state)
+  "Recursively extract buffer names from a window STATE tree."
+  (let (names)
+    (dolist (item state names)
+      (when (listp item)
+        (cond
+         ((eq (car item) 'buffer)
+          (push (cadr item) names))
+         ((memq (car item) '(leaf vc hc))
+          (setq names (nconc names
+                             (buf--window-state-buffer-names item)))))))))
+
 ;;  Alternatively, there's a built-in approach using ibuffer:
 ;;  1. M-x ibuffer (or SPC d i with your config)
 ;;  2. * u to mark all unsaved buffers, or * m to mark by mode
 ;;  3. / g to filter by content/name
 ;;  4. D to delete marked buffers
+;;
+;; Helper to kill all buffers that are not displayed in any frames and
+;; windows, including inactive tabs.
 (defun buf-only-visible ()
-  "Kill all buffers not currently shown in a window somewhere."
+  "Kill all buffers not displayed in any window, tab, or frame."
   (interactive)
-  (dolist (buf  (buffer-list))
-    (unless (get-buffer-window buf 'visible) (kill-buffer buf))))
-    ;; This should also skip special buffers like *Minibuf-0*
-    ;; (unless (or (get-buffer-window buf 'visible)
-    ;;             (string-prefix-p " " (buffer-name buf)))
+  (let ((kept (make-hash-table :test #'equal)))
+    ;; 1. Buffers in live windows on any frame (including iconified).
+    (dolist (frame (frame-list))
+      (dolist (win (window-list frame 'no-minibuf))
+        (puthash (buffer-name (window-buffer win)) t kept))
+      ;; 2. Buffers saved in inactive tab-bar tabs.
+      (when (fboundp 'tab-bar-tabs)
+        (dolist (tab (tab-bar-tabs frame))
+          (dolist (name (buf--window-state-buffer-names
+                         (alist-get 'ws tab)))
+            (puthash name t kept)))))
+    (dolist (buf (buffer-list))
+      (unless (gethash (buffer-name buf) kept)
+        ;; (message "buf-only-visible: would kill %s" (buffer-name buf)))))
+        (kill-buffer buf)))))
+
+;; This kills too many:
+;; (defun buf-only-visible ()
+;;   "Kill all buffers not currently shown in a window somewhere."
+;;   (interactive)
+;;   (dolist (buf (buffer-list))
+;;     (unless (get-buffer-window buf 'visible) (kill-buffer buf))))
 
 (use-package didyoumean
   :vc (:url "https://gitlab.com/kisaragi-hiu/didyoumean.el"))
