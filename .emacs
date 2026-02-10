@@ -510,3 +510,20 @@
                          ("Europe/London" "London")
                          ("Europe/Kyiv" "Kyiv")
                          ("Asia/Tokyo" "Tokyo")))
+
+;; unofficial github copilot client
+;; https://github.com/copilot-emacs/copilot.el
+;; - Setup copilot.el as described in the next section.
+;; - Install the copilot server by M-x copilot-install-server.
+;; - Login to Copilot by M-x copilot-login.
+;; You can also check the status by running M-x copilot-diagnose
+;; (NotAuthorized means you don't have a valid subscription).
+(use-package copilot
+  :vc (:url "https://github.com/copilot-emacs/copilot.el"
+            :rev :newest
+            :branch "main"))
+(add-hook 'prog-mode-hook 'copilot-mode)
+;; Use tab to accept completions (you may also want to bind copilot-accept-completion-by-word to some key):
+;; (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
+;; (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
+(define-key copilot-completion-map (kbd "C-j") 'copilot-accept-completion)
