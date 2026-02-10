@@ -64,6 +64,11 @@ Repeating commands:
 
 Dired: `C-x d`
 
+See also:
+- https://www.masteringemacs.org/article/effective-editing-movement
+- http://xahlee.info/emacs/emacs/effective_emacs.html
+- https://sites.google.com/site/steveyegge2/effective-emacs
+
 # Reading Help
 
 Note: you can see the current mode in the bottom bar, it says `*Help*` for help buffers and `*Info*` for Info manuals. Keybindings are somewhat different.
