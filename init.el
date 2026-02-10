@@ -514,7 +514,9 @@ The code is taken from here: https://github.com/skeeto/.emacs.d/blob/master/lisp
 (use-package magit
   :defer
   :custom (magit-diff-refine-hunk (quote all)) ;; Shows inline diff
-  :config (define-key transient-map (kbd "<escape>") 'transient-quit-one) ;; Make escape quit magit prompts
+  :config
+  (define-key transient-map (kbd "<escape>") 'transient-quit-one) ;; Make escape quit magit prompts
+  (setq magit-commit-diff-inhibit-same-window t) ;; Keep diff visible when opening commit buffer
   )
 
 (use-package diff-hl
