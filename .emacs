@@ -212,6 +212,35 @@
 ;;   (dolist (buf (buffer-list))
 ;;     (unless (get-buffer-window buf 'visible) (kill-buffer buf))))
 
+;; ---
+;; Emacs often replaces existing buffers unexpectedly which is quite different
+;; from how this usually works in Vim:
+;; - New buffer creates a split (left/bottom by default).
+;; - Or new buffer replaces the curent buffer (when, I for example, do ':e new_file.txt`')
+;;
+;; I think this is mostly it and there are no situations when I open something and
+;; get one of the existing buffers replaced unexpectedly.
+;;
+;; It may be a matter of getting used to Emacs way, where service buffers (like help)
+;; may popup and take over some of the existing buffers. The idea is probably that
+;; the takeover is temporary and it is usually easy to close the top buffer with q
+;; and get back to the previous one.
+;;
+;; This is different from vim where if I close the buffer, it would also always
+;; remove the window where the buffer is displayed, it would not go back automatically
+;; to display the previous buffer.
+;;
+;; Note: M-x tab-line-mode toggles on tabs inside the window, visualize what is
+;; hidden. Another useful tool is the `winner-mode` with `M-x winner-undo'
+;; and `M-x winner redo` to revert window layout changes.
+;;
+;; Related discussions:
+;; https://www.reddit.com/r/emacs/comments/rybkbw/how_can_i_stop_emacs_from_reusing_existing_windows/
+;; https://www.reddit.com/r/emacs/comments/ksbedp/how_can_i_prevent_window_buffers_from_getting/
+;; https://www.masteringemacs.org/article/demystifying-emacs-window-manager
+;; https://emacsninja.com/posts/design-is-hard.html
+;;
+;; Recipe to improve defaults:
 ;; https://github.com/nex3/perspective-el?tab=readme-ov-file#some-musings-on-emacs-window-layouts
 ;;
 ;; This seems to work closer to vim: "popup" occurs in the same window, so
@@ -241,8 +270,6 @@
                           (reusable-frames . t)))
 
 (customize-set-variable 'even-window-sizes nil)     ; avoid resizing
-
-;; Related: https://emacsninja.com/posts/design-is-hard.html
 
 ;; Update: I am not sure about popper, it feels more like a workaround than a
 ;; proper solution.
@@ -571,6 +598,12 @@
                          ("Europe/London" "London")
                          ("Europe/Kyiv" "Kyiv")
                          ("Asia/Tokyo" "Tokyo")))
+
+;; see https://xenodium.com/emacs-time-zones-mode
+;; Toggle help with the "?" key add cities with the "+" key.
+;; Shifting time is possible via the "f" / "b" keys,
+;; in addition to a other features available via the "?" help menu.
+(use-package time-zones :ensure t)
 
 ;; unofficial github copilot client
 ;; https://github.com/copilot-emacs/copilot.el

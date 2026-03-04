@@ -251,7 +251,7 @@ Some problems with evil and my setup:
   - this is similar to my vim config and it is very reliable, basically
     it reliably saves when expected, each time I finished typing
 - what is a good way to search help? Like :helpgrep in vim?
-- emacs hijacks windows (testing popper as a solution)
+- emacs hijacks windows (see .emacs around "display-buffer" for more information)
   - Example: Ctrl-h i to open help then h to get help for help - replaces all windows
   - Example: Ctrl-h i to open help then M-n to duplicate it - replaces one of the existing windows
   - Workaround: M-x winner-mode adds `M-x winner-undo' (and redo) to undo these changes
