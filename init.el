@@ -763,14 +763,12 @@ The code is taken from here: https://github.com/skeeto/.emacs.d/blob/master/lisp
 (use-package deadgrep
   :custom
   (deadgrep-display-buffer-function 'switch-to-buffer)  ;; Open in same window
-  ;; Swap RET and S-RET in deadgrep buffer
-  ;; From the ‘modes/unimpaired/evil-collection-deadgrep.el’.
-  (evil-collection-define-key 'normal 'deadgrep-edit-mode-map
-    (kbd "<S-return>") 'deadgrep-visit-result)
-  (evil-collection-define-key 'normal 'deadgrep-mode-map
-    (kbd "<S-return>") 'deadgrep-visit-result
-    (kbd "RET") 'deadgrep-visit-result-other-window)
   :config
+  ;; Swap RET and S-RET in deadgrep buffer (use hook to run after evil-collection bindings)
+  (defun my/deadgrep-swap-ret ()
+    (evil-local-set-key 'normal (kbd "RET") 'deadgrep-visit-result-other-window)
+    (evil-local-set-key 'normal (kbd "<S-return>") 'deadgrep-visit-result))
+  (add-hook 'deadgrep-mode-hook #'my/deadgrep-swap-ret)
   ;; Add context lines (like CtrlSF)
   (setq deadgrep-extra-arguments '("--follow" "-C3")))
 
