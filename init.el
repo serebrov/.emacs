@@ -158,6 +158,12 @@
   (define-key evil-visual-state-map (kbd "g C-a") 'evil-numbers/inc-at-pt-incremental)
   (define-key evil-visual-state-map (kbd "g C-x") 'evil-numbers/dec-at-pt-incremental))
 
+(defun edit-emacs-config-in-a-tab ()
+  "Open .emacs config file in a new tab"
+  (interactive)
+  (tab-bar-new-tab)
+  (find-file "~/.emacs.conf/.emacs"))
+
 (use-package general
   :config
   (general-evil-setup) ;; <- evil
@@ -171,13 +177,14 @@
 
   (start/leader-keys
     "." '(find-file :wk "Find file")
-    "TAB" '(comment-line :wk "Comment lines")
-    "q" '(flymake-show-buffer-diagnostics :wk "Flymake buffer diagnostic")
-                                        ; the "c" is needed for "SPC c f" (CtrlSF-like search)
-                                        ; eat can be opened with "SPC g t" (see the binding below)
-                                        ; "c" '(eat :wk "Eat terminal")
+    ;; "TAB" '(comment-line :wk "Comment lines")
+    ;; "q" '(flymake-show-buffer-diagnostics :wk "Flymake buffer diagnostic")
+    ;; the "c" is needed for "SPC c f" (CtrlSF-like search)
+    ;; eat can be opened with "SPC g t" (see the binding below)
+    ;; "c" '(eat :wk "Eat terminal")
     "p" '(projectile-command-map :wk "Projectile")
-    "s p" '(projectile-discover-projects-in-search-path :wk "Search for projects"))
+    "s p" '(projectile-discover-projects-in-search-path :wk "Search for projects")
+    "v c" '(edit-emacs-config-in-a-tab :wk "Edit emacs config in a tab"))
 
   (start/leader-keys
     "s" '(:ignore t :wk "Search and SQL")
