@@ -1,7 +1,8 @@
-(autoload 'fennel-mode "~/web/fennel-mode-recent/fennel-mode" nil t)
+;; (autoload 'fennel-mode "~/web/fennel-mode-recent/fennel-mode" nil t)
+(autoload 'fennel-mode "~/web/fennel-mode-head/fennel-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.fnl\\'" . fennel-mode))
 
-;; increase font size (the number is 1/10, 150 is 15px)
+;; Increase Font size (the number is 1/10, 150 is 15px)
 (set-face-attribute 'default nil :height 150)
 
 ; don't use tabs for indent
@@ -184,7 +185,7 @@
 ;;  3. / g to filter by content/name
 ;;  4. D to delete marked buffers
 ;;
-;; Helper to kill all buffers that are not displayed in any frames and
+;; Helper to close/kill all buffers that are not displayed in any frames and
 ;; windows, including inactive tabs.
 (defun buf-only-visible ()
   "Kill all buffers not displayed in any window, tab, or frame."
@@ -532,6 +533,28 @@
 
   ;; Don't save passwords in history
   (setq sql-password-wallet nil))
+
+;;EMMS
+(use-package emms
+  :ensure t :defer t
+  :config
+  (progn
+    (require 'emms-player-simple)
+    (require 'emms-source-file)
+    (require 'emms-source-playlist)
+    (require 'emms-player-mplayer)
+    ;; Requires `brew install mplayer`
+    (setq emms-player-list '(emms-player-mplayer))
+    ;; Suppress the album-art window mplayer pops up for audio files.
+    ;; -novideo skips the video stream; -vo null ensures no window opens.
+    (setq emms-player-mplayer-parameters
+          (append emms-player-mplayer-parameters '("-novideo" "-vo" "null")))
+    ;; macOS ships BSD find; EMMS's find-based scanner sends GNU syntax
+    ;; and silently returns no files. Use the pure-elisp scanner instead.
+    (setq emms-source-file-directory-tree-function
+          'emms-source-file-directory-tree-internal)
+    (setq emms-source-file-default-directory "~/Music/Music_My/QobuzMusic/")
+    (emms-add-directory-tree "~/Music/Music_My/QobuzMusic/")))
 
 ;; This has closer experience to what dbext.vim provides:
 ;; The output buffer only displays the last command output.

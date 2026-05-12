@@ -304,7 +304,19 @@ Buffer is similar to the Vim buffer.
 
 - `C-x b` - Switch to another buffer
 - `C-x k` - Kill a buffer
-- `C-x C-b` - List all buffers
+- `:ls` or `C-x C-b` - List all buffers
+  - m to mark several buffers for opening
+  - D to mark the buffer for deletion
+  - s to mark the buffer for saving
+  - u to unmark the buffer
+  - U to unmark all
+  - x to execute deletions
+  - v to open marked with `m` buffers
+
+See
+* `M-x describe-function buffer-menu`
+* `M-x describe-mode buffer-menu-mode`
+* M-x Info-goto-emacs-command-node RET buffer-men2 RET
 
 ## Managing Frames
 
