@@ -636,9 +636,14 @@ The code is taken from here: https://github.com/skeeto/.emacs.d/blob/master/lisp
 
 (use-package vertico
   ;;
- :custom
+  :custom
   ;; Always preselect the first candidate so RET selects it
-  (vertico-preselect 'first)
+  ;; Use M-RET to use what you typed instead of the suggestion.
+  ;; (vertico-preselect 'first)
+  ;;
+  ;; The prompt option will select the prompt, so you apply what you see.
+  ;; May require a bit more typing, but is more explicit.
+  (vertico-preselect 'prompt)
   :init
   (vertico-mode))
 
