@@ -182,8 +182,6 @@
     ;; the "c" is needed for "SPC c f" (CtrlSF-like search)
     ;; eat can be opened with "SPC g t" (see the binding below)
     ;; "c" '(eat :wk "Eat terminal")
-    "p" '(projectile-command-map :wk "Projectile")
-    "s p" '(projectile-discover-projects-in-search-path :wk "Search for projects")
     "v c" '(edit-emacs-config-in-a-tab :wk "Edit emacs config in a tab"))
 
   (start/leader-keys
@@ -261,7 +259,7 @@
 (start/leader-keys
                                         ; "c" '(:ignore :wk "Parent c for c f")
   "c f" '(deadgrep :wk "Search with deadgrep")
-  "f" '(projectile-find-file :wk "Search for file with projectile"))
+  "f" '(project-find-file :wk "Search for file with project"))
 
 (start/leader-keys
   "g" '(:ignore g :wk "Global commands")
@@ -350,16 +348,6 @@
 
 (use-package nerd-icons-ibuffer
   :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
-
-(use-package projectile
-  :config
-  (projectile-mode)
-  :custom
-  ;; (projectile-auto-discover nil) ;; Disable auto search for better startup times ;; Search with a keybind
-  (projectile-run-use-comint-mode t) ;; Interactive run dialog when running projects inside emacs (like giving input)
-  (projectile-switch-project-action #'projectile-dired) ;; Open dired when switching to a project
-  (projectile-project-search-path '("~/projects/" "~/work/" ("~/github" . 1)))) ;; . 1 means only search the first subdirectory level for projects
-
 
 ;; This is needed to fix a problem with pyright langserver: I have node installed with `nvm'
 ;; and when Emacs launces pyright, it cannot find node and fails with and error:
@@ -699,10 +687,10 @@ The code is taken from here: https://github.com/skeeto/.emacs.d/blob/master/lisp
    ;;;; 2. vc.el (vc-root-dir)
   ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
    ;;;; 3. locate-dominating-file
-  ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
-   ;;;; 4. projectile.el (projectile-project-root)
-  (autoload 'projectile-project-root "projectile")
-  (setq consult-project-function (lambda (_) (projectile-project-root)))
+;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
+;;  ;;;; 4. projectile.el (projectile-project-root)
+;; (autoload 'projectile-project-root "projectile")
+;; (setq consult-project-function (lambda (_) (projectile-project-root)))
    ;;;; 5. No project support
   ;; (setq consult-project-function nil)
 

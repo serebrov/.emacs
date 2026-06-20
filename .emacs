@@ -60,10 +60,6 @@
 ;;  To restore a specific session on startup:
 ;;  emacs --eval "(desktop-change-dir \"~/my-project/\")"
 
-;; With projectile (installed via kickstart config)
-;; M-x projectile-save-project-buffers    ;; Save
-;; M-x projectile-switch-project          ;; Restores last session when switching
-
 ;; Problem (solved): when the kickstart config is uncommented and I
 ;; run the C-u M-x run-lisp in the fennel file,
 ;; it does not ask me which lisp to run anymore
@@ -294,7 +290,6 @@
 ;;           "\\*helpful"
 ;;           "\\*info\\*"
 ;;           "\\*Info\\*"
-;;           "\\*projectile\\*"
 ;;           compilation-mode
 ;;           help-mode
 ;;           helpful-mode
@@ -400,24 +395,9 @@
 
 ;; debugging
 (add-variable-watcher
-   'display-buffer-alist
-   (lambda (sym val op where)
-     (message "display-buffer-alist %s to %S in %S" op val where)))
-
-;; Every now and then I have *projectile-files-errors* buffer popping up with
-;; the errors like this:
-;;   fatal: No url found for submodule path
-;;   'folder/subfolder' in .gitmodules
-;; The most annoying part is that it replaces the current buffer.
-;; This makes it to appear below the current buffer.
-(add-to-list 'display-buffer-alist
-             '("\\*projectile-files-errors\\*"
-               (display-buffer-below-selected)
-               (window-height . 0.25)))
-;; And this can be used to suppress it.
-;; (add-to-list 'display-buffer-alist
-;;              '("\\*projectile-files-errors\\*"
-;;               (display-buffer-no-window)))
+ 'display-buffer-alist
+ (lambda (sym val op where)
+   (message "display-buffer-alist %s to %S in %S" op val where)))
 
 ;; Spell checking
 ;; Note: emacs has standard support for ispell/aspell (needs to be installed with
@@ -607,7 +587,9 @@
 ;;          (sql-user "remote_user"))))
 (defun my-load-local-config ()
   "Load .git/.emacs.local from current project root."
-  (let* ((root (or (projectile-project-root) default-directory))
+  (let* ((root (or (when-let* ((proj (project-current nil)))
+                     (project-root proj))
+                   default-directory))
          (local-config (expand-file-name ".git/.emacs.local.el" root)))
     (when (file-exists-p local-config)
       (load local-config))))
