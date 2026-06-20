@@ -426,6 +426,20 @@
 ;; https://www.n16f.net/blog/decluttering-dired-for-peace-of-mind/
 (progn
   (setq g-dired-minimal-view t)
+  ;; When copying/moving files, if there is a dired buffer open in the target directory,
+  ;; use it as the target for the operation instead of opening a new buffer.
+  ;; For example:
+  ;; 1. Open dired in ~/projects and another dired in ~/downloads
+  ;; 2. In the ~/downloads dired, select files
+  ;; 3. Press R to rename (move) or C to copy
+  ;; 4. The minibufer will open with the ~/project directory preselected as a target
+  ;;
+  ;; Note: also M-n would work without setting dired-dwim-target
+  ;; It selects a "future" iten (M-p selects a "past" item) and, in case we just
+  ;; started (and there is no future item yet), it selects the  default value
+  ;; (which is the same as if dired-dwim-target was set to t).
+  ;; See also: https://engineering.collbox.co/post/working-faster-in-emacs-by-reading-the-future/
+  (setq dired-dwim-target t)
 
   (defun g-dired-setup-view ()
     (dired-hide-details-mode (if g-dired-minimal-view 1 -1)))
