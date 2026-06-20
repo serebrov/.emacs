@@ -210,6 +210,11 @@
   (start/leader-keys
     "e" '(:ignore t :wk "Languages")
     "e e" '(eglot-reconnect :wk "Eglot Reconnect")
+    ;; Useful if eglot gets into a bad state, and restarts the server
+    ;; all the time. I had a problem with projectile detecting home as
+    ;; project root and eglot getting into a loop of restarting the server
+    ;; and failing because of it.
+    "e s" '(eglot-shutdown-all :wk "Eglot Shutdown")
     "e d" '(eldoc-doc-buffer :wk "Eldoc Buffer")
     "e f" '(eglot-format :wk "Eglot Format")
     "e l" '(consult-flymake :wk "Consult Flymake")
@@ -405,6 +410,11 @@
   :custom
   ;; Good default
   (eglot-events-buffer-size 0) ;; No event buffers (LSP server logs)
+  ;; Uncomment for debugging LSP, restart Eglot with M-x eglot-reconnect
+  ;; and check the *EGLOT ... events* buffer for LSP server logs and errors.
+  ;; format can be 'full' (JSON) or 'lisp' (pretty-printed)
+  ;; (eglot-events-buffer-config '(:size 2000000 :format full))
+  ;; (eglot-events-buffer-config '(:size 2000000 :format lisp))
   (eglot-autoshutdown t)       ;; Shutdown unused servers.
   (eglot-report-progress nil)  ;; Disable LSP server logs (Don't show lsp messages at the bottom, java)
   ;; Manual lsp servers
