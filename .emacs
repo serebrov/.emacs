@@ -115,20 +115,20 @@
 (defun keyboard-escape-quit-safe ()
   (interactive)
   (cond ((eq last-command 'mode-exited) nil)
-	((region-active-p)
-	 (deactivate-mark))
-	((> (minibuffer-depth) 0)
-	 (abort-recursive-edit))
-	(current-prefix-arg
-	 nil)
-	((> (recursion-depth) 0)
-	 (exit-recursive-edit))
-	(buffer-quit-function
-	 (funcall buffer-quit-function))
-	;; ((not (one-window-p t))
-	;;  (delete-other-windows))
-	((string-match "^ \\*" (buffer-name (current-buffer)))
-	 (bury-buffer))))
+        ((region-active-p)
+         (deactivate-mark))
+        ((> (minibuffer-depth) 0)
+         (abort-recursive-edit))
+        (current-prefix-arg
+         nil)
+        ((> (recursion-depth) 0)
+         (exit-recursive-edit))
+        (buffer-quit-function
+         (funcall buffer-quit-function))
+        ;; ((not (one-window-p t))
+        ;;  (delete-other-windows))
+        ((string-match "^ \\*" (buffer-name (current-buffer)))
+         (bury-buffer))))
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit-safe)
 ;; Note that a better approach is to use advice (I use the above because
 ;; it is more straighforward for now)
@@ -417,7 +417,7 @@
   ;; even if it is not misspelled.
   :bind (("M-$" . jinx-correct)
          ("C-M-$" . jinx-languages))
-)
+  )
 
 ;; debugging
 (message "After jinx = %S" display-buffer-alist)

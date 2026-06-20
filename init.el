@@ -645,60 +645,60 @@ The code is taken from here: https://github.com/skeeto/.emacs.d/blob/master/lisp
   ('marginalia-mode-hook . 'nerd-icons-completion-marginalia-setup))
 
 (use-package consult
-  ;; Enable automatic preview at point in the *Completions* buffer. This is
-  ;; relevant when you use the default completion UI.
-  :hook (completion-list-mode . consult-preview-at-point-mode)
-  :init
-  ;; Optionally configure the register formatting. This improves the register
-  ;; preview for `consult-register', `consult-register-load',
-  ;; `consult-register-store' and the Emacs built-ins.
-  (setq register-preview-delay 0.5
-        register-preview-function #'consult-register-format)
+;; Enable automatic preview at point in the *Completions* buffer. This is
+;; relevant when you use the default completion UI.
+:hook (completion-list-mode . consult-preview-at-point-mode)
+:init
+;; Optionally configure the register formatting. This improves the register
+;; preview for `consult-register', `consult-register-load',
+;; `consult-register-store' and the Emacs built-ins.
+(setq register-preview-delay 0.5
+      register-preview-function #'consult-register-format)
 
-  ;; Optionally tweak the register preview window.
-  ;; This adds thin lines, sorting and hides the mode line of the window.
-  (advice-add #'register-preview :override #'consult-register-window)
+;; Optionally tweak the register preview window.
+;; This adds thin lines, sorting and hides the mode line of the window.
+(advice-add #'register-preview :override #'consult-register-window)
 
-  ;; Use Consult to select xref locations with preview
-  (setq xref-show-xrefs-function #'consult-xref
-        xref-show-definitions-function #'consult-xref)
-  :config
-  ;; Optionally configure preview. The default value
-  ;; is 'any, such that any key triggers the preview.
-  ;; (setq consult-preview-key 'any)
-  ;; (setq consult-preview-key "M-.")
-  ;; (setq consult-preview-key '("S-<down>" "S-<up>"))
+;; Use Consult to select xref locations with preview
+(setq xref-show-xrefs-function #'consult-xref
+      xref-show-definitions-function #'consult-xref)
+:config
+;; Optionally configure preview. The default value
+;; is 'any, such that any key triggers the preview.
+;; (setq consult-preview-key 'any)
+;; (setq consult-preview-key "M-.")
+;; (setq consult-preview-key '("S-<down>" "S-<up>"))
 
-  ;; For some commands and buffer sources it is useful to configure the
-  ;; :preview-key on a per-command basis using the `consult-customize' macro.
-  ;; (consult-customize
-  ;; consult-theme :preview-key '(:debounce 0.2 any)
-  ;; consult-ripgrep consult-git-grep consult-grep
-  ;; consult-bookmark consult-recent-file consult-xref
-  ;; consult--source-bookmark consult--source-file-register
-  ;; consult--source-recent-file consult--source-project-recent-file
-  ;; :preview-key "M-."
-  ;; :preview-key '(:debounce 0.4 any))
+;; For some commands and buffer sources it is useful to configure the
+;; :preview-key on a per-command basis using the `consult-customize' macro.
+;; (consult-customize
+;; consult-theme :preview-key '(:debounce 0.2 any)
+;; consult-ripgrep consult-git-grep consult-grep
+;; consult-bookmark consult-recent-file consult-xref
+;; consult--source-bookmark consult--source-file-register
+;; consult--source-recent-file consult--source-project-recent-file
+;; :preview-key "M-."
+;; :preview-key '(:debounce 0.4 any))
 
-  ;; By default `consult-project-function' uses `project-root' from project.el.
-  ;; Optionally configure a different project root function.
+;; By default `consult-project-function' uses `project-root' from project.el.
+;; Optionally configure a different project root function.
    ;;;; 1. project.el (the default)
-  ;; (setq consult-project-function #'consult--default-project--function)
+;; (setq consult-project-function #'consult--default-project--function)
    ;;;; 2. vc.el (vc-root-dir)
-  ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
+;; (setq consult-project-function (lambda (_) (vc-root-dir)))
    ;;;; 3. locate-dominating-file
 ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
 ;;  ;;;; 4. projectile.el (projectile-project-root)
 ;; (autoload 'projectile-project-root "projectile")
 ;; (setq consult-project-function (lambda (_) (projectile-project-root)))
    ;;;; 5. No project support
-  ;; (setq consult-project-function nil)
+;; (setq consult-project-function nil)
 
-  ;; Add context lines to ripgrep results (like CtrlSF in vim)
-  ;; -C 3 shows 3 lines before and after each match
-  (setq consult-ripgrep-args
-        "rg --null --line-buffered --color=never --max-columns=1000 --path-separator / --smart-case --no-heading --with-filename --line-number -C 3")
-  )
+;; Add context lines to ripgrep results (like CtrlSF in vim)
+;; -C 3 shows 3 lines before and after each match
+(setq consult-ripgrep-args
+      "rg --null --line-buffered --color=never --max-columns=1000 --path-separator / --smart-case --no-heading --with-filename --line-number -C 3")
+)
 
 (use-package helpful
   :bind
