@@ -467,6 +467,14 @@
 ;; By default, emacs hijacks (or replaces) my open buffers with other buffers
 ;; which is annoying. I did not experience this in Vim.
 ;;
+;; Note: this is less of the problem after using it for some time as it aslo
+;; works differently from Vim: when new buffers like help, etc are opened in
+;; the existing window, it is usually easy to close it with `q` and get back
+;; to the previous buffer.
+;;
+;; And `M-x winner-undo` can be used to restore the previous window configuration
+;; in the worst case.
+;;
 ;; Scenarios:
 ;; - have a file into two splits
 ;; - invoke help for something, for example, K on display-buffer-base-action
@@ -506,6 +514,10 @@ The code is taken from here: https://github.com/skeeto/.emacs.d/blob/master/lisp
 
 ;; (start/hello)
 
+;; Open Magit: M-x magit
+;; In the Magit buffer:
+;; - Expand current item: TAB
+;; - Expand all: M-TAB (repeat to expand more)
 (use-package magit
   :defer
   :custom (magit-diff-refine-hunk (quote all)) ;; Shows inline diff
@@ -782,10 +794,20 @@ The code is taken from here: https://github.com/skeeto/.emacs.d/blob/master/lisp
 ;; 3. Press C-c C-c to apply changes to all files
 ;; 4. Press C-c C-k to abort
 
-;; Bonus embark bindings:
-;; - C-. (embark-act) - Context menu on any target (file, symbol, etc.)
-;; - C-; (embark-dwim) - "Do what I mean" action
-
+;; Embark provides:
+;; 1. a context menu for various targets (files, symbols, etc.)
+;; the `emark-act' command. This is like right-click in GUI apps,
+;; gives you context-aware options (different for URL, filename, etc).
+;; 2. "Do what I mean" command (`embark-dwim') that tries to guess the best
+;; action for the target at point and execute it.
+;; 3. Exporting results to a buffer with `embark-export'. So any service
+;; list such as minibuffer completions, can be exported to a regular buffer
+;; for further actions (like editing with wgrep). Export also tries to
+;; guess the best way to display the results, for example, grep results are
+;; displayed in a grep-mode buffer, which allows to jump to results and edit
+;; with wgrep.
+;; 4. Collect mode that is similar to export, but it does not try to guess
+;; the best way to display the results, just dumps them in a buffer.
 (use-package embark
   :bind
   (("C-." . embark-act)         ;; Context actions on target at point

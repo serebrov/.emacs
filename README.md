@@ -30,6 +30,10 @@ Cancel current operation: C-g (which is usually done with Esc in vim)
 - Close minibuffer
 - Close autocompletion popup
 
+The autocompletion in minibuffer is managed with vertico.
+- Use M-n / M-p to move through completion suggestions.
+- Note: with `(vertico-preslect 'first)` set, use M-RET to use what you typed without using a suggestion (but I disabled it in favor of more explicit behavior)
+
 Search in the document: C-s (next C-s, prev C-r)
 
 Select, copy/paste:
@@ -63,6 +67,7 @@ Repeating commands:
   - `C-u 4 C-n` - move down 4 lines
 
 Dired: `C-x d`
+- See more in [./emacs.md](./emacs.md)
 
 See also:
 - https://www.masteringemacs.org/article/effective-editing-movement

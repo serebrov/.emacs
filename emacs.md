@@ -164,6 +164,106 @@ Open dired: `C-x d`
   - `C-c C-c` to save changes
   - `C-c ESC` to undo
 
+Navigation:
+- In evil mode: j, k to go up/down, `-` to go dir up
+- Next/prev dir: `g j` and `g k`
+
+Mark files:
+- `d` - mark for deletion
+- `m` - mark for command that we will decide on later, `t` - toggle marks
+- `u` - unmark, `U` to umark all
+- `DEL` to back up one line and unmark or unflag.
+Commands:
+- Delete: `x` to delete (eXpunge) the files flagged ‘D’.
+- Open: `RET` to open file
+  - `shift-RET` or `g O` (`o` in emacs mode) to open file or directory in Other window
+- New dir: `i` to Insert a subdirectory in this buffer.
+- Move / Rename: `R` to Rename a file or move the marked files to another directory.
+- Copy: `C` to Copy files.
+- Open URL: `W`
+- Execute shell command: `!` or `X`
+- Compress: `Z`, `c` is "compress to" (will ask for the archive name)
+- Redisplay: `r` (`l` in emacs mode)
+
+Helpers:
+  - View: `g o` (`v` in emacs mode), use `Ctrl-o` to get back
+  - Show file type: `g y` (`y` in emacs mode)
+- View:
+  - `TAB` or `(` to show/hide details
+  - Sorting: `o` (`s` in emacs mode) to toggle Sorting by name/date or change the ‘ls’ switches.
+  - Redisplay: `r` (`l` in emacs mode), `:e!` also works
+  This retains all marks and hides subdirs again that were hidden before.
+- Use SPC and DEL to move down and up by lines.
+
+Most of the `evil` mode bindings are the same, but there are some differences because of the keys used for Vim naviagtion (h,j,k,l,-, etc), for example
+- `-` in evil goes to the parent dir (this is "negative argument" by default)
+- `I` is "dired-maybe-insert-subdir" in `evil` (and Info by default)
+- Go to file: "J" in evil and "j" in emacs
+- ...
+
+Marking tools:
+- * C-n			dired-next-marked-file
+- * C-p			dired-prev-marked-file
+- * !				dired-unmark-all-marks
+- * %				dired-mark-files-regexp
+- * (				dired-mark-sexp
+- * *				dired-mark-executables
+- * .				dired-mark-extension
+- * /				dired-mark-directories
+- * ?				dired-unmark-all-files
+- * @				dired-mark-symlinks
+- * O				dired-mark-omitted
+- * c				dired-change-marks
+- * m				dired-mark
+- * s				dired-mark-subdir-files
+- * t				dired-toggle-marks
+- * u				dired-unmark
+- * <delete>		dired-unmark-backward
+
+Regex tools:
+- % C		dired-do-copy-regexp
+- % H		dired-do-hardlink-regexp
+- % R		dired-do-rename-regexp
+- % S		dired-do-symlink-regexp
+- % d		dired-flag-files-regexp
+- % g		dired-mark-files-containing-regexp
+- % l		dired-downcase
+- % m		dired-mark-files-regexp
+- % r		dired-do-rename-regexp
+- % u		dired-upcase
+
+# Wdired, editing mode (similar to vidir)
+
+Edit mode (wdired): `i` in evil switches to editing mode (or `M-x wdired-change-to-wdired-mode`)
+- Apply changes: `C-c C-c` or `M-x wdired-finish-edit`
+- Exit: `C-x C-q`
+
+## Dired: interactive replacemend mode
+
+`Q` in direcd starts the regexp replace in marked files (on in current directory under cursor).
+
+It opens two buffers: search results and current buffer with replacements. Key mappings are:
+- Type SPC or y to replace one match, Delete or n to skip to next,
+- RET or q to exit, Period to replace one match and exit,
+- , to replace but not move point immediately,
+- ! to replace all remaining matches in this buffer with no more questions,
+- C-r to enter recursive edit (C-M-c to get out again),
+- C-w to delete match and then enter recursive edit,
+- ^ to move point back to previous match,
+- u to undo previous replacement,
+- U to undo all replacements,
+- e to edit the replacement string.
+- E to edit the replacement string with exact case.
+- C-l to clear the screen, redisplay, and offer same replacement again,
+- Y to replace all remaining matches in all remaining buffers (in
+- multi-buffer replacements) with no more questions,
+- N (in multi-buffer replacements) to skip to the next buffer without
+replacing remaining matches in the current buffer.
+
+Any other character exits the interactive replacement loop, and is then
+re-executed as a normal key sequence.
+* Question: how to re-enable the ineractive mode?
+
 ## Getting help
 
 Emacs manual: C-h r, C-h i
@@ -568,6 +668,8 @@ Manual:
 
 ## Debugging
 
+Show stacktrace on errors: `M-x  toggle-debug-on-error`.
+
 edebug - Emacs Lisp debugger, `M-x edebug-defun` to start debugging a function.
 
 TODO: recheck
@@ -643,43 +745,7 @@ TODO: recheck
 
 ## Files and Directories, Dired
 
-Recheck:
-- Dired: Switch to edit mode in dired with SPC b w -> writable dired
-  - Can edit file names
-  - Save with C-c C-c
- - Can use `SPC h SPC dired` to see dired settings in spacemacs-base layer
- - Mark files with `m`, R - rename/move, C - copy and `u` to unmark (also undelete)
- - `d` - delete, `u` - undelete, `x` - expunge, apply deletions
- - `+` - create directory
- - Change file/directory permissions with `M`
- - `(` - show / hide file details
- - `s` - change sort mode
-
-## Dired: interactive replacemend mode
-
-`Q` in direcd starts the regexp replace in marked files (on in current directory under cursor).
-
-It opens two buffers: search results and current buffer with replacements. Key mappings are:
-- Type SPC or y to replace one match, Delete or n to skip to next,
-- RET or q to exit, Period to replace one match and exit,
-- , to replace but not move point immediately,
-- ! to replace all remaining matches in this buffer with no more questions,
-- C-r to enter recursive edit (C-M-c to get out again),
-- C-w to delete match and then enter recursive edit,
-- ^ to move point back to previous match,
-- u to undo previous replacement,
-- U to undo all replacements,
-- e to edit the replacement string.
-- E to edit the replacement string with exact case.
-- C-l to clear the screen, redisplay, and offer same replacement again,
-- Y to replace all remaining matches in all remaining buffers (in
-- multi-buffer replacements) with no more questions,
-- N (in multi-buffer replacements) to skip to the next buffer without
-replacing remaining matches in the current buffer.
-
-Any other character exits the interactive replacement loop, and is then
-re-executed as a normal key sequence.
-* Question: how to re-enable the ineractive mode?
+Dired: `C-x d`
 
 ## Org Mode
 
