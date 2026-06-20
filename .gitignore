@@ -60,3 +60,8 @@ site-lisp/package/
 /bookmarks
 /custom-vars.el
 /custom.el
+
+# LSP servers: installed via lsp_servers/install.sh (huge, platform-specific).
+# Ignore the whole tree; the install script + npm manifests are force-added
+# (git add -f) so `npm ci` can reproduce exact versions on a fresh clone.
+lsp_servers/
