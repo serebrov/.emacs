@@ -59,7 +59,17 @@
   (electric-indent-mode nil)  ;; Turn off the weird indenting that Emacs does by default.
   (electric-pair-mode t)      ;; Turns on automatic parens pairing
   (blink-cursor-mode nil)     ;; Don't blink cursor
-  (global-auto-revert-mode t) ;; Automatically reload file and show changes if the file has changed
+
+  ;; Automatically refresh dired buffers, but be quiet about it.
+  ;; By default dired caches and displays stale filesystem state,
+  ;; needs to  be refreshed automatically.
+  (global-auto-revert-non-file-buffers t)
+  ;; This disables the message "Reverting buffer <buffer-name>..."
+  (auto-revert-verbose nil)
+  ;; This is the main setting that enables auto-revert for all buffers,
+  ;; so if the file changes on disk, the buffer will be automatically
+  ;; updated to reflect those changes.
+  (global-auto-revert-mode t)
 
   ;;(dired-kill-when-opening-new-dired-buffer t) ;; Dired don't create new buffer
   ;;(recentf-mode t) ;; Enable recent file mode
