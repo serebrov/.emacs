@@ -36,6 +36,18 @@
 
 (setq package-quickstart t) ;; For blazingly fast startup times, this line makes startup miles faster
 
+;; Note on syntax:
+;; the item above, `(setq package-quickstart t)` sets the variable value.
+;; below, in the `:custom` section of `use-package`, we set the variable
+;; values without `setq`, for example, `(menu-bar-mode nil)`.
+;; This is because the `:custom` block is special and it expects
+;; variable-value pairs (and in other places we need to use `setq` to
+;; set the variable values).
+;;
+;; Similarly, the `:hook` section expects mode-function pairs, for example,
+;; (pdf-view-mode . (lambda () (display-line-numbers-mode -1))))
+;; which would "normally" be writtten as
+;; (add-hook 'pdf-view-mode (lambda () (display-line-numbers-mode -1))))
 (use-package emacs
   :custom
   (menu-bar-mode nil)         ;; Disable the menu bar
@@ -46,22 +58,12 @@
   (delete-selection-mode t)   ;; Select text and delete it by typing.
   (electric-indent-mode nil)  ;; Turn off the weird indenting that Emacs does by default.
   (electric-pair-mode t)      ;; Turns on automatic parens pairing
-  ;; ;; Remove backtick -> quote pairing (keeps other pairs like brackets)
-  ;; ;; Otherwise, entering ` (backtick) resuls in `' (backtick followed by single quote)
-  ;; (setq electric-pair-pairs (assq-delete-all ?\` electric-pair-pairs))
-  ;; (setq electric-pair-text-pairs (assq-delete-all ?\` electric-pair-text-pairs))
-  ;; Make ` pair with ` and ' pair with ' (instead of default ` -> ')
-  ;; note: this seemed to work, but doesnot and I get `' when entering backtick
-  (setq electric-pair-pairs '((?\` . ?\`) (?\' . ?\')))
-  (setq electric-pair-text-pairs '((?\` . ?\`) (?\' . ?\')))
-
   (blink-cursor-mode nil)     ;; Don't blink cursor
   (global-auto-revert-mode t) ;; Automatically reload file and show changes if the file has changed
 
   ;;(dired-kill-when-opening-new-dired-buffer t) ;; Dired don't create new buffer
   ;;(recentf-mode t) ;; Enable recent file mode
 
-  (add-hook 'pdf-view-mode-hook (lambda () (display-line-numbers-mode -1)))
   ;; something for consult
   ;; https://github.com/minad/consult/discussions/853
   ;; (defun display-line-numbers--turn-on ()
@@ -84,7 +86,8 @@
   (auto-save-visited-mode t) ;; Automatically save files (different from auto-save that creates backup)
 
   :hook
-  (prog-mode . (lambda () (hs-minor-mode t))) ;; Enable folding hide/show globally
+  ((prog-mode . (lambda () (hs-minor-mode t))) ;; Enable folding hide/show globally
+   (pdf-view-mode . (lambda () (display-line-numbers-mode -1))))
   :config
   ;; Move customization variables to a separate file and load it, avoid filling up init.el with unnecessary variables
   (setq custom-file (locate-user-emacs-file "custom-vars.el"))
