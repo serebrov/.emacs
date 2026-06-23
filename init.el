@@ -356,6 +356,8 @@
 (use-package doom-modeline
   :custom
   (doom-modeline-height 25) ;; Set modeline height
+  ;; (doom-modeline-buffer-file-name-style 'auto)
+  (doom-modeline-buffer-file-name-style 'relative-to-project)
   :hook (after-init . doom-modeline-mode))
 
 (use-package nerd-icons
