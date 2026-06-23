@@ -89,7 +89,7 @@
 ;;
 ;; M-1 M-x run-lisp
 ;; C-1 M-x run-lisp
-;; 
+;;
 ;; One more method: temporarily disable evil-mode - Press C-z to
 ;; switch to Emacs state, then use C-u M-x run-lisp
 ;;
@@ -466,6 +466,18 @@
 
   (message "Inside dired = %S" g-dired-minimal-view)
   )
+
+(defun g-dired-two-pane ()
+  "Open dired in two panes side by side."
+  (interactive)
+  (let ((dir1 (read-directory-name "Directory 1: "))
+        (dir2 (read-directory-name "Directory 2: ")))
+    (tab-new)
+    (delete-other-windows)
+    (split-window-right)
+    (dired dir1)
+    (other-window 1)
+    (dired dir2)))
 
 ;; debugging
 (message "After dired = %S" g-dired-minimal-view)
