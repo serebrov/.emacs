@@ -172,6 +172,24 @@
   :config
   (global-evil-surround-mode 1))
 
+;; Visual search: select text and hit * / # to search for it literally.
+;; Stays on the first match, like the normal-state * / # above.
+(use-package evil-visualstar
+  :after evil
+  :config
+  (defun my-evil-visualstar-forward-stay ()
+    "Search for the visual selection forward but stay on the first match."
+    (interactive)
+    (call-interactively 'evil-visualstar/begin-search-forward)
+    (evil-ex-search-previous))
+  (defun my-evil-visualstar-backward-stay ()
+    "Search for the visual selection backward but stay on the first match."
+    (interactive)
+    (call-interactively 'evil-visualstar/begin-search-backward)
+    (evil-ex-search-previous))
+  (define-key evil-visual-state-map (kbd "*") 'my-evil-visualstar-forward-stay)
+  (define-key evil-visual-state-map (kbd "#") 'my-evil-visualstar-backward-stay))
+
 ;; Vim's C-a / C-x to increment/decrement numbers
 ;; and g C-a / g C-x for incremental increment, useful for lists of numbers:
 ;; 1              2
