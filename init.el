@@ -118,6 +118,20 @@
   :config
   (evil-set-initial-state 'eat-mode 'insert) ;; Set initial state in eat terminal to insert mode
   (evil-select-search-module 'evil-search-module 'evil-search)
+  ;; Vim: nnoremap * *N / # #N -- highlight the word under the cursor
+  ;; without jumping to the next match (search, then step back).
+  (defun my-evil-search-word-forward-stay ()
+    "Search forward for the word under the cursor but stay on it."
+    (interactive)
+    (call-interactively 'evil-ex-search-word-forward)
+    (evil-ex-search-previous))
+  (defun my-evil-search-word-backward-stay ()
+    "Search backward for the word under the cursor but stay on it."
+    (interactive)
+    (call-interactively 'evil-ex-search-word-backward)
+    (evil-ex-search-previous))
+  (define-key evil-motion-state-map (kbd "*") 'my-evil-search-word-forward-stay)
+  (define-key evil-motion-state-map (kbd "#") 'my-evil-search-word-backward-stay)
   ;; (evil-set-initial-state 'deadgrep-mode 'emacs)
   ;; (evil-set-initial-state 'wgrep-mode 'emacs) ;; Use emacs state for wgrep editing
   ;; (evil-set-initial-state 'grep-mode 'emacs)  ;; Use emacs state for grep buffers
@@ -357,7 +371,8 @@
   :custom
   (doom-modeline-height 25) ;; Set modeline height
   ;; (doom-modeline-buffer-file-name-style 'auto)
-  (doom-modeline-buffer-file-name-style 'relative-to-project)
+  ;; (doom-modeline-buffer-file-name-style 'relative-to-project)
+  (doom-modeline-buffer-file-name-style 'relative-from-project)
   :hook (after-init . doom-modeline-mode))
 
 (use-package nerd-icons
