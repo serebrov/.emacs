@@ -239,7 +239,6 @@ To pass a negative argument use `C--5 ...` or `M--5 ...`.  The `C-- ...` works a
 Some problems with evil and my setup:
 - undo after restart
 - "z=" does not replace explicitely with correct spelling (or I don't know how)
-- Add of find a ":GBrowse" command
 - The "Enter" in normal mode creates new line
   - In Vim it folds/unfolds the code (but I don't use it much, so NOOP is also fine)
 - The "*" behavoir
@@ -300,6 +299,8 @@ Checking the `*Messages*` buffer:
 
 # Solved problems
 
+- Add of find a ":GBrowse" command
+  - Added `browse-at-remote` (see .emacs), also `magit`s `forge` has a similar command.
 - SQL mode, something similar to vim's dbext.vim
   - Update: added config for sql-mode in .emacs - not the same as dbext, but very close.
   - have some configuration for available databases

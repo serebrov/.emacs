@@ -588,6 +588,17 @@ The code is taken from here: https://github.com/skeeto/.emacs.d/blob/master/lisp
   (setq magit-commit-diff-inhibit-same-window t) ;; Keep diff visible when opening commit buffer
   )
 
+;; Note: forge did not work after installing and I added `browse-at-remote' package
+;; instead, see the `.emacs' config.
+;; Forge is a Magit extension that allows you to work with Git forges (like GitHub, GitLab, etc.)
+;; directly from within Emacs.
+;; Specifically, I need it for M-x forge-browse to open the current file in GitHub (or other forge)
+;; in a browser.
+;; Error (bytecomp): Eager macro-expansion failure: (wrong-number-of-arguments (2 . 2) 4)
+;; Error (bytecomp): forge--pull is already defined as something else than a generic function [20 times]
+;; (use-package forge
+;;   :after magit)
+
 (use-package diff-hl
   :hook ((dired-mode         . diff-hl-dired-mode-unless-remote)
          (magit-post-refresh . diff-hl-magit-post-refresh))

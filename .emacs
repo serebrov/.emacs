@@ -296,9 +296,26 @@
 ;;           Info-mode))
 ;;   (popper-mode +1))
 
+;; TODO: there is an issue with didyoumean: it asks for confirmation even if
+;; there is a direct match.
+;; For example, it asks each time when opening `~/.emacs.conf/.emacs' file
+;; because there is also `~/.emacs.conf/.emacs.desktop'.
+;; In the same situation, Vim "didyoumean" plugin just opens the file and only
+;; asks for the confirmation when there is no direct match (for example,
+;; if I try to open `~/.emacs.conf/.em`).
+;; This is double-annoying because confirmation requests are shown event when
+;; I close and restart emacs and it tries to reopen files that were open before,
+;; so I have to confirm each time I start emacs.
 (use-package didyoumean
   :vc (:url "https://gitlab.com/kisaragi-hiu/didyoumean.el"))
 (didyoumean-mode 1)
+
+;; Provides M-x browse-at-remote to open the current file in the browser
+;; at the corresponding GitHub/GitLab/Bitbucket page.
+;; Note: `magit`'s `forge` also has `forge-browse`, but I was not able to
+;; get it to work, see the note in the `init.el` file.
+(use-package browse-at-remote
+  :vc (:url "https://github.com/rmuslimov/browse-at-remote.git"))
 
 ;; Display tabs, trailing spaces
 (use-package whitespace
