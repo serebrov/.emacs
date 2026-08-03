@@ -266,9 +266,10 @@ re-executed as a normal key sequence.
 
 ## Getting help
 
+Select a manual and search in it: `M-x info-lookup-symbol`, C-h S
+
 Emacs manual: C-h r, C-h i
 Search on the current page: C-h s
-Select a manual and search in it: C-h S
 
 Describe package: C-h P
 Describe current mode: C-h m

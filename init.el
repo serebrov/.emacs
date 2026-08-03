@@ -146,17 +146,35 @@
   ;; so this also disables TAB).
   (evil-undo-system 'undo-redo) ;; C-r to redo
   (evil-shift-round nil)        ;; preserve indentation when << and >>
+  ;; Makes * / # search for the symbol at point instead of the word,
+  ;; so underscore_words are matched whole.
+  ;; (but this does not work for w, e, b, etc. motions, this is handled separately
+  ;; below, see the `with-eval-after-load` with `defalias`)
+  (evil-symbol-word-search t)
   ;; Unmap keys in 'evil-maps. If not done, org-return-follows-link will not work
   :bind (:map evil-motion-state-map
               ("SPC" . nil)
               ("RET" . nil)
               ("TAB" . nil)))
+
 (use-package evil-collection
   :after (evil wgrep)
   :config
   ;; Setting where to use evil-collection
   (setq evil-collection-mode-list '(dired ibuffer magit corfu vertico consult info grep wgrep deadgrep))
   (evil-collection-init))
+
+;; Vim treats _ as a word character, but emacs treats it as a separator by default.
+;; I am used to the editor treating some_thing, some-thing, someThing as one word.
+;; Part of the fix is the `(evil-symbol-word-search t)` (see above).
+;; The snippet below also changes w/e/b/etc to work like that.
+;;
+;; Related: emacs has subword-mode (the opposite) and superword-mode (what I want,
+;; but does not work with evil, see https://github.com/emacs-evil/evil/issues/721).
+;; See also:
+;; https://evil.readthedocs.io/en/latest/faq.html#underscore-is-not-a-word-character
+(with-eval-after-load 'evil
+  (defalias #'forward-evil-word #'forward-evil-symbol))
 
 ;; Surround in visual-state with
 ;; S<textobject> or gS<textobject>

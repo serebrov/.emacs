@@ -641,11 +641,11 @@
 
 ;; Emacs comes with a built-in world clock: M-x world-clock
 ;; To customize displayed timezones, use:
-(setq world-clock-list '(("America/New_York" "New York")
-                         ("America/Los_Angeles" "Los Angeles")
-                         ("Europe/London" "London")
-                         ("Europe/Kyiv" "Kyiv")
-                         ("Asia/Tokyo" "Tokyo")))
+
+("America/Los_Angeles" "Los Angeles")
+("Europe/London" "London")
+("Europe/Kyiv" "Kyiv")
+("Asia/Tokyo" "Tokyo")))
 
 ;; see https://xenodium.com/emacs-time-zones-mode
 ;; Toggle help with the "?" key add cities with the "+" key.
