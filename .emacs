@@ -270,47 +270,34 @@
 
 (customize-set-variable 'even-window-sizes nil)     ; avoid resizing
 
-;; Update: I am not sure about popper, it feels more like a workaround than a
-;; proper solution.
-;; ;; ;; This supposed to solve "emacs is hijacking my windows problem"
-;; ;; testing...
-;; ;; Popper - manage popup windows like vim
-;; ;; Popups open in a dedicated area and can be dismissed with q
-;; (use-package popper
-;;   :bind (("C-`"   . popper-toggle)        ;; Toggle last popup
-;;          ("M-`"   . popper-cycle)          ;; Cycle through popups
-;;          ("C-M-`" . popper-toggle-type))   ;; Convert popup <-> regular window
-;;   :init
-;;   (setq popper-reference-buffers
-;;         '("\\*Messages\\*"
-;;           "\\*Warnings\\*"
-;;           "\\*Compile-Log\\*"
-;;           "\\*Backtrace\\*"
-;;           "\\*evil-registers\\*"
-;;           "\\*Apropos\\*"
-;;           "\\*Help\\*"
-;;           "\\*helpful"
-;;           "\\*info\\*"
-;;           "\\*Info\\*"
-;;           compilation-mode
-;;           help-mode
-;;           helpful-mode
-;;           Info-mode))
-;;   (popper-mode +1))
-
-;; TODO: there is an issue with didyoumean: it asks for confirmation even if
-;; there is a direct match.
-;; For example, it asks each time when opening `~/.emacs.conf/.emacs' file
-;; because there is also `~/.emacs.conf/.emacs.desktop'.
-;; In the same situation, Vim "didyoumean" plugin just opens the file and only
-;; asks for the confirmation when there is no direct match (for example,
-;; if I try to open `~/.emacs.conf/.em`).
-;; This is double-annoying because confirmation requests are shown event when
-;; I close and restart emacs and it tries to reopen files that were open before,
-;; so I have to confirm each time I start emacs.
+;; This is similar to the Vim `didyoumean` plugin: it asks to open an existing
+;; file when the requested file does not exist.
+;; For example: `:e ~/.emacs.conf/.em` suggests `~/.emacs.conf/.emacs`.
 (use-package didyoumean
-  :vc (:url "https://gitlab.com/kisaragi-hiu/didyoumean.el"))
-(didyoumean-mode 1)
+  :vc (:url "https://gitlab.com/kisaragi-hiu/didyoumean.el")
+  :custom
+  ;; Unlike the Vim plugin, this package asks for the confirmation even if the
+  ;; requested file exists (which is very annoying because when I re-open emacs
+  ;; and it reopens the `~/.emacs.conf/.emacs`, it asks for the confirmation because
+  ;; the `~/.emacs.conf/.emacs.desktop` file exists).
+  ;; The `didyoumean-custom-ignore-function` fixes this.
+  (didyoumean-custom-ignore-function #'file-exists-p)
+  :config
+  (didyoumean-mode 1))
+
+;; Note: an alternative fix is to use the advice (code below).
+;; This may be useful in case didyoumean author fixes the code (that now looks like
+;; the intention is to apply the `didyoumena-custom-ignore-function` to candidate
+;; files, but it is instead applied to the requested file, which is what I want,
+;; but can be "broken" with a fix).
+;; The related code in didyoumean.el is: `(defun didyoumean--matching-files (file)`.
+;; (use-package didyoumean
+;;   :vc (:url "https://gitlab.com/kisaragi-hiu/didyoumean.el")
+;;   :config
+;;   (define-advice didyoumean (:before-while () only-for-new-files)
+;;     "Ask only when the visited file does not exist yet."
+;;     (and buffer-file-name (not (file-exists-p buffer-file-name))))
+;;   (didyoumean-mode 1))
 
 ;; Provides M-x browse-at-remote to open the current file in the browser
 ;; at the corresponding GitHub/GitLab/Bitbucket page.
@@ -321,7 +308,7 @@
 ;; "Wrong type argument: stringp, t". The fix is only on master.
 (use-package browse-at-remote
   :vc (:url "https://github.com/rmuslimov/browse-at-remote.git"
-       :rev :newest))
+            :rev :newest))
 
 ;; Display tabs, trailing spaces
 (use-package whitespace

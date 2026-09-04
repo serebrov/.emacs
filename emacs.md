@@ -457,6 +457,12 @@ Eshell - Emacs shell, a shell implemented in Emacs Lisp, `M-x eshell`.
 - `M-x customize-face` - Customize a face (font, color, etc.)
 - `M-x list-packages` - List all packages
 
+Upgrade packages:
+- `M-x package-upgrade` [package]
+- `M-x package-upgrade-all`
+- `M-x package-vc-upgrade` [package]
+- `M-x package-vc-upgrade-all`
+
 Configuration file is `~/.emacs.d/init.el`.
 Use `M-x eval-buffer` to reload the configuration file.
 Start Emacs with `emacs -q` to ignore the configuration file (if something is broken).

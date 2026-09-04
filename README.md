@@ -241,10 +241,6 @@ Some problems with evil and my setup:
 - "z=" does not replace explicitely with correct spelling (or I don't know how)
 - The "Enter" in normal mode creates new line
   - In Vim it folds/unfolds the code (but I don't use it much, so NOOP is also fine)
-- The "*" behavoir
-  - in my vim setup in normal mode pressing `*` searches for the word under the cursor
-    it also stays on the current word
-    this should be a piece of custom setup, need to find and replicate it in emacs config
 - setup spellchecking
 - learn more about projectile and session save/restore
   - currently I have `(desktop-save-mode 1)`, see also related notes in [.emacs](.emacs)
@@ -255,15 +251,8 @@ Some problems with evil and my setup:
   - this is similar to my vim config and it is very reliable, basically
     it reliably saves when expected, each time I finished typing
 - what is a good way to search help? Like :helpgrep in vim?
-- emacs hijacks windows (see .emacs around "display-buffer" for more information)
-  - Example: Ctrl-h i to open help then h to get help for help - replaces all windows
-  - Example: Ctrl-h i to open help then M-n to duplicate it - replaces one of the existing windows
-  - Workaround: M-x winner-mode adds `M-x winner-undo' (and redo) to undo these changes
 - I have `tn` to open new tab, it also opens the active buffer in it.
   - who do I make it open empty buffer instead? (I used to this in vim - is this really necessary though?)
-- Autocompletion uses Enter, so I cannot create a new line without selecting an option
-  - reconfigure to TAB? or Ctrl-n?
-  - note: popup can be cancelled with `Ctrl-g`
 - vim surround bindings?
 - which text objects are available?
 - System C-SPC conflict with emacs C-SPC (like C-SPC to start selection and
@@ -299,9 +288,24 @@ Checking the `*Messages*` buffer:
 
 # Solved problems
 
-- After upgrading emacs to 31.1, vertico throws errors
+- After the upgrade to emacs 31.1, vertico throws errors
   - "The error says "Vertico detected an error: Press C-h e to see the stack trace]."
   - Fixed with `M-x package-recompile-all` and restarting emacs.
+- The "*" behavoir
+  - Solved: added `evil-visual-star`
+  - in my vim setup in normal mode pressing `*` searches for the word under the cursor
+    it also stays on the current word
+    this should be a piece of custom setup, need to find and replicate it in emacs config
+- Autocompletion uses Enter, so I cannot create a new line without selecting an option
+  - Solve: see the note in init.el around `defun my-corfu-ret ()`
+  - reconfigure to TAB? or Ctrl-n?
+  - note: popup can be cancelled with `Ctrl-g`
+- emacs hijacks windows (see .emacs around "display-buffer" for more information)
+  - (partially fixed, partially I get used to emacs behavior, see the
+    `define-minor-mode dedicated-mode` in the init.el and related comments)
+  - Example: Ctrl-h i to open help then h to get help for help - replaces all windows
+  - Example: Ctrl-h i to open help then M-n to duplicate it - replaces one of the existing windows
+  - Workaround: M-x winner-mode adds `M-x winner-undo' (and redo) to undo these changes
 - Add of find a ":GBrowse" command
   - Added `browse-at-remote` (see .emacs), also `magit`s `forge` has a similar command.
 - SQL mode, something similar to vim's dbext.vim
