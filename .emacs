@@ -597,6 +597,15 @@ Like normal Emacs `C-k'.  Kill to end of line and put content in kill-ring."
   ;; Don't save passwords in history
   (setq sql-password-wallet nil))
 
+;; Adds formatting rules for align command.
+;; Select the region with SQL and
+;; M-x indent-region RET  ;; formats the block, same with `=` in evil mode or `TAB`
+;; M-x align RET          ;; aligns spaces inside the line
+(use-package sql-indent
+  :ensure t
+  :defer t
+  :hook ((sql-mode . sqlind-minor-mode)))
+
 ;;EMMS
 (use-package emms
   :ensure t :defer t
