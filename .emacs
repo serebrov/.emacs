@@ -1,3 +1,5 @@
+;;; ...  -*- lexical-binding: nil -*-
+
 ;; (autoload 'fennel-mode "~/web/fennel-mode-recent/fennel-mode" nil t)
 (autoload 'fennel-mode "~/web/fennel-mode-head/fennel-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.fnl\\'" . fennel-mode))
