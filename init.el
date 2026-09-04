@@ -609,6 +609,12 @@ The code is taken from here: https://github.com/skeeto/.emacs.d/blob/master/lisp
   (setq magit-commit-diff-inhibit-same-window t) ;; Keep diff visible when opening commit buffer
   )
 
+;; Make Ctrl-O work with magit buffer
+(with-eval-after-load 'magit
+  (evil-add-command-properties #'magit-diff-visit-file :jump t)
+  (evil-add-command-properties #'magit-show-commit :jump t)
+  (evil-add-command-properties #'magit-log-visit-diff :jump t))
+
 ;; Note: forge did not work after installing and I added `browse-at-remote' package
 ;; instead, see the `.emacs' config.
 ;; Forge is a Magit extension that allows you to work with Git forges (like GitHub, GitLab, etc.)
