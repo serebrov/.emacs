@@ -316,8 +316,12 @@
 ;; at the corresponding GitHub/GitLab/Bitbucket page.
 ;; Note: `magit`'s `forge` also has `forge-browse`, but I was not able to
 ;; get it to work, see the note in the `init.el` file.
+;; `:rev :newest' is required: the last "release" commit (Jan 2023) calls
+;; `vc-git--call' with the pre-Emacs-31 signature and fails with
+;; "Wrong type argument: stringp, t". The fix is only on master.
 (use-package browse-at-remote
-  :vc (:url "https://github.com/rmuslimov/browse-at-remote.git"))
+  :vc (:url "https://github.com/rmuslimov/browse-at-remote.git"
+       :rev :newest))
 
 ;; Display tabs, trailing spaces
 (use-package whitespace
