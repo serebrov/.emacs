@@ -299,6 +299,9 @@ Checking the `*Messages*` buffer:
 
 # Solved problems
 
+- After upgrading emacs to 31.1, vertico throws errors
+  - "The error says "Vertico detected an error: Press C-h e to see the stack trace]."
+  - Fixed with `M-x package-recompile-all` and restarting emacs.
 - Add of find a ":GBrowse" command
   - Added `browse-at-remote` (see .emacs), also `magit`s `forge` has a similar command.
 - SQL mode, something similar to vim's dbext.vim

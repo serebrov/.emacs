@@ -132,7 +132,7 @@ Navigating:
 
 Running commands and code:
 - Run emacs function ("interactive command"): M-x {function name}
-- Eval emacs code in the buffer: C-x C-e
+- Eval (execute) emacs code in the buffer: C-x C-e
 - Eval buffer: M-x eval-buffer
 
 Splits:
@@ -465,7 +465,7 @@ Start Emacs with `emacs -q` to ignore the configuration file (if something is br
 
 Lisp intro: `C-h i` to open manual, `m lisp intro` to open Lisp intro or `m elisp` to open Lisp manual.
 
-- `C-x C-e` - Evaluate the expression before the cursor
+- `C-x C-e` - Evaluate (execute) the expression before the cursor
 - `C-j` - Evaluate the expression before the cursor and insert the result
 
 - `M-x` - Run a command
@@ -666,6 +666,14 @@ to execute code and then return to the original buffer:
 
 Manual:
 - 4.3.1 Body of 'mark-whole-buffer'
+
+Consult:
+- M-x consult-history (disabled now)
+- M-x consult-recent-file (disabled now)
+
+Update readme:
+- Add general information about consult, marginalia, vertico, orderless, corfu, cape, embark
+  - https://github.com/minad/cape
 
 ## Debugging
 
