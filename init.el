@@ -59,7 +59,8 @@
 
   (delete-selection-mode t)   ;; Select text and delete it by typing.
   (electric-indent-mode nil)  ;; Turn off the weird indenting that Emacs does by default.
-  (electric-pair-mode t)      ;; Turns on automatic parens pairing
+  ;; I fight the automatic paring more than I use it
+  (electric-pair-mode f)      ;; Turns on automatic parens pairing
   (blink-cursor-mode nil)     ;; Don't blink cursor
 
   ;; Automatically refresh dired buffers, but be quiet about it.
