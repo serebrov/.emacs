@@ -268,34 +268,63 @@ re-executed as a normal key sequence.
 
 Select a manual and search in it: `M-x info-lookup-symbol`, C-h S
 
-Emacs manual: C-h r, C-h i
-Search on the current page: C-h s
+Help prefix: C-h [will prompt for other help commands]
 
-Describe package: C-h P
-Describe current mode: C-h m
-Describe function under cursor: M-x describe-function
-Describe key: M-x describe-key
-
-Quick reference card: M-x help-quick
+Emacs manual:
+* Quick reference card: `M-x help-quick`
+* Info reader: `M-x info`, `C-h i`
+* Emacs manual: `M-x info-emacs-manual`, `C-h r`
+  * `RET` go to link; `l` to go back; `s` search
+  * `m` [item] - pick a menu item; `i` jump to index entry
+  * see more in the "Reading Help" section
+* `M-x info-lookup-symbol` [symbol] - search for symbol in manuals
+* `M-x info-display-manual` [topic] - manual on the `topic`
+* `M-x view-emacs-news` - history of Emacs changes
 
 Help on a topic:
-- M-x Info-goto-emacs-command-node RET {topic} RET
+* `M-x Info-goto-emacs-command-node` [command] - emacs Info topic for `command`
+* `M-x shortdoc-display-group` [topic] - gropped information for commands related to `topic`
+* `M-x finder-by-keyword` [topic] - see which packages exist for the selected [topic]
 
-- `C-h a {keyword}` - Search for a keyword in all commands
-- `C-h b` - Show all key bindings
+Describe:
+* Package: `M-x describe-package`, C-h P
+  * provided by package.el, does not cover standard packages like dired
+  * for dired, see the emacs manual, C-h r
+* Current mode: `M-x describe-mode`, C-h m
+* Function under cursor: `M-x describe-function`
+* Command: `M-x describe-command` [command]
+* Key: `M-x describe-key`, `C-h k` (`C-h k C-h k` to get help on `C-h k` itself)
+  * Related: `M-x where-is` [command] - which key this command is bound to?
+  * `M-x helpful-key` [key] - show help for the command bound to the `key`
+  * `M-x describe-key-briefly`, `C-h c {key}` - show the command bound to a key
+* Key bindings: `M-x describe-bindings`, `C-h b`
+* Keymap: `M-x describe-keymap` [mode] - describe keys for selected mode
 
-- `C-h k {key}` - Describe a key
-  - `C-h k C-f` - Describe the `C-f` key
-  - `M-x helpful-key`
-- `C-h c {key}` - Show the command bound to a key
-  - `C-h c C-f` - Show the command bound to the `C-f` key
-- `C-h x {command}` - Describe a command
-  - `C-h x forward-char` - Describe the `forward-char` command
-- `C-h f {function}` - Describe a function
-  - `C-h f forward-char` - Describe the `forward-char` function
+Understanding what's happening:
+* history of keystrokes: `M-x view-lossage`, `C-h l` (what did I just press??)
+* last command as lisp: `M-x repeat-complex-command`, `C-x ESC ESC`
+  * use "up" and "down" arrows to scroll through the history of commands
+  * the `M-x consult-complex-command` shows the history (and C-c C-c in consult exports it to a buffer)
+* view messages: `M-x view-echo-area-messages`, `C-h e`
+  * or `M-x ibuffer` and select `*Messages*`
+* enable debug mode to see stack tracke for errors: `M-x toggle-debug-on-error`
 
-- `C-h i` - Open the Info manual
-  - `m Emacs` - Search for a topic
+Navigating Elisp code:
+* Jump to definition at point (point=cursor): `M-.`, `M-x xref-find-definitions`
+* Jump back: `M-,`, `M-x xref-go-back`
+* Go to function source: `M-x find-function`
+* Go to variable definition: `M-x find-variable`
+* Go to library source: `M-x find-library`
+
+Search:
+* `M-x apropos` [keyword] - search for symbols (functions, commands, variables, etc) with `keyword`
+* `M-x apropos-documentation` [keyword] - search docstrings
+* `M-x apropos-command` [keyword], `C-h a` - search for commands with `keyword`
+* `M-x apropos-variable` [keyword] - search variables
+* `M-x apropos-value` [val] - which variables have `val` value?
+
+Related links:
+* https://www.chiply.dev/post-june-emacs-carnival
 
 # Reading Help
 
