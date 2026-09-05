@@ -363,6 +363,16 @@ Like normal Emacs `C-k'.  Kill to end of line and put content in kill-ring."
   (add-to-list 'project-switch-commands '(ghostel-project-list-buffers "Ghostel buffers") t)
   (add-to-list 'ghostel-eval-cmds '("magit-status-setup-buffer" magit-status-setup-buffer)))
 
+;; The `ghostel` opens an existing ghostel buffer and we need to
+;; pass a universal argument (C-u) to open a new buffer.
+;; C-u is not working in evil mode (this is scroll up key),
+;; so we add a `ghostel-new` command to make this easier.
+(defun ghostel-new ()
+  "Open a new ghostel buffer."
+  (interactive)
+  (ghostel (universal-argument))
+  )
+
 (use-package ghostel-eshell
   :hook (eshell-load . ghostel-eshell-visual-command-mode))
 
