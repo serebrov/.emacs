@@ -386,6 +386,9 @@ Like normal Emacs `C-k'.  Kill to end of line and put content in kill-ring."
   :after (ghostel evil)
   :hook (ghostel-mode . evil-ghostel-mode))
 
+(use-package annotate
+  :hook (after-init . annotate-global-mode))
+
 ;; Alternative for pdf-tools:
 ;; https://www.reddit.com/r/emacs/comments/1pgliu9/a_new_pdf_reader_for_emacs/
 ;; https://codeberg.org/divyaranjan/emacs-reader
