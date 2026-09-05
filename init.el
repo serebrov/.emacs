@@ -139,6 +139,9 @@
   (define-key evil-normal-state-map (kbd "C-n") 'evil-ex-nohighlight)
   (define-key evil-motion-state-map (kbd "C-n") 'evil-ex-nohighlight)
   (define-key evil-visual-state-map (kbd "C-n") 'evil-ex-nohighlight)
+  ;; Unbind the M-. (M-. and M-, are useful for code navigation)
+  ;; (define-key evil-normal-state-map (kbd "M-.") 'evil-repeat-pop-next)
+  (define-key evil-normal-state-map (kbd "M-.") nil)
   ;; (evil-set-initial-state 'deadgrep-mode 'emacs)
   ;; (evil-set-initial-state 'wgrep-mode 'emacs) ;; Use emacs state for wgrep editing
   ;; (evil-set-initial-state 'grep-mode 'emacs)  ;; Use emacs state for grep buffers
