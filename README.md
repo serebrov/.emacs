@@ -6,6 +6,7 @@ https://github.com/MiniApollo/kickstart.emacs
 The readme below is mostly a Emacs quick reference with more information in the following files:
 * [./emacs.md](./emacs.md) - more information about emacs
 * [./demo.org](./demo.org) - org mode demo and basic information
+* [./README.KICKSTART.md](./README.KICKSTART.md) - the original kickstart project readme.
 
 The entry point is the [.emacs](.emacs) config where there is non-kickstart stuff.
 It includes the [init.el](init.el) with modified kickstart config.
