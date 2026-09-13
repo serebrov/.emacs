@@ -3,6 +3,10 @@
 Config is based on kickstart, the original readme is down below.
 https://github.com/MiniApollo/kickstart.emacs
 
+The readme below is mostly a Emacs quick reference with more information in the following files:
+* [./emacs.md](./emacs.md) - more information about emacs
+* [./demo.org](./demo.org) - org mode demo and basic information
+
 The entry point is the [.emacs](.emacs) config where there is non-kickstart stuff.
 It includes the [init.el](init.el) with modified kickstart config.
 
