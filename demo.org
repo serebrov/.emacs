@@ -1,0 +1,84 @@
+#+Title: Orgmode Basic Information
+
+* Lists start with -*-
+** A couple of -*- for the second level
+*** And so on...
+**** this one looks like a small star?
+**** instead of typing many -*-s, can use TAB at the beginning of the line
+and de-indented with Shift-TAB
+** Lists can start with `*`, `+` or `-`
+** Checkboxes are added with `[ ]`, `[x]`, `[-]`
+*** [ ] TODO
+*** [x] DONE
+*** [-] In progress
+** Tags are added with `::` :: tag another_tag
+* Links are added with ~[[link]]~ and ~[[link][description]]~
+** The link format is similar to html: ~<a href="target">desc</a>~ (link, then description)
+** Links to images without description are rendered automatically
+*** https://upload.wikimedia.org/wikipedia/commons/5/5d/Konigsberg_bridges.png
+**** I don't see the above (is this because that is a web link?)
+***** I can see the small preview buffer when I click one of the images below, so image rendering /is/ working, but not inline.
+*** [[./Konigsberg_bridges.png]]
+**** Now I got it displayed, by putting cursor on the link and doing `M-x org-link-preview` (so it works, but not automatically).
+**** Looks like this is correct, the preview is enabled per link for for the active region or selection.
+**** Automation can be achieved like this:
+#+BEGIN_QUOTE
+Org mode can display link previews automatically when opening
+buffers.  Either customize ‘org-startup-with-link-previews’ or use
+the ‘#+STARTUP: linkpreviews’ keyword to enable previews for that
+specific buffer when opening it.  ‘#+STARTUP: nolinkpreviews’ will
+disable previews on startup in the buffer.
+#+END_QUOTE
+*** [[file:./Konigsberg_bridges.png]]
+*** [[file:~/.emacs.conf/Konigsberg_bridges.png]]
+*** Images located on your computer can also be rendered in the Emacs buffer with C-c C-x C-v (M-x org-link-preview)
+* Org mode renders the markup, so, for example, after you add a link, it is hard to edit the URL.
+** Switching to `M-x fundamental-mode` shows everything as plain text.
+** Is there better way to do this?
+* Markup is different from Markdown, but similar by nature
+** *Bold* /italic/ _underline_
+** _*/combination/*_ (did not work? does not look like italic... the guide says it can be combined in any order)
+** ~code~ and =verbatim= needs to be inner-most markup
+** More information: [[https://orgmode.org/worg/org-syntax.html#Emphasis_Markers][Emphasis Markers]]
+
+#+begin_example
+block example
+#+end_example
+
+#+BEGIN_SRC emacs-lisp
+(message "Hello World")
+#+END_SRC
+
+| Table Heading    | Table Heading  |
+|------------------+----------------|
+| Table cell       | Table cell     |
+| Table cell two   | Table cell two |
+| Aligned with TAB |                |
+|                  |                |
+
+* Controlling the document structure
+** Use TAB on when cursor is on the document node (in insert mode in evil) to collapse/expand the current node (cycles through states)
+*** The cycle is: Folded -> Children -> Subtree
+** Use Shift-TAB to collapse/expand all nodes
+*** The cycle is: Overview -> Contents -> Show all
+** TAB / Shift-TAB are multi-functional, effect depends on the context:
+*** After the heading marker (~*~) it shifts / unshifts the marker.
+*** On the table, it formats the table
+*** On the list item (heading) it cycles through folding states.
+*** More commands to control the visibility: [[info:org#Global and local cycling][org#Global and local cycling]]
+**** Note on Info links: copy link in the Info mode with `M-x org-store-link` then insert into the org document with `M-x org-insert-link`.
+*** The `M-x toggle-truncate-lines` is useful to toggle truncation on and off.
+* Coming home to emacs (this should be an essay)
+I think [[https://stevelosh.com/blog/2010/09/coming-home-to-vim/][Steve Losh described perfectly]] how and why Vim can be your home.
+
+First and foremost, the vim editing model with normal and insert that let you *navigate* and *edit the text* the text [[https://pragprog.com/titles/dnvim2/practical-vim-second-edition/][with the speed of thought]] are much worth understanding and mastering.
+
+Second, the idea that "everything is a text" is very powerful: this works in the Unix shell, with commands reading text and producing text and it works in editors like Vim where everything you see is the text that you can copy and modify. For example, if you run an SQL client inside Vim there is never a problem of "exporting" the query result which you may need to do in a traditional GUI SQL client. In Vim it is just text that you can copy and paste elsewhere.
+
+Third, as a programmable editor, Vim gives you much freedom and lots of tools made by others that you can adopt, modify and improve.
+
+But here comes a shortcut: if you ever tried writing vimscript, it does not feel very nice. There are [[https://github.com/tpope][people]] who master it and create extremely useful tools. The neovim's move to Lua is a big improvement and it sparked a revolution of even more complex tools and tools that reinvent the vim UI, look and feel ([[https://github.com/nvim-mini/mini.nvim][mini.nvim]], [[https://github.com/nvim-telescope/telescope.nvim][telescope]]).
+
+This is where emacs comes in place: it is not just a programmable editor with a scripting language added as a way to extend it. It is a programming language (Emacs Lisp) environment at its core. The language itself is unique (see [[https://paulgraham.com/rootsoflisp.html][roots of lisp by paul graham]], [[https://wiki.eecs.yorku.ca/course_archive/2014-15/W/6339/_media/jmc.pdf][pdf]], [[https://en.wikipedia.org/wiki/Structure_and_Interpretation_of_Computer_Programs][Structure and Interpretation of Computer Programs]]).
+
+* ...
