@@ -176,6 +176,8 @@ Describing things:
 
 # Emacs interactive commands and prefix system
 
+Note on evil mode: C-u in evil is "scroll up". An easy way to use the universal argument is to switch to the insert mode (then `C-u M-x ...` will add the universal argument. Another alternative: temporary switch to emacs mode with `Ctrl-Z` (and `Ctrl-Z` to switch back to evil).
+
 Interactive commands are special functions that can be executed with `M-x`. These special functions are able to take extra arguments passed via Emacs prefix system.
 
 The prefix is a key combination that you use before executing the actual command, for example, to repeat the "move down" command we do `C-u 4 C-n`. This moves down 4 lines.
@@ -288,6 +290,12 @@ Checking the `*Messages*` buffer:
 
 # Solved problems
 
+- How to use `C-u` in evil mode?
+  - C-u in evil is "scroll up".
+  - An easy way to use the universal argument is to switch to the insert mode (then `C-u M-x ...` will add the universal argument.
+  - Another alternative: temporary switch to emacs mode with `Ctrl-Z` (and `Ctrl-Z` to switch back to evil).
+- How to use emacs and evil commands when reading Info manuals and help?
+  - Same as above: evil insert mode enables emacs keybindings. And `Ctrl-Z` can be used to switch between evil and emacs modes.
 - After the upgrade to emacs 31.1, vertico throws errors
   - "The error says "Vertico detected an error: Press C-h e to see the stack trace]."
   - Fixed with `M-x package-recompile-all` and restarting emacs.

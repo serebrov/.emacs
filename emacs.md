@@ -314,7 +314,7 @@ Navigating Elisp code:
 * Jump back: `M-,`, `M-x xref-go-back`
 * Go to function source: `M-x find-function`
 * Go to variable definition: `M-x find-variable`
-* Go to library source: `M-x find-library`
+* Go to library source: `M-x find-variable`
 
 Search:
 * `M-x apropos` [keyword] - search for symbols (functions, commands, variables, etc) with `keyword`
@@ -328,7 +328,12 @@ Related links:
 
 # Reading Help
 
-Note: you can see the current mode in the bottom bar, it says `*Help*` for help buffers and `*Info*` for Info manuals. Keybindings are somewhat different.
+Note: you can see the current mode in the bottom bar, it says `*Help*` for help buffers and `*Info*` for Info manuals. Keybindings (info, help) are somewhat different.
+
+When using evil mode:
+* Press `Ctrl-Z` to switch from evil to emacs mode (`Ctrl-Z` one more time to go back)
+* Go to insert mode: most help/info commands will work
+* There are also evil keybindings (leaving these out of scope)
 
 In the Help file:
 - scroll up/down: `spc` / `backspace` (or `DEL`).
@@ -342,7 +347,12 @@ In the Help file:
 
 # Reading Info manuals
 
-Note: you can see the current mode in the bottom bar, it says `*Help*` for help buffers and `*Info*` for Info manuals. Keybindings are somewhat different.
+Note: you can see the current mode in the bottom bar, it says `*Help*` for help buffers and `*Info*` for Info manuals. Keybindings in these two modes are somewhat different.
+
+When using evil mode:
+* Press `Ctrl-Z` to switch from evil to emacs mode (`Ctrl-Z` one more time to go back)
+* Go to insert mode: most help/info commands will work
+* There are also evil keybindings (leaving these out of scope)
 
 In the Info manual:
 - get quick help: `?`
@@ -351,6 +361,7 @@ In the Info manual:
   - `spc` at the end of a node to go to the next node.
 - Go to the top (beginning of the node): `b`
 - Go to the bottom (end of the node): `e`
+- Copy current node name: `c`
 - Quit: `q`
 
 Moving between nodes:
