@@ -5,26 +5,25 @@
 
 ;; The init.org does not work for me, maybe because of the way I load
 ;; init.el out of the ~/.emacs config?
-(defun start/org-babel-tangle-config ()
-  "Automatically tangle our init.org config file and refresh package-quickstart when we save it. Credit to Emacs From Scratch for this one!"
-  (interactive)
-  (when (string-equal (file-name-directory (buffer-file-name))
-        (expand-file-name user-emacs-directory))
-    ;; Dynamic scoping to the rescue
-    (let ((org-confirm-babel-evaluate nil))
-    (org-babel-tangle)
-    (package-quickstart-refresh)
-    )
-  ))
-
-(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'start/org-babel-tangle-config)))
+;; (defun start/org-babel-tangle-config ()
+;;   "Automatically tangle our init.org config file and refresh package-quickstart when we save it. Credit to Emacs From Scratch for this one!"
+;;   (interactive)
+;;   (when (string-equal (file-name-directory (buffer-file-name))
+;;         (expand-file-name user-emacs-directory))
+;;     ;; Dynamic scoping to the rescue
+;;     (let ((org-confirm-babel-evaluate nil))
+;;     (org-babel-tangle)
+;;     (package-quickstart-refresh)
+;;     )
+;;   ))
+;; (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'start/org-babel-tangle-config)))
 
 (defun start/display-startup-time ()
   (message "Emacs loaded in %s with %d garbage collections."
-    (format "%.2f seconds"
-      (float-time
-      (time-subtract after-init-time before-init-time)))
-   gcs-done))
+           (format "%.2f seconds"
+                   (float-time
+                    (time-subtract after-init-time before-init-time)))
+           gcs-done))
 
 (add-hook 'emacs-startup-hook #'start/display-startup-time)
 
@@ -546,6 +545,18 @@
 (use-package org-tempo
   :ensure nil
   :after org)
+
+;; (use-package jupyter
+;;   :demand t
+;;   :after (:all org python))
+
+(setq org-babel-python-command "python3")
+;; Enable python and bash support in org-babel, so that we can run code blocks in org-mode.
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((python . t)
+   ;; (jupyter . t)
+   (shell . t)))
 
 (use-package eat
   :hook ('eshell-load-hook #'eat-eshell-mode))
