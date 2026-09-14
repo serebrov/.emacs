@@ -626,8 +626,17 @@ The code is taken from here: https://github.com/skeeto/.emacs.d/blob/master/lisp
 ;; Make Ctrl-O work with magit buffer
 (with-eval-after-load 'magit
   (evil-add-command-properties #'magit-diff-visit-file :jump t)
+  (evil-add-command-properties #'magit-diff-visit-worktree-file :jump t)
+  (evil-add-command-properties #'magit-diff-visit-thing :jump t)
   (evil-add-command-properties #'magit-show-commit :jump t)
   (evil-add-command-properties #'magit-log-visit-diff :jump t))
+
+;; TODO: make RET in magit open file in another window and
+;; Shift-RET open in the same window.
+;; (defun my/magit-swap-ret ()
+;;   (evil-local-set-key 'normal (kbd "RET") '...?-other-window)
+;;   (evil-local-set-key 'normal (kbd "<S-return>") '...?-visit))
+;; (add-hook 'deadgrep-mode-hook #'my/magit-swap-ret)
 
 ;; Note: forge did not work after installing and I added `browse-at-remote' package
 ;; instead, see the `.emacs' config.

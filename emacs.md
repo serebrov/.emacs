@@ -264,6 +264,29 @@ Any other character exits the interactive replacement loop, and is then
 re-executed as a normal key sequence.
 * Question: how to re-enable the ineractive mode?
 
+## Magit
+
+Magit is useful for reviewing and commiting parts of the local changes, having a better interface than with `git add -p`:
+* `M-x magit` to open magit
+* `TAB` to expand folded sections (files with changes)
+* `s` to stage changes
+* `c` to commit
+* `?` to see help and key shortcuts
+
+Magit is also useful to review changes on a specific branch (your code or doing a code review):
+* Checkout and switch to the branch you want o review
+* `M-x magit` to open magit
+* `d` to open diff menu
+* `r` to select rande to diff
+  * Usually you want to diff against `main` or `master` branch
+  * Or type another parent branch, the one you want to review against
+* `M-x magit-diff-visit-file-other-window` to see the current file in the split
+* `e` to start the "ediff" mode where you can see before/after files side-by-side
+* Tip: Some developers use Git's staging area as a "read tracker".
+  * If you check out the branch locally and soft-reset it to the base branch (`git reset --soft main`), you can "stage" hunks as you review them to clear them from your vision.
+  * [1] (https://www.reddit.com/r/emacs/comments/2n9tj8/anyone_care_to_share_their_magit_workflow/), [2] (https://tigerbeetle.com/blog/2025-08-04-code-review-can-be-better/)
+* `?` to see help and key shortcuts
+
 ## Getting help
 
 Select a manual and search in it: `M-x info-lookup-symbol`, C-h S
