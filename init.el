@@ -946,6 +946,10 @@ The code is taken from here: https://github.com/skeeto/.emacs.d/blob/master/lisp
   ;; Add context lines (like CtrlSF)
   (setq deadgrep-extra-arguments '("--follow" "-C3")))
 
+;; Make Ctrl-O work with magit buffer
+(with-eval-after-load 'deadgrep
+  (evil-add-command-properties #'deadgrep-visit-result :jump t))
+
 ;; Note: setup below may still be useful, but I added deadgrep plugin above instead
 ;; as it is closer to CtrlSF (nicer presentation of the search results)
 ;;
