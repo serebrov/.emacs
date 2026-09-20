@@ -654,8 +654,46 @@ The code is taken from here: https://github.com/skeeto/.emacs.d/blob/master/lisp
 ;; in a browser.
 ;; Error (bytecomp): Eager macro-expansion failure: (wrong-number-of-arguments (2 . 2) 4)
 ;; Error (bytecomp): forge--pull is already defined as something else than a generic function [20 times]
-;; (use-package forge
-;;   :after magit)
+(use-package forge
+  :init
+  ;; Auth for forge, see https://docs.magit.vc/forge/Setup-for-Githubcom.html
+  (setq auth-sources '("~/.emacs.forge.github.authinfo"))
+  :after magit)
+
+;; Testing framework, used by code-review.
+(use-package buttercup)
+
+;; I use my fork of code-review that has a fix for the `closql` issue (see
+;; https://github.com/wandersoncferreira/code-review/pull/246)
+;; and some other fixes.
+;;
+;; To update:
+;; - `M-x package-vc-upgrade RET code-review RET`
+;; - Restart Emacs to make sure in-memory code is updated.
+;;
+;; `M-x code-review-start RET [PR URL] RET` to start reviewing a PR.
+;;
+;; If the package say there is an error, the log file is in the
+;; ~/.emacs.d/code-review-error.log`.
+;; To install from Github (goes in ~/.emacs.d/elpa/code-review/):
+;; (use-package code-review
+;;   :init
+;;   ;; use forge's keys for authentication
+;;   (setq code-review-auth-login-marker 'forge)
+;;   ;; this is only needed for debugging
+;;   (setq deferred:debug-on-signal t)
+;;   :vc (
+;;        :url "https://github.com/serebrov/code-review"
+;;        :branch "master"
+;;        :rev :newest
+;;        ))
+;; To use local package:
+(use-package code-review
+  :load-path "~/web/code-review"
+  ;; :commands (code-review-start code-review-forge-pr-at-point)
+  :init
+  (setq code-review-auth-login-marker 'forge)
+  (setq deferred:debug-on-signal t))
 
 (use-package diff-hl
   :hook ((dired-mode         . diff-hl-dired-mode-unless-remote)
