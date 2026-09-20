@@ -287,6 +287,44 @@ Magit is also useful to review changes on a specific branch (your code or doing 
   * [1] (https://www.reddit.com/r/emacs/comments/2n9tj8/anyone_care_to_share_their_magit_workflow/), [2] (https://tigerbeetle.com/blog/2025-08-04-code-review-can-be-better/)
 * `?` to see help and key shortcuts
 
+### Magit vs Forge vs Code Review
+
+There are two main packages to work with git: Magit and Forge.
+
+Magit implements local operations with Git.
+
+Forge adss API operations with Github, Gitlab, Bitbucket.
+
+Forge documentation is a bit cryptic and is a good reference, but I did not find a good explanation of what exactly the package is for. The terminology is also confusing at first:
+* "Forges" are git hosting services (Github, Gitlab, Bitbucket).
+* "Topics" are pull requests and issues (it terms of Github).
+
+And `Forge` (package) allows to fetch the information about topics (pull requests and issues) and:
+* Have pull requests and issues displayed in the Magit buffer
+* Open pull request and issue and see all the related information
+* Add, edit and reply to comments
+
+Forge does not have a feature to review pull requests the way it is done on Github (see the PR diff and comment on it inline).
+
+The code review capability is added by the `Code Review` package (see the configuration in the [./init.el](./init.el)). The current version of the package is outdated and does not work with recent magit/forge, so I have a forked version with a few fixes that make it work again.
+
+### Code Review TODO
+
+My Code Review fork is here: https://github.com/serebrov/code-review
+
+It works, but I only tested it briefly and there may be problems I am not yet aware of.
+
+TODOs:
+* Check issues and PRs
+  * https://github.com/wandersoncferreira/code-review/issues
+  * https://github.com/wandersoncferreira/code-review/pulls
+* Check other forks
+  * https://github.com/wandersoncferreira/code-review/compare/master...BenediktBroich:code-review:master
+  * https://github.com/wandersoncferreira/code-review/compare/master...doomelpa:code-review:master
+  * https://codeberg.org/rossabaker/code-review/commit/73425a1c50bfecf3215a5be894baea9ebfa953bf
+  * https://github.com/wandersoncferreira/code-review/forks
+* Check the "parent" package: https://github.com/charignon/github-review
+
 ## Dealing with Errors and Debugging
 
 Understanding what's just happened:
