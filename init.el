@@ -535,6 +535,8 @@
                                (if (char-equal c ?<) t (,electric-pair-inhibit-predicate c))))))
   )
 
+;; When enabled, replaces :TOC: tag with a table of contents in org-mode on file save.
+;; Also works in markdown-mode.
 (use-package toc-org
   :commands toc-org-enable
   :hook (org-mode . toc-org-mode))
@@ -558,6 +560,11 @@
  '((python . t)
    ;; (jupyter . t)
    (shell . t)))
+
+;; Displays the current org heading in the header line.
+(use-package org-sticky-header
+  :after org
+  :hook (org-mode . org-sticky-header-mode))
 
 (use-package eat
   :hook ('eshell-load-hook #'eat-eshell-mode))
