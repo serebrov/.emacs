@@ -166,7 +166,8 @@
   :after (evil wgrep)
   :config
   ;; Setting where to use evil-collection
-  (setq evil-collection-mode-list '(dired ibuffer magit corfu vertico consult info grep wgrep deadgrep))
+  (setq evil-collection-mode-list '(dired ibuffer magit corfu vertico consult info grep wgrep))
+  ;; removed deadgrep (standard bindings are fine, evil-collection breaks my overrides)
   (evil-collection-init))
 
 ;; Vim treats _ as a word character, but emacs treats it as a separator by default.
