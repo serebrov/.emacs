@@ -287,6 +287,107 @@ Magit is also useful to review changes on a specific branch (your code or doing 
   * [1] (https://www.reddit.com/r/emacs/comments/2n9tj8/anyone_care_to_share_their_magit_workflow/), [2] (https://tigerbeetle.com/blog/2025-08-04-code-review-can-be-better/)
 * `?` to see help and key shortcuts
 
+## Dealing with Errors and Debugging
+
+Understanding what's just happened:
+* history of keystrokes: `M-x view-lossage`, `C-h l` (what did I just press??)
+* last command as lisp: `M-x repeat-complex-command`, `C-x ESC ESC`
+  * use "up" and "down" arrows to scroll through the history of commands
+  * the `M-x consult-complex-command` shows the history (and C-c C-c in consult exports it to a buffer)
+* view messages: `M-x ibuffer` and select `*Messages*`
+  or `M-x view-echo-area-messages`, `C-h e`
+* view warnings: `M-x ibuffer` and select `*Warnings*`
+
+Navigating Elisp code:
+* Jump to definition at point (point=cursor): `M-.`, `M-x xref-find-definitions`
+* Jump back: `M-,`, `M-x xref-go-back`
+* Go to function source: `M-x find-function`
+* Go to variable definition: `M-x find-variable`
+* Go to library source: `M-x find-variable`
+
+To see details about the error, enable debug mode to see stack tracke for errors: `M-x toggle-debug-on-error`.
+
+Other ways to set breakpoints:
+* `M-x debug-on-entry` [command] adds a breakpoint on each command entry
+  * `M-x cancel-debug-on-entry` to remove
+* Insert `(debug)` in the elisp code
+
+The stacktrace window is interactive, you can evaluate expressions to see the state of local variables and continue execution, key bindings:
+* h to see the help
+* d to step through
+* c to continue
+* + to display the current code as multi-line
+* v to see locals
+* e to evaluate expression
+
+### Edebug
+
+The standard debugger UI is not very convenient as you can't see the code until you execute the next statement. The `edebug` mode provides a much better interactive debugger.
+
+To set a breakpoint, put cursor on the function and press `C-u C-M-x`.
+* This executes the `eval-defun` command with universal argument to add Edebug instrumentation.
+* The `edebug` instruments the function, so next time it run, we have the interactive debugger.
+
+The `C-M-x` itself is `eval-defun`, it evaludates the current function and updates the in-memory copy of the code. This is useful when working on fixes to refresh the "live" copy of the code without restarting Emacs.
+* To re-evaluate the whole file, use `C-c C-e`.
+
+More ways to add breakpoints:
+
+| Instrument one defun          | With cursor on it, press `C-u C-M-x`          |
+| Instrument defun by name      | `M-x edebug-defun`                            |
+| Instrument a whole file       | `M-x edebug-all-defs`, then `M-x eval-buffer` |
+| Remove from one defun         | `C-M-x`                                       |
+| Remove from everything        | `M-x edebug-remove-instrumentation`           |
+
+Note on `evil` mode: the `C-u C-M-x` can be entered by:
+1. Switching to emacs mode (C-Z)
+2. Swithcing to insert mode and entering there
+
+Same for the debugger and edebug: when they are active, either switch to emacs mode or insert mode to have the keybindings.
+
+By default Edebug re-arranges/restores windows automatically, to disable this behavior add `(setq edebug-save-windows f)` or press `W` (or `M-x edebug-toggle-save-windows`) to turn this off.
+
+Key bindings in Edebug:
+
+| Key | Command                  | What it does                                   |
+|-----|--------------------------|------------------------------------------------|
+| ?   | edebug-help              | The list of key bindings                       |
+|     |                          | `M-x describe-keymap RET edebug-mode-map RET`  |
+|     |                          | for more detailed information.                 |
+| SPC | edebug-step-mode         | Run to the next stop point                     |
+| n   | edebug-next-mode         | Stop after the current expression returns      |
+| i   | edebug-step-in           | Step into the call at point                    |
+| o   | edebug-step-out          | Run until the enclosing expression finishes    |
+| f   | edebug-forward-sexp      | Run over the next expression                   |
+| h   | edebug-goto-here         | Run until point (a one-shot breakpoint)        |
+| b   | edebug-set-breakpoint    | Breakpoint at point                            |
+| x   | edebug-set-conditional-breakpoint | Breakpoint with a condition           |
+| u   | edebug-unset-breakpoint  | Remove the breakpoint                          |
+| e   | edebug-eval-expression   | Evaluate an expression in the current context  |
+| C-x C-e | edebug-eval-last-sexp| Evaluate the expression before point           |
+| E   | edebug-visit-eval-list   | Watch list: expressions re-evaluated each stop |
+| g   | edebug-go-mode           | Run on, stop only at breakpoints or errors     |
+| c   | edebug-continue-mode     | Run on, but show each stop point briefly       |
+| q   | top-level                | Abort back to the top level                    |
+| r   | edebug-previous-result   | Show the last value again                      |
+| d   | edebug-pop-to-backtrace  | The normal backtrace, from inside Edebug       |
+| v   | edebug-view-outside      | Look at the buffers as they were outside       |
+| I   | edebug-instrument-callee | Instrument the function called at point        |
+
+`i` and `I` are useful to explore the code in runtime.
+`i` instruments the function under cursor, adds the beakpoint for it and runs `go`.
+`I` instruments the function without entering it.
+
+`E` is very useful to watch for expressions while you are moving through the code.
+
+To start edebug on specific error: `(setq edebug-on-error '(wrong-type-argument))`.
+
+Questions:
+* Easier way to debug defer code? Maybe temporary make it blocking somehow?
+* Is there a way to switch from the backtrace window to Edebug?
+
+---
+
 ## Getting help
 
 Select a manual and search in it: `M-x info-lookup-symbol`, C-h S
@@ -323,21 +424,8 @@ Describe:
 * Key bindings: `M-x describe-bindings`, `C-h b`
 * Keymap: `M-x describe-keymap` [mode] - describe keys for selected mode
 
-Understanding what's happening:
-* history of keystrokes: `M-x view-lossage`, `C-h l` (what did I just press??)
-* last command as lisp: `M-x repeat-complex-command`, `C-x ESC ESC`
-  * use "up" and "down" arrows to scroll through the history of commands
-  * the `M-x consult-complex-command` shows the history (and C-c C-c in consult exports it to a buffer)
-* view messages: `M-x view-echo-area-messages`, `C-h e`
-  * or `M-x ibuffer` and select `*Messages*`
-* enable debug mode to see stack tracke for errors: `M-x toggle-debug-on-error`
-
-Navigating Elisp code:
-* Jump to definition at point (point=cursor): `M-.`, `M-x xref-find-definitions`
-* Jump back: `M-,`, `M-x xref-go-back`
-* Go to function source: `M-x find-function`
-* Go to variable definition: `M-x find-variable`
-* Go to library source: `M-x find-variable`
+What did I just press???
+* see the history of keystrokes: `M-x view-lossage`, `C-h l`
 
 Search:
 * `M-x apropos` [keyword] - search for symbols (functions, commands, variables, etc) with `keyword`
@@ -744,12 +832,6 @@ Update readme:
 - Add general information about consult, marginalia, vertico, orderless, corfu, cape, embark
   - https://github.com/minad/cape
 
-## Debugging
-
-Show stacktrace on errors: `M-x  toggle-debug-on-error`.
-
-edebug - Emacs Lisp debugger, `M-x edebug-defun` to start debugging a function.
-
 TODO: recheck
 
 ```
@@ -821,64 +903,6 @@ TODO: recheck
 ;; (boldify-names)
 ```
 
-## Files and Directories, Dired
-
-Dired: `C-x d`
-
 ## Org Mode
 
-Open a file with `.org` extension to use Org mode or run `M-x org-mode`.
-
-Structure:
-- `*` - Heading
-- `**` - Subheading
-
-Text formatting:
-- `*bold*`
-- `/italic/`
-- `_underline_`
-- `=verbatim=`
-- `~code~`
-- `+strike-through+`
-
-Lists:
-- `-` - Unordered list
-- `1.` - Ordered list
-
-Links:
-- `[[link]]`
-- `[[link][description]]`
-- `[[file:file.org]]`
-- `[[file:file.org::heading]]`
-
-Tables:
-```
-| Header 1 | Header 2 |
-|----------+----------|
-| Cell 1   | Cell 2   |
-```
-
-Code blocks:
-- `#+BEGIN_SRC` - Start a code block
-- `#+END_SRC` - End a code block
-
-TODO items:
-- `TODO` - Unfinished item
-- `DONE` - Finished item
-
-Scheduling:
-- `SCHEDULED: <2021-01-01>` - Schedule an item for a specific date
-
-Clocking:
-- `C-c C-x C-i` - Start the clock
-- `C-c C-x C-o` - Stop the clock
-- `C-c C-x C-e` - Update the clock
-
-Capturing:
-- `C-c c` - Capture a note
-
-Agenda:
-- `C-c a a` - Open the agenda
-- `C-c a t` - Open the agenda for today
-- `C-c a w` - Open the agenda for the week
-- `C-c a m` - Open the agenda for the month
+See [./demo.org](./demo.org].
