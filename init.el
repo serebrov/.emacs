@@ -566,6 +566,19 @@
   :after org
   :hook (org-mode . org-sticky-header-mode))
 
+;; Org <-> OPML export and import.
+;; Useful for WorkFlowy.
+;; OPML files are converted on-the-fly and displayed as org-mode files.
+;; Points to my fort with the fix for nodes with properties:
+;; https://github.com/serebrov/org-opml
+(setq org-opml-src "~/web/emacs/org-opml-v2/")
+(use-package ox-opml
+  :ensure t
+  :load-path org-opml-src)
+(use-package org-opml
+  :ensure t
+  :load-path org-opml-src)
+
 (use-package eat
   :hook ('eshell-load-hook #'eat-eshell-mode))
 
