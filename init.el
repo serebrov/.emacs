@@ -542,8 +542,8 @@
       )
      ("l" "🌐 Link" entry
       (file "~/web/org/notes/links.org")
-      "%(org-web-tools-insert-link-for-url)"
-      ;; "* %a %^g\n %?\n %T\n %i"
+      ;; Link to the first URL in the clipboard or kill ring, with the page title.
+      "* %(org-web-tools--org-link-for-url) %^g\n %?\n %T\n %i"
       :prepend t
       :empty-lines-after 2
       )
