@@ -13,266 +13,76 @@ It includes the [init.el](init.el) with modified kickstart config.
 
 Kickstart also has an org mode config, [init.org](init.org) - I don't use it, but it is a good source of information about the initial setup provided by kickstart.
 
-# Basic emacs keybindings
+# Emacs: Various information
 
-I use evil, but it is good to know basic keybindings and be able to move around without evil.
+See [./emacs.org](./emacs.org) for various Emacs information: terminology, getting help, keyboard shortcuts, dired, magit, etc.
 
-More information is in the [emacs.md](emacs.md).
+# The most important command
 
-Note: "M-" (Meta) in shortcuts is "Opt" or "Alt", or "Esc" followed by letter.
+I think the most important command is `M-x` that opens a command minbuffer with completion ("M-x" is "Alt+x" or "Option+x" or "Esc, x").
 
-Open/save/quit:
-- Open file: C-x C-f
-- Save: C-x C-s or M-x save-buffer
-  - M-x save-some-buffers to save multiple buffers
-- Quit emacs: `C-x C-c`
+You can often guess which command you need based on its name.
 
-Move around:
-- use arrow keys
-- Page up/down: C-v / M-v or actual PgUp / PgDown keys
+# Evil mode vs Emacs mode
 
-Cancel current operation: C-g (which is usually done with Esc in vim)
-- Close minibuffer
-- Close autocompletion popup
+Use `C-z` to switch between Evil and Emacs.
 
-The autocompletion in minibuffer is managed with vertico.
-- Use M-n / M-p to move through completion suggestions.
-- Note: with `(vertico-preslect 'first)` set, use M-RET to use what you typed without using a suggestion (but I disabled it in favor of more explicit behavior)
+Emacs keybindings can also be entered Evli in the insert mode. So, for example, if you want `C-u M-x ghostel`, go to the intert mode and then type `C-u`, `M-x` and `ghostel` in the command buffer (this opens a new terminal vs trying to re-open already existing one when you call it without `C-u`).
 
-Search in the document: C-s (next C-s, prev C-r)
+# Help
 
-Select, copy/paste:
-- Select text: C-space
-- Copy/Cut/Paste: M-w, C-w, C-y
-
-Undo and redo:
-- `C-/` - undo, also `C-x u`, also `C-_`
-- `C-?` - redo
-- Note: originally Emacs did not have redo, related:
-  - M-x Info-goto-emacs-command-node RET undo RET
-  - https://stackoverflow.com/a/18383455:
-
-Running commands and code:
-- Run emacs function ("interactive command"): M-x {function name}
-- Eval emacs code in the buffer: C-x C-e
-- Eval buffer: M-x eval-buffer
-
-Splits:
-- Make a split: C-x 2 (horizontal), C-x 3 (vertical)
-- Move to other split: C-x o
-- Close current split: C-x 0
-
-Buffers:
-- Close: C-x k (kill-buffer)
-- Switch to buffer: C-x b
-- List buffers: C-x C-b, nicer UI: M-x ibuffer
-
-Repeating commands:
-- `C-u {number} {command}` - repeat the command {number} times
-  - `C-u 4 C-n` - move down 4 lines
-
-Dired: `C-x d`
-- See more in [./emacs.md](./emacs.md)
-
-See also:
-- https://www.masteringemacs.org/article/effective-editing-movement
-- http://xahlee.info/emacs/emacs/effective_emacs.html
-- https://sites.google.com/site/steveyegge2/effective-emacs
-
-# Reading Help
-
-Note: you can see the current mode in the bottom bar, it says `*Help*` for help buffers and `*Info*` for Info manuals. Keybindings are somewhat different.
-
-In the Help file:
-- scroll up/down: `spc` / `backspace` (or `DEL`).
-- Go to the top: `<`
-- Go to the bottom: `>`
-- Go back: `l`
-- Next / prev page: `n` and `p`
-- Open info page for current topic: `i`
-- View source code: `s`
-- Quit: `q`
-
-# Reading Info manuals
-
-Note: you can see the current mode in the bottom bar, it says `*Help*` for help buffers and `*Info*` for Info manuals. Keybindings are somewhat different.
-
-In the Info manual:
-- get quick help: `?`
-  - quit: scroll to the bottom or C-g (or anything that is not bound like `j`)
-- scroll up/down: `spc` / `backspace` (or `DEL`).
-  - `spc` at the end of a node to go to the next node.
-- Go to the top (beginning of the node): `b`
-- Go to the bottom (end of the node): `e`
-- Quit: `q`
-
-Moving between nodes:
-- Go back/forward in history (like jump list): `l` / `r`
-  - Note that `l` is a universal back command, it works in many contexts.
-  - See the history: `L`
-- Go to nearest node: RET
-- Next/prev node, sequentially:  `[` / `]` (same as space/backspace, but without scrolling)
-- Next/prev node on the same level: `n` and `p` (will skip lower level nodes)
-- First (top) node / last node: `t` and `<` / `>`
-- Table of contents: `T`
-- Parent node: `u` (up one level)
-
-Quick jumps:
-- Show menu: `m`
-  - Cycle through menu items: `TAB`
-- Show references: `f`
-- Go to node: `g`
-
-Search:
-- Search: `s`
-  - Incremental search: `C-s` or `C-r`
-  - Search in the index: `i` (`I` to create a page with results)
-- Search everywhere: M-x info-apropos
-
-Other:
-- All manuals (directory): `d` to go to the directory of all manuals.
-- Open current manual in the browser: `G`
-
-Info has some hints in the top and bottom bars:
-- The "Prev: ..." in the header shows where "p" would take you
-  - Similarly, "Up:" shows the top level node ()
-- The mode line at the bottom shows where we are now (*info* (info) NodeName)
-- The mode line at the bottom also says "Top" (we see part of the text) or "All" (all text is visible)
-
-# Getting help in Emacs
-
-Shortcuts (in emacs state):
-- Read Emacs manual: M-x info-emacs-manual, `C-h r`
-- Describe current mode - M-x describe-mode
-- Describe a key - M-x describe-key or M-x helpful-key, `C-h k`
-  - `helpful-xxx` alternatives usually give nicer formatted output
-- Show the command bound to a key - M-x describe-key-briefly, C-h c {key}
-- Describe a command, M-x describe-function or M-x helpful-command
-  - For example, M-x helpful-callable helpful-callable
- - Quick help, show a reference card - M-x help-quick
-  - This will show emacs keybindings
-
-Note on key shortcuts: default Emacs shortcuts such as `C-h r` to display the manual do not work in Evil mode. The unified way is to use `M-x` commands. Alternatively, press `C-z` to switch to `evil-emacs-state` then evil keys are disabled and native Emacs shortcuts are working.
+* `M-x info` to open manuals, `q` to quit, `l` to go back.
+* `M-x describe-key`, `M-x describe-mode`, and other `describe-` commands to get quick information about things.
+   * Or `~M-x helpful-key`, ... ("helpful" alternatives usually have nicer format)
+* Quick help, show a reference card - M-x help-quick
 
 Searching help:
-- M-x info-apropos - search all info manuals for a string
-  - this is similar to vim's :helpgrep, but does not support wildcards
-- M-x consult-info - search with consult, fuzzy completion
-  - C-u M-x consult-info to select manual to search
-- M-x Info-search (or s in the info buffer) - search in the current manual
-- Use consult-ripgrep or deadgrep to search /usr/share/info/ (info manuals)
-  - check where info files are, check with M-: Info-directory-list
-  - M-x deadgrep RET a.b*c RET
-    - then change the directory at the top to /usr/share/info/
-  - C-u M-x consult-ripgrep RET /usr/share/info/ RET a.b*c
 - M-x apropos, C-h a - search for commands/variables by regex.
   - M-x apropos RET evil.*jump finds everything matching that pattern.
 - M-x apropos-command - like apropos but for interactive commands (with M-x).
 - M-x consult-apropos - fuzzy searchable apropos (with consult)
 
-Describing things:
-- M-x describe-function - documentation for a function/command, C-h f
-  - M-x helpful-callable gives nicer output
-- M-x describe-variable - variable value and documentation, C-h v
-  - M-x helpful-variable gives nicer output
-  - for example, M-x helpful-variable RET evil-normal-state-map
-  - for example, M-x helpful-variable RET evil-want-C-u-scroll
-- M-x describe-symbol - describes any symbol (function, variable, face, etc.), a catch-all, C-h o
+Searching help with consult and deadgrep:
+- Use consult-ripgrep or deadgrep to search /usr/share/info/ (info manuals)
+  - check where info files are, check with M-: Info-directory-list
+  - M-x deadgrep RET a.b*c RET
+    - then change the directory at the top to /usr/share/info/
+  - C-u M-x consult-ripgrep RET /usr/share/info/ RET a.b*c
 
-# Emacs interactive commands and prefix system
+# Config: Problems to solve
 
-Note on evil mode: C-u in evil is "scroll up". An easy way to use the universal argument is to switch to the insert mode (then `C-u M-x ...` will add the universal argument. Another alternative: temporary switch to emacs mode with `Ctrl-Z` (and `Ctrl-Z` to switch back to evil).
-
-Interactive commands are special functions that can be executed with `M-x`. These special functions are able to take extra arguments passed via Emacs prefix system.
-
-The prefix is a key combination that you use before executing the actual command, for example, to repeat the "move down" command we do `C-u 4 C-n`. This moves down 4 lines.
-
-In this example the `C-u 4` is the prefix that passes `4` as an argument to the next command (`C-n` that is bound to the `next-line` command).
-
-One more example: the `forward-char` command moves the cursor forward. We can do the following with prefixes:
-- C-f or M-x forward-char → moves forward 1 character
-- M-5 C-f → moves forward 5 characters
-- C-u 10 C-f → moves forward 10 characters
-- C-u C-f → moves forward 4 characters (C-u alone defaults to 4)
-
-Note that the prefix can be passed either with `C-u {n}` or with `M-{n}`.
-
-The `C-u` on its own passes the "default" argument which usually tells the command "do what you usually do, but differently". For example, `M-x run-lisp` starts the default lisp REPL and `C-u M-x run-lisp` will ask which REPL to run before starting it.
-
-The run-lisp function's code basically does this:
-
-```emacs-lisp
-(defun run-lisp (arg)
-  (interactive "P")  ;; "P" means "accept a prefix argument"
-  (if arg
-      ;; If ANY argument was passed, prompt user
-      (read-string "Run lisp: " inferior-lisp-program)
-    ;; Otherwise use default
-    inferior-lisp-program))
- ```
-
-It does not care what argument we pass as long as we pass something.
-
-In the case we want to distinguish arguments, we can do it like this:
-
-```emacs-lisp
-(defun my-command (arg)
-  (interactive "P")
-  (cond
-   ((null arg) (message "No argument"))
-   ((= arg 1) (message "You passed 1!"))
-   ((= arg 2) (message "You passed 2!"))
-   ((= arg 4) (message "You pressed C-u"))
-   (t (message "You passed: %d" arg))))
-```
-
-Functions can also have multiple arguments. The prefix argument (M-6, C-u, etc.) is special - it's captured before the command runs and is separate from other arguments. All other arguments are gathered by prompting the user through the minibuffer.
-
-So when we do:
-
-```emacs-lisp
-M-5 M-x replace-string RET foo RET bar RET
-```
-
-We have the following sequence of actions:
-- M-5 sets a prefix argument (which replace-string might use to limit replacements, depending on the command)
-- Then it prompts for "foo"
-- Then it prompts for "bar"
-
-To pass a negative argument use `C--5 ...` or `M--5 ...`.  The `C-- ...` works as `-1` (same for `M-- ...`). Also we can use `C-u -5 ...` and `C-u - ...`.
-
-# Problems to solve
-
-Some problems with evil and my setup:
-- undo after restart
-- "z=" does not replace explicitely with correct spelling (or I don't know how)
+Some problems with evil mode and my setup:
+- jumplist does not work as well as in Vim (also plain Emacs does not have a jumplist)
+  - Ctrl-I Ctrl-O does not work everywhere
+  - In vim, it is a universal system similar to the browser back and forward navigation. It also works uniformly within the file (jumping between places in the file I visited, for example, with search) and across multiple files and buffers.
+  - In emacs, Evil mode supports this, but it does not always work within the file and breaks in special buffers (such as help, magit, etc).
+  - Emacs also has global mark history (`M-x pop-global-mark` and `M-x consult-global-mark`) that keeps the history of navigation across files (but not within the file) and some local marks system. Maybe these can be combined into vim-like behavior or maybe the evil mode can be tuned to work more reliably.
+  - check https://github.com/gilbertw1/better-jumper
+  - also: https://github.com/ganmacs/jumplist/tree/master
+  - related: https://help-gnu-emacs.gnu.narkive.com/G4oeM1kY/vim-s-jumplist-equivalent-in-emacs
+  - also: https://www.reddit.com/r/emacs/comments/3srwz6/idelike_go_back/
+- undo after restart, persistent undo history (to be able to undo or g; after you restart emacs)
 - The "Enter" in normal mode creates new line
   - In Vim it folds/unfolds the code (but I don't use it much, so NOOP is also fine)
 - setup spellchecking
+  - ~M-x ispell~ works to interactively spell-check the buffer, but it is nice to have mistakes automatically highlighted
 - learn more about projectile and session save/restore
   - currently I have `(desktop-save-mode 1)`, see also related notes in [.emacs](.emacs)
-- learn more about org mode
 - can I switch to emacs state for one command? Like one-time `C-z`
   - Would be nice to have a prefix like SMTH C-h C-i
 - autosave: make it save on going from insert to normal and on focus lost
   - this is similar to my vim config and it is very reliable, basically
     it reliably saves when expected, each time I finished typing
-- what is a good way to search help? Like :helpgrep in vim?
+- what is a good way to search throuh all help? Like :helpgrep in vim?
+  - Maybe `M-x info-apropos`?
 - I have `tn` to open new tab, it also opens the active buffer in it.
   - who do I make it open empty buffer instead? (I used to this in vim - is this really necessary though?)
 - vim surround bindings?
 - which text objects are available?
 - System C-SPC conflict with emacs C-SPC (like C-SPC to start selection and
   C-x C-SPC to go back to previous mark)
-- jumplist does not work as well as in Vim (also plain Emacs does not have a jumplist)
-  - check https://github.com/gilbertw1/better-jumper
-  - also: https://github.com/ganmacs/jumplist/tree/master
-  - related: https://help-gnu-emacs.gnu.narkive.com/G4oeM1kY/vim-s-jumplist-equivalent-in-emacs
-  - also: https://www.reddit.com/r/emacs/comments/3srwz6/idelike_go_back/
 - Some useful Emacs bindings are overwritten
   - For example, I use C-hjkl to move between windows, but C-j executes Lisp
-- LSP does not work in python code
-- persistent undo history (to be able to undo or g; after you restart emacs)
 
 Dired:
 - How to have a more minimal view?
@@ -513,55 +323,11 @@ eat (Emulate A Terminal)
 - Good terminal compatibility
 - Integrates with eshell (eat-eshell-mode)
 
-# Original Kickstart Readme
+# Kickstart Packages
 
-See: https://github.com/MiniApollo/kickstart.emacs
+Packages from the [kickstart](./README.KICKSTART.md).
 
-https://github.com/MiniApollo/kickstart.emacs/assets/72389030/5c66130d-66b9-459b-a26d-210f3f937459
-
-# Table of Contents
-
-1.  [Introduction](#orgb229cbd)
-    -  [Packages](#orgb05d649)
-    -  [Helpful resources](#orgfaf0570)
-2.  [Installation](#orgb633c86)
-    -  [1. Requirements](#orgb7bc22f)
-    -  [2. Backup your previous configuration](#org6189661)
-    -  [3. Clone the repository to the configuration location](#org820a205)
-    -  [4. Start Emacs](#orgd77a070)
-3.  [Post Installation](#org60302a9)
-    -  [1. Install fonts](#org87d8fc9)
-    -  [2. Open the configuration file](#org94fe140)
-    -  [3. Fork the repository](#org23b14b0)
-4.  [Uninstallation](#org14852f4)
-5.  [Gallery](#orgc18728a)
-
-<a id="orgb229cbd"></a>
-
-# Introduction
-This repository gives you a starting point for Gnu Emacs with good defaults, optional vim keybindings and packages that most people may want to use.
-
-Kickstart.emacs is **not** a distribution. <br>
-It's a template for your own configuration.
-
-This config is:
--   A single file **org document** (with examples of moving to multi-file)
--   Modular and easily configurable
--   Documented describing its purpuse
-
-Inspired by [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim)
-
-Special thanks to:
--   [DistroTube](https://www.youtube.com/watch?v=d1fgypEiQkE&list=PL5--8gKSku15e8lXf7aLICFmAHQVo0KXX)
--   [System Crafters](https://www.youtube.com/watch?v=74zOY-vgkyw&list=PLEoMzSkcN8oPH1au7H6B7bBJ4ZO7BXjSZ)
-
-Their content helped me to create this configuration.
-
-<a id="orgb05d649"></a>
-
-## Packages
-
-### Included Package list
+## Included Package list
 
 -   Package Manager: Package.el with Use-package (built in)
 -   Optin [Evil mode](https://github.com/emacs-evil/evil): An extensible vi/vim layer
@@ -571,7 +337,7 @@ Their content helped me to create this configuration.
 -   [Nerd Icons](https://github.com/rainstormstudio/nerd-icons.el): For icons and more helpful ui (Supports both GUI and TUI)
 -   [Projectile](https://github.com/bbatsov/projectile): Project interaction library
 -   [Eglot](https://www.gnu.org/software/emacs/manual/html_mono/eglot.html): Language Server Protocol Support
--   [Sideline-Flymake](https://github.com/emacs-sideline/sideline-flymake): Show flymake errors with sideline 
+-   [Sideline-Flymake](https://github.com/emacs-sideline/sideline-flymake): Show flymake errors with sideline
 -   [Yasnippet](https://github.com/joaotavora/yasnippet): Template system and snippet collection package
 -   Optin [Tree-Sitter](https://tree-sitter.github.io/tree-sitter): A parser generator tool and an incremental parsing library.
 -   Some [Org mode](https://orgmode.org/) packages (toc-org, org-superstar)
@@ -584,13 +350,13 @@ Their content helped me to create this configuration.
 -   [Vertico](https://github.com/minad/vertico): Provides a performant and minimalistic vertical completion UI.
 -   [Marginalia](https://github.com/minad/marginalia): Adds extra metadata for completions in the margins (like descriptions).
 -   [Consult](https://github.com/minad/consult): Provides search and navigation commands.
--   [Helpful](https://github.com/Wilfred/helpful): A better Emacs *help* buffer 
+-   [Helpful](https://github.com/Wilfred/helpful): A better Emacs *help* buffer
 -   [Diminish](https://github.com/myrjola/diminish.el): Hiding or abbreviation of the modeline displays
 -   [Rainbow Delimiters](https://github.com/Fanael/rainbow-delimiters): Adds colors to brackets.
 -   [Which key](https://github.com/justbur/emacs-which-key): Helper utility for keychords
 -   [Ws-butler](https://github.com/lewang/ws-butler): Removes whitespace from the ends of lines.
 
-### Recommended Packages
+## Recommended Packages
 
 If you want to see how to configure these, look up their git repositories or check out my [config](https://github.com/MiniApollo/config/blob/main/emacs/config.org).
 
@@ -599,10 +365,8 @@ If you want to see how to configure these, look up their git repositories or che
 -   **[Rainbow Mode](https://github.com/emacsmirror/rainbow-mode):** Displays the actual color as a background for any hex color value (ex. #ffffff).
 -   **[UndoTree](https://www.emacswiki.org/emacs/UndoTree):** Visualizes the undo history (alternative: [Vundo](https://github.com/casouri/vundo) with [undo-fu-session](https://github.com/emacsmirror/undo-fu-session)).
 -   **[Vterm](https://github.com/akermu/emacs-libvterm):** Fast, Fully-fledged terminal emulator inside GNU Emacs.
--   **[Multi-vterm](https://github.com/suonlight/multi-vterm):** Managing multiple vterm buffers in Emacs 
+-   **[Multi-vterm](https://github.com/suonlight/multi-vterm):** Managing multiple vterm buffers in Emacs
 -   **[Sudo-edit](https://github.com/nflath/sudo-edit):** Utilities for opening files with root privileges (also works with doas).
-
-<a id="orgfaf0570"></a>
 
 ## Helpful resources
 
@@ -615,107 +379,3 @@ Videos and configurations to get started.
 -   **[Spacemacs](https://www.spacemacs.org/) and [Doom Emacs](https://github.com/doomemacs/doomemacs):** For an out of box experience and their wiki pages are really helpful.
 -   **[More starter kits](https://www.emacswiki.org/emacs/StarterKits ):** List of starter kits for Emacs.
 -   **[Emacs manual](https://www.gnu.org/software/emacs/manual/html_node/emacs/index.html):** For learning the fundamentals of Emacs.
-
-
-<a id="orgb633c86"></a>
-
-# Installation
-
-
-<a id="orgb7bc22f"></a>
-
-## 1. Requirements
-
--   Gnu Emacs 30.1 or later (Latest stable release)
--   Git (To clone/download this repository)
-
-
-### Optional:
-
--   ripgrep
--   fd (improves file indexing performance for some commands)
--   Gnu Emacs with [native-compilation](https://www.emacswiki.org/emacs/GccEmacs) (provides noticeable performance improvements)
-
-
-<a id="org6189661"></a>
-
-## 2. Backup your previous configuration
-
-If any exists.
-
-<a id="org820a205"></a>
-
-## 3. Clone the repository to the configuration location
-
-### Linux and Mac
-```sh
-git clone https://github.com/MiniApollo/kickstart.emacs.git "${XDG_CONFIG_HOME:-$HOME/.config}"/emacs
-```
-
-### Windows
-
--   **CMD:**
-```sh
-git clone https://github.com/MiniApollo/kickstart.emacs.git %userprofile%\AppData\Local\emacs\
-```
--   **Powershell:**
-```sh
-git clone https://github.com/MiniApollo/kickstart.emacs.git $env:USERPROFILE\AppData\Local\emacs\
-```
-
-<a id="orgd77a070"></a>
-
-## 4. Start Emacs
-
-Emacs will install all the requested packages (it can take a minute).
-
-> **Note:**
-> If you see errors, warnings when package installation is finished just restart Emacs.
-
-<a id="org60302a9"></a>
-
-# Post Installation
-
-<a id="org87d8fc9"></a>
-
-## 1. Install fonts
-
-Run the following command with M-x (alt-x) C-y to paste
-
-```sh
-nerd-icons-install-fonts
-```
-
-Change or install JetBrains Mono font
-
-<a id="org94fe140"></a>
-
-## 2. Open the configuration file
-
-1.  Hit Ctrl-Space-s-c to open the config file at $HOME/.config/emacs
-
-> **Note**
-> If you use Windows you need to change the path (hit C-x C-f, find the config file and in general region replace the path)
-
-2.  Now you can Edit and add more configuration.
-
-<a id="org23b14b0"></a>
-
-## 3. Fork the repository
-
-Recommended so that you have your own copy to modify.
-
-<a id="org14852f4"></a>
-
-# Uninstallation
-
-To uninstall kickstart.emacs, you need to remove the following directory:
-
--   Delete the emacs folder/directory for your OS (E.g. $HOME/.config/emacs/).
-
-<a id="orgc18728a"></a>
-
-# Gallery
-
-![Emacs_KickStarter](https://github.com/MiniApollo/kickstart.emacs/assets/72389030/b82bb86b-ce49-4b0a-8fe7-2ca8b8c422fb)
-![Kickstart_coding](https://github.com/MiniApollo/kickstart.emacs/assets/72389030/8e560d2b-78f5-4306-8f6a-c70ad189f181)

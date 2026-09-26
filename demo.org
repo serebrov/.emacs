@@ -236,7 +236,7 @@ We have access to the outside world too, for example, get the list of `*.el` fil
 
 * Clocking
 :LOGBOOK:
-CLOCK: [2026-09-20 Sun 17:00]
+CLOCK: [2026-09-20 Sun 17:00]--[2026-09-20 Sun 17:08] =>  0:08
 CLOCK: [2026-09-20 Sun 16:56]--[2026-09-20 Sun 16:56] =>  0:00
 :END:
 + `C-c C-x C-i` - Start the clocK
