@@ -384,7 +384,7 @@ gkroam][orgrr]]: a replica of org-roam v1 implemented using ripgrep
     + It features efficient, local, Xapian engine based search over potentially very large numbers of note files
 
 
-* Coming home to Emacs (this should be an essay)
+* Coming home to Emacs
 I think [[https://stevelosh.com/blog/2010/09/coming-home-to-vim/][Steve Losh described perfectly]] how and why Vim can be your home.
 
 First and foremost, the vim editing model with normal and insert that let you *navigate* and *edit the text* the text [[https://pragprog.com/titles/dnvim2/practical-vim-second-edition/][with the speed of thought]] are much worth understanding and mastering.

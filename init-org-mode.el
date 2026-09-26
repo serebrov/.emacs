@@ -1,5 +1,14 @@
 ;;; init-org-mode --- Org mode setup -*- lexical-binding: nil -*-
 
+;; Org mode is a markup language and a set of related tools
+;; to create and manage notes, capture information, manage TODO lists,
+;; track time on tasks, schedule tasks, and more.
+;; Capturing notes:
+;; - `M-x org-capture` (C-c c) captures a note, asks for a template (configured below)
+;; Saving and inserting links:
+;; - `M-x org-store-link` (C-c l) stores a link to the current location
+;; - `M-x org-insert-link` (C-c C-l) inserts a link to the current location
+;; See also: ./demo.org
 (use-package org
   :ensure nil
   :custom
@@ -55,10 +64,17 @@
   :commands toc-org-enable
   :hook (org-mode . toc-org-mode))
 
+;; Display pretty bullets in org-mode.
 (use-package org-superstar
   :after org
   :hook (org-mode . org-superstar-mode))
 
+;; Enable the <s TAB> and <e TAB> shortcuts for inserting source blocks in org-mode.
+;; Shortcuts for source blocks:
+;; <s + TAB - insert a source block
+;; <e + TAB - insert an example block
+;; <q + TAB - insert a quote block
+;; <v + TAB - insert a verse block
 (use-package org-tempo
   :ensure nil
   :after org)
@@ -93,11 +109,56 @@
   :ensure t
   :load-path org-opml-src)
 
+;; Capture webpages and links.
 (use-package org-web-tools
   :ensure t
   :config
   (load "~/.emacs.conf/lisp/org-web-capture"))
 
+;; Download images.
+;; Put the cursor on a link, copy it (can do viy if on an org link)
+;; then run `org-download-yank` to download the image and insert a
+;; local link into the org file.
+(use-package org-download
+  :ensure t
+  :config
+  (setq-default org-download-image-dir "~/web/org/images")
+  ;; Keep all images in `org-download-image-dir'. The default puts them
+  ;; in a subdirectory named after the top heading, which is a link in
+  ;; captured web pages.
+  (setq-default org-download-heading-lvl nil)
+  ;; Drag-and-drop to `dired`
+  (add-hook 'dired-mode-hook 'org-download-enable))
+
+;; Highlight and annotate in org-mode.
+;; org-remark-mark to add a mark
+;; org-remark-open to open related notes
+(use-package org-remark-global-tracking
+  ;; It is recommended that `org-remark-global-tracking-mode' be
+  ;; enabled when Emacs initializes. You can set it in
+  ;; `after-init-hook'.
+  :hook after-init
+  :config
+  ;; Selectively keep or comment out the following if you want to use
+  ;; extensions for Info-mode, EWW, and NOV.el (EPUB) respectively.
+  (use-package org-remark-info :after info :config (org-remark-info-mode +1))
+  (use-package org-remark-eww  :after eww  :config (org-remark-eww-mode +1))
+  (use-package org-remark-nov  :after nov  :config (org-remark-nov-mode +1)))
+
+(use-package org-remark
+  :bind (;; :bind keyword also implicitly defers org-remark itself.
+         ;; Keybindings before :map is set for global-map. Adjust the keybinds
+         ;; as you see fit.
+         ("C-c n m" . org-remark-mark)
+         ("C-c n l" . org-remark-mark-line)
+         :map org-remark-mode-map
+         ("C-c n o" . org-remark-open)
+         ("C-c n ]" . org-remark-view-next)
+         ("C-c n [" . org-remark-view-prev)
+         ("C-c n r" . org-remark-remove)
+         ("C-c n d" . org-remark-delete)))
+
+;; Export org to HTML with syntax highlighting for code blocks.
 (use-package htmlize
   :ensure t
   :defer t)

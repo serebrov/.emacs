@@ -238,6 +238,12 @@
   (tab-bar-new-tab)
   (find-file "~/.emacs.conf/.emacs"))
 
+(defun edit-org-in-a-tab ()
+  "Open main org file in a new tab"
+  (interactive)
+  (tab-bar-new-tab)
+  (find-file "~/web/org/notes.org"))
+
 (use-package general
   :config
   (general-evil-setup) ;; <- evil
@@ -256,7 +262,8 @@
     ;; the "c" is needed for "SPC c f" (CtrlSF-like search)
     ;; eat can be opened with "SPC g t" (see the binding below)
     ;; "c" '(eat :wk "Eat terminal")
-    "v c" '(edit-emacs-config-in-a-tab :wk "Edit emacs config in a tab"))
+    "v c" '(edit-emacs-config-in-a-tab :wk "Edit emacs config in a tab")
+    "v v" '(edit-org-in-a-tab :wk "Open main org file in a tab"))
 
   (start/leader-keys
     "s" '(:ignore t :wk "Search and SQL")

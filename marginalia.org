@@ -1,0 +1,16 @@
+
+* init-org-mode
+:PROPERTIES:
+:org-remark-file: init-org-mode.el
+:END:
+
+** Highlight and annotate in org-mode.
+:PROPERTIES:
+:org-remark-id: f398a940
+:org-remark-label: nil
+:org-remark-beg: 4543
+:org-remark-end: 4578
+:org-remark-link: [[file:init-org-mode.el::133]]
+:org-remark-original-text: Highlight and annotate in org-mode.
+:END:
+Org-remark allows to add highlights and make related notes.
