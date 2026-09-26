@@ -16,6 +16,12 @@
 ;; Load kickstart (some settings + evil mode)
 (load "~/.emacs.conf/init")
 
+;; Read the org mode config
+(load "~/.emacs.conf/init-org-mode")
+
+;; Read the claude code config
+(load "~/.emacs.conf/init-claude-code")
+
 ;; Note: the below triggers an error on launch, saying
 ;; that there is no "init" function.
 ;; This still triggers the config loading because
@@ -736,9 +742,6 @@ Like normal Emacs `C-k'.  Kill to end of line and put content in kill-ring."
                 (when buf
                   (with-current-buffer buf
                     (rename-uniquely))))))
-
-;; Read the claude code config
-(load "~/.emacs.conf/init-claude-code")
 
 ;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
 (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
