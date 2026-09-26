@@ -147,7 +147,8 @@
   :custom
   (evil-want-keybinding nil)    ;; Disable evil bindings in other modes (It's not consistent and not good)
   (evil-want-C-u-scroll t)      ;; Set C-u to scroll up
-  (evil-want-C-i-jump t)        ;; Enables C-i jump (C-i and TAB are the same in Emacs
+  ;; TODO: does not seem to work
+  ;; (evil-want-C-i-jump t)        ;; Enables C-i jump (C-i and TAB are the same in Emacs
   ;; so this also disables TAB).
   (evil-undo-system 'undo-redo) ;; C-r to redo
   (evil-shift-round nil)        ;; preserve indentation when << and >>
@@ -525,6 +526,33 @@
   :custom
   (org-edit-src-content-indentation 4) ;; Set src block automatic indent to 4 instead of 2.
   (org-return-follows-link t)   ;; Sets RETURN key in org-mode to follow links
+  (org-capture-templates
+   '(("w" "🌎 Webpage As Entry" entry
+      (file "~/web/org/webpages/web.org")
+      ;; Fetches the first URL in the clipboard or kill ring.
+      "%(org-web-tools--url-as-readable-org)"
+      :prepend t
+      :empty-lines-after 2
+      )
+     ("t" "✔ To-Do-Item" entry
+      (file "~/web/org/notes/todo.org")
+      "* TODO %?\n  %i\n  %a"
+      :prepend t
+      :empty-lines-after 2
+      )
+     ("l" "🌐 Link" entry
+      (file "~/web/org/notes/links.org")
+      "* %a %^g\n %?\n %T\n %i"
+      :prepend t
+      :empty-lines-after 2
+      )
+     ("n" "📖 Note" entry
+      (file+headline "~/web/org/notes/notes.org" "Notes")
+      "* Note %? %^g \n%T"
+      :prepend t
+      :empty-lines-after 2
+      )
+     ))
   :hook
   (org-mode . org-indent-mode) ;; Indent text
   ;; The following prevents <> from auto-pairing when electric-pair-mode is on.
@@ -578,6 +606,13 @@
 (use-package org-opml
   :ensure t
   :load-path org-opml-src)
+
+(use-package org-web-tools
+  :ensure t)
+
+(use-package htmlize
+  :ensure t
+  :defer t)
 
 (use-package eat
   :hook ('eshell-load-hook #'eat-eshell-mode))
