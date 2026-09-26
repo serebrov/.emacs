@@ -527,22 +527,29 @@
   (org-edit-src-content-indentation 4) ;; Set src block automatic indent to 4 instead of 2.
   (org-return-follows-link t)   ;; Sets RETURN key in org-mode to follow links
   (org-capture-templates
-   '(("w" "🌎 Webpage As Entry" entry
+   '(("w" "🌎 Webpage As File" entry
+      ;; Fetches the first URL in the clipboard or kill ring into
+      ;; a new file YYYY-MM-DD-hh-mm-webpage-title.org.
+      (file (lambda () (org-web-capture-file "~/web/org/webpages")))
+      "%(org-capture-get :web-entry)"
+      )
+     ("e" "🌎 Webpage As Entry" entry
       (file "~/web/org/webpages/web.org")
       ;; Fetches the first URL in the clipboard or kill ring.
       "%(org-web-tools--url-as-readable-org)"
       :prepend t
       :empty-lines-after 2
       )
-     ("t" "✔ To-Do-Item" entry
-      (file "~/web/org/notes/todo.org")
-      "* TODO %?\n  %i\n  %a"
+     ("l" "🌐 Link" entry
+      (file "~/web/org/notes/links.org")
+      "%(org-web-tools-insert-link-for-url)"
+      ;; "* %a %^g\n %?\n %T\n %i"
       :prepend t
       :empty-lines-after 2
       )
-     ("l" "🌐 Link" entry
-      (file "~/web/org/notes/links.org")
-      "* %a %^g\n %?\n %T\n %i"
+     ("t" "✔ To-Do-Item" entry
+      (file "~/web/org/notes/todo.org")
+      "* TODO %?\n  %i\n  %a"
       :prepend t
       :empty-lines-after 2
       )
@@ -608,7 +615,9 @@
   :load-path org-opml-src)
 
 (use-package org-web-tools
-  :ensure t)
+  :ensure t
+  :config
+  (load "~/.emacs.conf/lisp/org-web-capture"))
 
 (use-package htmlize
   :ensure t
