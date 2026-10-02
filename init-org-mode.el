@@ -72,6 +72,7 @@
       :empty-lines-after 2
       )
      ))
+  (org-reverse-note-order t) ;; New notes are added at the top of the file.
   (org-refile-targets '((nil :maxlevel . 9) ;; current file
                         (org-agenda-files :maxlevel . 3) ;; Agenda files
                         ;; Main org file.
