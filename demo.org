@@ -43,7 +43,9 @@ Structure editing commands:
 + Promote/demote heading or list item: M-LEFT (org-metaleft), M-RIGHT (org-metaright)
 + Move subtree up or down: M-UP (org-move-subtree-up), M-DOWN (org-move-subtree-down)
 + [[info:org#Refile and Copy][Refile]] entry or region to a different location: C-c C-w (org-refile)
-+ Narrow/widen buffer to current subtree: C-x n s (org-narrow-to-subtree), C-x n w (widen)
++ Narrow/widen buffer to current subtree:
+  + Narrow: ~C-x n s~ (~M-x org-narrow-to-subtree`)
+  + Widen: ~C-x n w~ (~M-x widen~)
 
 Filtering the document ("sparse tree"): we can filter the document (collapse unreleated headings) based on several properties (such as TODO items, tags, dates). The simplest mode is "Regex" where we can enter the search team and only keep sections that contain it expanded.
 
@@ -251,6 +253,8 @@ CLOCK: [2026-09-20 Sun 16:56]--[2026-09-20 Sun 16:56] =>  0:00
 + C-c a t - Open the agenda for today
 + C-c a w - Open the agenda for the week
 + C-c a m - Open the agenda for the month
+
+* Org mode + Embedded Calc Demo
 
 * [[https://cmdln.org/2023/03/25/how-i-org-in-2023/][How I org in 2023 (web)]]
 + Structure

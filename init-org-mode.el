@@ -8,12 +8,21 @@
 ;; Saving and inserting links:
 ;; - `M-x org-store-link` (C-c l) stores a link to the current location
 ;; - `M-x org-insert-link` (C-c C-l) inserts a link to the current location
+;; Images (in both cases the image is safed in the data folder near the org file):
+;; - Drag and drop an image into an org file to insert a link to it.
+;; - `M-x yank-media` to insert a link.
 ;; See also: ./demo.org
 (use-package org
   :ensure nil
   :custom
   (org-edit-src-content-indentation 4) ;; Set src block automatic indent to 4 instead of 2.
   (org-return-follows-link t)   ;; Sets RETURN key in org-mode to follow links
+  ;; org starts with truncation by default, because:
+  ;; This is useful since some lines containing links can be very long and
+  ;; uninteresting.  Also tables look terrible when wrapped.
+  (org-startup-truncated t)
+  ;; Open links in the same buffer (default is find-file-other-window)
+  (org-link-frame-setup '((file . find-file)))
   (org-capture-templates
    '(("w" "🌎 Webpage As File" entry
       ;; Fetches the first URL in the clipboard or kill ring into
@@ -30,6 +39,13 @@
       )
      ("l" "🌐 Link" entry
       (file "~/web/org/notes/links.org")
+      ;; Link to the first URL in the clipboard or kill ring, with the page title.
+      "* %(org-web-tools--org-link-for-url) %^g\n %?\n %T\n %i"
+      :prepend t
+      :empty-lines-after 2
+      )
+     ("r" "🌐 Reading Inbox" entry
+      (file "~/web/org/notes/inbox.org")
       ;; Link to the first URL in the clipboard or kill ring, with the page title.
       "* %(org-web-tools--org-link-for-url) %^g\n %?\n %T\n %i"
       :prepend t
@@ -139,6 +155,16 @@
   ;; `after-init-hook'.
   :hook after-init
   :config
+  ;; (setq org-remark-default-feature-modes
+  ;;       '(org-remark-info-mode org-remark-eww-mode org-remark-nov-mode))
+  (defun my/org-remark-notes-file ()
+    (concat "~/web/org/remark-notes/"
+            (file-name-base (org-remark-notes-file-name-function))
+            ".org"))
+
+  (setq org-remark-notes-file-name
+        #'my/org-remark-notes-file)
+
   ;; Selectively keep or comment out the following if you want to use
   ;; extensions for Info-mode, EWW, and NOV.el (EPUB) respectively.
   (use-package org-remark-info :after info :config (org-remark-info-mode +1))
