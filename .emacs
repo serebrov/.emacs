@@ -11,6 +11,9 @@
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 
+;; Load nano-emacs
+;; (load "~/web/emacs/nano-emacs/nano.el")
+
 ;; https://www.shaneikennedy.xyz/blog/emacs-intro
 
 ;; Load kickstart (some settings + evil mode)

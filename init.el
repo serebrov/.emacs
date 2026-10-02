@@ -235,13 +235,21 @@
 (defun edit-emacs-config-in-a-tab ()
   "Open .emacs config file in a new tab"
   (interactive)
-  (tab-bar-new-tab)
+  ;; I think keeping the window should work better
+  ;; as I often want to open it in a split that I've prepared rather than
+  ;; opening a new tab.
+  ;; TODO: update function name.
+  ;; (tab-bar-new-tab)
   (find-file "~/.emacs.conf/.emacs"))
 
 (defun edit-org-in-a-tab ()
   "Open main org file in a new tab"
   (interactive)
-  (tab-bar-new-tab)
+  ;; I think keeping the window should work better
+  ;; as I often want to open it in a split that I've prepared rather than
+  ;; opening a new tab.
+  ;; TODO: update function name.
+  ;; (tab-bar-new-tab)
   (find-file "~/web/org/notes.org"))
 
 (use-package general
