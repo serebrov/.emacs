@@ -12,6 +12,9 @@
 ;; - Drag and drop an image into an org file to insert a link to it.
 ;; - `M-x yank-media` to insert a link.
 ;; See also: ./demo.org
+(defun my-org-files-list ()
+  "Return a list of all org files in the notes directory."
+  (file-expand-wildcards "~/web/org/notes/*.org"))
 (use-package org
   ;; Note: we need `ensure nil` for all built-in packages or local packages
   ;; (such as org-opml) or packages that are included in other packages
@@ -69,6 +72,14 @@
       :empty-lines-after 2
       )
      ))
+  (org-refile-targets '((nil :maxlevel . 9) ;; current file
+                        (org-agenda-files :maxlevel . 3) ;; Agenda files
+                        ;; Main org file.
+                        ("~/web/org/notes.org" :maxlevel . 3)
+                        ;; Other org files in the notes directory.
+                        (my-org-files-list :maxlevel . 3)))
+  ;;(org-outline-path-complete-in-steps nil) ; Refile in a single go
+  (org-refile-use-outline-path t) ; Show full paths for refiling
   :hook
   (org-mode . org-indent-mode) ;; Indent text
   ;; The following prevents <> from auto-pairing when electric-pair-mode is on.
