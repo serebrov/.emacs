@@ -382,13 +382,17 @@ Like normal Emacs `C-k'.  Kill to end of line and put content in kill-ring."
   (ghostel (universal-argument))
   )
 
+;; These are files of the ghostel package, not separate packages.
 (use-package ghostel-eshell
+  :ensure nil
   :hook (eshell-load . ghostel-eshell-visual-command-mode))
 
 (use-package ghostel-compile
+  :ensure nil
   :hook (after-init . ghostel-compile-global-mode))
 
 (use-package ghostel-comint
+  :ensure nil
   :hook (after-init . ghostel-comint-global-mode))
 
 (use-package evil-ghostel

@@ -13,6 +13,11 @@
 ;; - `M-x yank-media` to insert a link.
 ;; See also: ./demo.org
 (use-package org
+  ;; Note: we need `ensure nil` for all built-in packages or local packages
+  ;; (such as org-opml) or packages that are included in other packages
+  ;; (such as org-remark-info).
+  ;; The `ensure t` tries to install the package from MELPA,
+  ;; and it takes time and fails for built-in and local packages.
   :ensure nil
   :custom
   (org-edit-src-content-indentation 4) ;; Set src block automatic indent to 4 instead of 2.
@@ -117,12 +122,13 @@
 ;; OPML files are converted on-the-fly and displayed as org-mode files.
 ;; Points to my fort with the fix for nodes with properties:
 ;; https://github.com/serebrov/org-opml
+;; The fork is a local checkout, not an installed package.
 (setq org-opml-src "~/web/emacs/org-opml-v2/")
 (use-package ox-opml
-  :ensure t
+  :ensure nil
   :load-path org-opml-src)
 (use-package org-opml
-  :ensure t
+  :ensure nil
   :load-path org-opml-src)
 
 ;; Capture webpages and links.
@@ -150,6 +156,7 @@
 ;; org-remark-mark to add a mark
 ;; org-remark-open to open related notes
 (use-package org-remark-global-tracking
+  :ensure nil ;; Part of the org-remark package below.
   ;; It is recommended that `org-remark-global-tracking-mode' be
   ;; enabled when Emacs initializes. You can set it in
   ;; `after-init-hook'.
@@ -167,9 +174,10 @@
 
   ;; Selectively keep or comment out the following if you want to use
   ;; extensions for Info-mode, EWW, and NOV.el (EPUB) respectively.
-  (use-package org-remark-info :after info :config (org-remark-info-mode +1))
-  (use-package org-remark-eww  :after eww  :config (org-remark-eww-mode +1))
-  (use-package org-remark-nov  :after nov  :config (org-remark-nov-mode +1)))
+  ;; These are files of the org-remark package, not separate packages.
+  (use-package org-remark-info :ensure nil :after info :config (org-remark-info-mode +1))
+  (use-package org-remark-eww  :ensure nil :after eww  :config (org-remark-eww-mode +1))
+  (use-package org-remark-nov  :ensure nil :after nov  :config (org-remark-nov-mode +1)))
 
 (use-package org-remark
   :bind (;; :bind keyword also implicitly defers org-remark itself.
