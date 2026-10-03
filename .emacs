@@ -22,6 +22,8 @@
 ;; Read the org mode config
 (load "~/.emacs.conf/init-org-mode")
 
+(load "~/.emacs.conf/lisp/utils.el")
+
 ;; Read the claude code config
 (load "~/.emacs.conf/init-claude-code")
 
