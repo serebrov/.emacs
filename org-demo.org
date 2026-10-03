@@ -278,6 +278,9 @@ CLOCK: [2026-09-20 Sun 16:56]--[2026-09-20 Sun 16:56] =>  0:00
 * Org mode + Embedded Calc Demo
 
 * [[https://cmdln.org/2023/03/25/how-i-org-in-2023/][How I org in 2023 (web)]]
+https://github.com/nickanderson/how-i-org
+https://github.com/nickanderson/org-config
+
 ** Structure
   + ~/org
     + ~/org/roam

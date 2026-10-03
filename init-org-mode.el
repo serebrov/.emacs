@@ -73,12 +73,14 @@
       )
      ))
   (org-reverse-note-order t) ;; New notes are added at the top of the file.
+  ;; All org files in the notes directory are agenda files.
+  (org-agenda-files (my-org-files-list))
   (org-refile-targets '((nil :maxlevel . 9) ;; current file
                         (org-agenda-files :maxlevel . 3) ;; Agenda files
-                        ;; Main org file.
-                        ("~/web/org/notes.org" :maxlevel . 3)
                         ;; Other org files in the notes directory.
-                        (my-org-files-list :maxlevel . 3)))
+                        ;; (my-org-files-list :maxlevel . 3)
+                        ;; Main org file.
+                        ("~/web/org/notes.org" :maxlevel . 3)))
   ;;(org-outline-path-complete-in-steps nil) ; Refile in a single go
   (org-refile-use-outline-path t) ; Show full paths for refiling
   :hook
