@@ -191,6 +191,16 @@
   (use-package org-remark-eww  :ensure nil :after eww  :config (org-remark-eww-mode +1))
   (use-package org-remark-nov  :ensure nil :after nov  :config (org-remark-nov-mode +1)))
 
+(use-package org-rich-yank
+  :ensure t
+  :demand t
+  :custom
+  ;; On macOS the clipboard reports `image/png' data even for plain text,
+  ;; so `org-rich-yank' calls `org-download-clipboard', which inserts nothing.
+  (org-rich-yank-download-image nil)
+  :bind (:map org-mode-map
+              ("C-M-y" . org-rich-yank)))
+
 (use-package org-remark
   :bind (;; :bind keyword also implicitly defers org-remark itself.
          ;; Keybindings before :map is set for global-map. Adjust the keybinds
