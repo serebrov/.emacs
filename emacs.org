@@ -340,7 +340,13 @@ Lisp intro: =C-h i= to open manual, =m lisp intro= to open Lisp intro or =m elis
 - =C-j= - Evaluate the expression before the cursor and insert the result
 
 - =M-x= - Run a command
+  - A command is an interactive function (has `(interactive)` call in the body).
+  - Interactive functions are available in the ~M-x~ interface.
 - =M-:= - Evaluate an Emacs Lisp expression
+  - This can evaluate any expresion, which includes non-interactive functions.
+  - It may sometimes be useful to see how things work, for example:
+    - The `org-rich-yank` has an internal `org-rich-yank--treat-as-image` function.
+    - That function is not invokable with ~M-x~, but we can copy the text and run it with ~M-:~.
 
 Base syntax:
 - (function arg1 arg2)
