@@ -1,5 +1,35 @@
 ;;; ...  -*- lexical-binding: nil -*-
 
+;; Start a server so that `emacsclient' can connect to this Emacs.
+;;
+;; After this, `emacsclient` can be used to work with the running server:
+;; emacsclient -n file.txt    # open the file in the running Emacs, return at once
+;; emacsclient file.txt       # open the file, wait until you press C-x # in Emacs
+;; emacsclient -c             # open a new GUI frame
+;; emacsclient -t             # open a frame inside the terminal
+;; emacsclient --eval '(+ 1 2)' # evaluate Lisp in the running Emacs
+;;
+;; Advantages
+;; 1. Open files with `emacsclient` very fast (Emacs is already loaded).
+;; 2. Shared state: files from the terminal go to the same Emacs (buffers, kill ring, history, org agenda, open projects).
+;; 3. Emacs as $EDITOR.
+;;    Can be used for Git commit messages, crontab -e, etc.:
+;;      export EDITOR="emacsclient"
+;;      export VISUAL="emacsclient"
+;;    The calling program waits until you press ~C-x~ # (or ~C-c C-c~ in Magit's commit buffer).
+;; 4. Scripting and integration.
+;;    Other tools can control Emacs with ~emacsclient --eval~.
+;; 5. org-protocol.
+;;    Browser bookmarklets can send links and selected text to org-capture through emacsclient.
+;; 6. Terminal and GUI frames together.
+;;    You can open a `-t` frame in an SSH or terminal session next to your GUI frames.
+;;
+;; Note: it is possible to run Emacs as a daemon with `emacs --daemon`
+;; It starts a server without a window and new emacs instances connect to it.
+(require 'server)
+(unless (server-running-p)
+  (server-start))
+
 ;; (autoload 'fennel-mode "~/web/fennel-mode-recent/fennel-mode" nil t)
 (autoload 'fennel-mode "~/web/fennel-mode-head/fennel-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.fnl\\'" . fennel-mode))
