@@ -18,6 +18,7 @@ tab in terminal Emacs).
 The =M-= in keyboard shortcuts is “Meta” (“Option” key or “Alt” key).
 Alternatively, “Esc” can be used as meta, for example, press “Esc” and
 then “v” to move up one screen.
+
 * Help
 ** Getting Help
 :PROPERTIES:
@@ -987,6 +988,22 @@ Magit is also useful to review changes on a specific branch (your code or doing 
  * [1](https://www.reddit.com/r/emacs/comments/2n9tj8/anyone_care_to_share_their_magit_workflow/)
  * [2](https://tigerbeetle.com/blog/2025-08-04-code-review-can-be-better/)
  * =?= to see help and key shortcuts
+
+While working on a specific file it may also be convenient to run `git add`
+or `git rm` equivalents on it from Emacs:
+ * =M-x magit-file-stage= to `git add` the file
+ * =M-x magit-file-delete= to `git rm` the file
+ * =M-x magit-diff-buffer-file= show diff for the current file
+ * =M-x magit-file-dispatch= to run other commands on the current file
+
+One more nice way to review the diff is ~ediff~:
+ * =M-x vc-ediff= to inspect the diff for the current file
+
+Or just run git commands directly:
+ * =M-x magit-git-command= type and run git command
+ * =M-x magit-run= interactively select what to do
+ * From the `evil` command line:
+   * =:!git add %= to "git add" the current file
 
 * Magit vs Forge vs Code Review
 :PROPERTIES:
