@@ -157,6 +157,10 @@
   ;; (but this does not work for w, e, b, etc. motions, this is handled separately
   ;; below, see the `with-eval-after-load` with `defalias`)
   (evil-symbol-word-search t)
+  ;; By default, evil emulates Vim behavior, we need to disable it
+  ;; so we can comfortably paste multiple times in visual mode.
+  ;; https://serebrov.github.io/html/2012-04-03-vim-replace-word-with-yanked-text.html
+  (evil-kill-on-visual-paste nil)
   ;; Unmap keys in 'evil-maps. If not done, org-return-follows-link will not work
   :bind (:map evil-motion-state-map
               ("SPC" . nil)
