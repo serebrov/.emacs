@@ -52,6 +52,15 @@ Searching help with consult and deadgrep:
 # Config: Problems to solve
 
 Some problems with evil mode and my setup:
+- what's wrong with *Help* and *Info*? I can't use splits and the buffer gets overwritten all the time
+  - what I want is: open a help page an leave it, then split and explore independently or open another help page
+  - what happens: I split and navigate to some link, the original buffer also navigates (but I wanted to see these two help pages side by side!)
+  - what happens: I open help page for another command and it overwites the original buffer (but I wanted to see these two help pages side by side!)
+- org mode folds are synced across splits
+  - if I split the buffer and then fold/unfold in a split, it also updates the original buffer
+  - there is a recommendation to use "indirect clone" with ~M-x clone-indirect-buffer~ or ~M-x org-tree-to-indirect-buffer~, but it requires extra thinking.
+  - maybe make it to make "indirect buffer" by default?
+  - btw, vim (evil) folds work fine, independent in splits
 - jumplist does not work as well as in Vim (also plain Emacs does not have a jumplist)
   - Ctrl-I Ctrl-O does not work everywhere
   - In vim, it is a universal system similar to the browser back and forward navigation. It also works uniformly within the file (jumping between places in the file I visited, for example, with search) and across multiple files and buffers.

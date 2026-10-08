@@ -114,6 +114,11 @@
          )
   )
 
+;; Vim keybindings.
+;; Some reminders:
+;; C-u and C-d to scroll up and down half a page.
+;; C-I and C-O to navigate back and forward (jump list).
+;; zm, zr, za to manage folds.
 (use-package evil
   :init
   (evil-mode)
@@ -646,6 +651,7 @@ The code is taken from here: https://github.com/skeeto/.emacs.d/blob/master/lisp
 ;; - Restart Emacs to make sure in-memory code is updated.
 ;;
 ;; `M-x code-review-start RET [PR URL] RET` to start reviewing a PR.
+;; `M-x code-review-comment-add-or-edit RET` to add a comment to the current line.
 ;;
 ;; If the package say there is an error, the log file is in the
 ;; ~/.emacs.d/code-review-error.log`.
