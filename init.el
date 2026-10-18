@@ -111,6 +111,13 @@
          ("C--" . text-scale-decrease)
          ("<C-wheel-up>" . text-scale-increase)
          ("<C-wheel-down>" . text-scale-decrease)
+         :map Help-mode-map
+         :map help-mode-map
+         ("C-h" . windmove-left)
+         ("C-l" . windmove-right)
+         ("C-j" . windmove-down)
+         ("C-k" . windmove-up)
+         ("c-k" . windmove-up)
          )
   )
 
@@ -119,6 +126,7 @@
 ;; C-u and C-d to scroll up and down half a page.
 ;; C-I and C-O to navigate back and forward (jump list).
 ;; zm, zr, za to manage folds.
+;; gv to reselect the last visual selection.
 (use-package evil
   :init
   (evil-mode)
@@ -375,6 +383,11 @@
 ;; gc to comment/uncomment lines
 (define-key evil-normal-state-map (kbd "g c") 'comment-line)
 (define-key evil-visual-state-map (kbd "g c") 'comment-or-uncomment-region)
+;; gV to select the last edited/pasted text
+;; nnoremap gV `[v`]
+(evil-define-key 'normal 'global
+  ;; select the previously pasted text
+  "gV" "`[v`]")
 
 ;; Vinegar-style: "-" opens dired in current file's directory
 (define-key evil-normal-state-map (kbd "-") 'dired-jump)
