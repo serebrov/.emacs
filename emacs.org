@@ -193,6 +193,7 @@ Quick jumps (evil):
 - Show references: =g f=
 - Go to node: =g G=
 - Virtual index: =I=
+
 * Interactive commands, universal argument and prefix system
 
 Interactive commands are commands that are executed from the mini-buffer after we press `M-x`. These commands are special emacs lisp functions that may require user input (in contrast with regular functions that we pass arguments to when calling them). For example, `M-x describe-key` will prompt for the key to show help for.
@@ -329,6 +330,35 @@ tab in terminal Emacs).
 - =M-x desktop-change-dir= - Change the session directory
 - Get help about sessions: =C-h i= to open the manual, =m desktop= to
   open the desktop manual.
+
+* Custom Keybindings
+
+Example: I want to add C-h/j/k/l as keybindings to switch to the split window
+and C-u/C-d to go to the previous and next page.
+for the =PDFView= mode (the =emacs-reader= package) that don't have them.
+
+First, open any PDF and run the =M-x describe-mode= to see what standard keybindings
+are mapped to:
+
+#+begin_example
+n						pdf-view-next-page-command
+p						pdf-view-previous-page-command
+#+end_example
+
+Then add =:bind= section in the =use-package= config:
+
+#+begin_src
+(use-package reader
+  :load-path "~/web/emacs/emacs-reader"
+  :bind (:map pdf-view-mode-map
+              ("C-h" . windmove-left)
+              ("C-l" . windmove-right)
+              ("C-j" . windmove-down)
+              ("C-k" . windmove-up)
+              ("C-u" . pdf-view-previous-page-command)
+              ("C-d" . pdf-view-next-page-command)
+              ))
+#+end_src
 
 * Emacs Lisp
 :PROPERTIES:

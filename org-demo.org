@@ -54,10 +54,6 @@ Sparse tree commands:
 + Occur: prompts for a regexp: C-c / r (org-occur)
   + Higlights occurrences, highlight can be removed with C-c C-c.
 
-* Test
-
-test
-
 * Lists
 
 Lists can be started with ~+~, ~-~ or ~*~ (the ~*~ should not be after the new line or it will be a heading), the list with ~+~ markers:
@@ -269,6 +265,8 @@ CLOCK: [2026-09-20 Sun 16:56]--[2026-09-20 Sun 16:56] =>  0:00
 * Capturing
 + ~M-x org-capture~
 
+
+
 * Agenda
 + C-c a a - Open the agenda
 + C-c a t - Open the agenda for today
@@ -276,6 +274,63 @@ CLOCK: [2026-09-20 Sun 16:56]--[2026-09-20 Sun 16:56] =>  0:00
 + C-c a m - Open the agenda for the month
 
 * Org mode + Embedded Calc Demo
+
+https://www.reddit.com/r/emacs/comments/1upaqm5/underappreciated_emacs_builtins_emacs_calc/
+
+Press =C-x *=, then =?= to see the calculator help.
+
+Calculator can work in its own window, but it can also be used in
+the org document to calculate embedded expressions.
+
+Press =C-x * u= on the formula to evaluate it.
+
+$(80 km/h) * 2h$
+
+The formula like above will be replaced with the result.
+
+To keep the formula and add the result, use the ~=>~ at the end of the formula:
+
+$(80 km/h) * 2h => $
+
+=C-x * a= detects and activates every "assignment-formula", so we can have some
+assignments and then evaluate the formula that uses them:
+
+$mass := 2 kg$
+$v := 3 m/s$
+$E_c := (1/2) mass * v^2 => $
+
+Out comes =9 kg m^2 / s^2=
+
+The calculator understands units:
+
+$side1 := 3 m$
+$side2 := 40 cm$
+$hyp := usimplify(sqrt(side1^2 + side2^2)) => 3.02654919008 m $
+
+It can solve equations! Press =C-x * u= on the next formula:
+
+$solve(22 x + 33 = 65, x) => x = 1.45454545455 $
+
+* [[https://github.com/unhammer/org-rich-yank][org-rich-yank]] to copy/paste rich text
+
+Copy code, then insert with ~M-x org-rich-yank~ to get it formatted as org mode
+block.
+
+* org-download to download images
+
+Put the cursor on a link, copy it (can do vi[y if on an org link)
+then run ~M-x org-download-yank~ to download the image and insert a
+local link into the org file.
+
+https://getreuer.info/posts/keyboards/symbol-layer/my-layer-v2.png
+
+#+DOWNLOADED: https://getreuer.info/posts/keyboards/symbol-layer/my-layer-v2.png @ 2026-10-09 19:56:26
+[[file:../web/org/images/2026-10-09_19-56-26_my-layer-v2.png]]
+
+Use ~M-x org-link-preview~ do display images inline.
+Use ~M-x org-link-preview-refresh~ to make sure all images are displayed.
+
+org-download also allows dragging and dropping images to Emacs.
 
 * [[https://cmdln.org/2023/03/25/how-i-org-in-2023/][How I org in 2023 (web)]]
 https://github.com/nickanderson/how-i-org

@@ -52,6 +52,12 @@ Searching help with consult and deadgrep:
 # Config: Problems to solve
 
 Some problems with evil mode and my setup:
+- word boundaries don't work the way I want to:
+  this_works_fine second_word (this works fine, cursor jumps over `_`)
+  this-works-not-fine second_word (I want `-` to be a word bounadry)
+  this-works/not-fine second_word (and I want `/` to be a word boundary)
+  this-works\fine second_word (this works fine)
+
 - what's wrong with *Help* and *Info*? I can't use splits and the buffer gets overwritten all the time
   - what I want is: open a help page an leave it, then split and explore independently or open another help page
   - what happens: I split and navigate to some link, the original buffer also navigates (but I wanted to see these two help pages side by side!)
