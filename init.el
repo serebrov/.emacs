@@ -515,7 +515,7 @@
 (use-package eglot
   :ensure nil ;; Don't install eglot because it's now built-in
   :hook ((c-mode c++-mode ;; Autostart lsp servers for a given mode
-                 lua-mode ;; Lua-mode needs to be installed
+          lua-mode ;; Lua-mode needs to be installed
           python-mode
           typescript-ts-mode tsx-ts-mode
           sh-mode bash-ts-mode
@@ -585,8 +585,8 @@
 ;;
 (define-minor-mode dedicated-mode
   "Minor mode for dedicating windows.
-This minor mode dedicates the current window to the current buffer.
-The code is taken from here: https://github.com/skeeto/.emacs.d/blob/master/lisp/extras.el"
+  This minor mode dedicates the current window to the current buffer.
+  The code is taken from here: https://github.com/skeeto/.emacs.d/blob/master/lisp/extras.el"
   :init-value nil
   :lighter " [D]"
   (let* ((window (selected-window))
@@ -983,9 +983,9 @@ The code is taken from here: https://github.com/skeeto/.emacs.d/blob/master/lisp
   :bind
   (("C-." . embark-act)         ;; Context actions on target at point
    ("C-;" . embark-dwim)        ;; "Do what I mean" on target
-   :map minibuffer-local-map
-   ("C-c C-e" . embark-export)  ;; Export results to a buffer
-   ("C-c C-c" . embark-collect))) ;; Collect results in a buffer
+  :map minibuffer-local-map
+  ("C-c C-e" . embark-export)  ;; Export results to a buffer
+  ("C-c C-c" . embark-collect))) ;; Collect results in a buffer
 
 (use-package embark-consult
   :after (embark consult)
