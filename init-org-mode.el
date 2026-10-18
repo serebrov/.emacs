@@ -164,7 +164,8 @@
   ;; captured web pages.
   (setq-default org-download-heading-lvl nil)
   ;; Drag-and-drop to `dired`
-  (add-hook 'dired-mode-hook 'org-download-enable))
+  (add-hook 'dired-mode-hook 'org-download-enable)
+  (load "~/.emacs.conf/lisp/org-download-smart"))
 
 ;; Highlight and annotate in org-mode.
 ;; org-remark-mark to add a mark
