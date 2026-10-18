@@ -1,4 +1,10 @@
-;;; ...  -*- lexical-binding: nil -*-
+;;; .emacs --- config  -*- lexical-binding: nil -*-
+
+;;; Commentary:
+
+;; Main emacs configuration file.
+
+;;; Code:
 
 ;; Start a server so that `emacsclient' can connect to this Emacs.
 ;;
@@ -52,10 +58,34 @@
 ;; Read the org mode config
 (load "~/.emacs.conf/init-org-mode")
 
-(load "~/.emacs.conf/lisp/utils.el")
+(load "~/.emacs.conf/lisp/org-convert-html-link.el")
 
 ;; Read the claude code config
 (load "~/.emacs.conf/init-claude-code")
+
+;; agent-shell and its dependencies
+;; needs an agent with ACP package installed on the system
+;; claude code:
+;; npm install -g @agentclientprotocol/claude-agent-acp
+;; codex:
+;; npm install -g @agentclientprotocol/codex-acp
+;; more in the readme
+;;
+;; Start with M-x agent-shell
+(use-package acp
+  :load-path "~/web/emacs/acp.el")
+(use-package shell-maker
+  :load-path "~/web/emacs/shell-maker")
+(use-package agent-shell
+  :load-path "~/web/emacs/agent-shell"
+  :config
+  (setq agent-shell-preferred-agent-config (agent-shell-anthropic-make-claude-code-config))
+  )
+;; :ensure t
+;; :ensure-system-package
+;; ;; Add agent installation configs here
+;; ((claude . "brew install claude-code")
+;;  (claude-agent-acp . "npm install -g @agentclientprotocol/claude-agent-acp")))
 
 ;; Note: the below triggers an error on launch, saying
 ;; that there is no "init" function.
