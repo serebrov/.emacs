@@ -111,14 +111,6 @@
          ("C--" . text-scale-decrease)
          ("<C-wheel-up>" . text-scale-increase)
          ("<C-wheel-down>" . text-scale-decrease)
-         :map Help-mode-map
-         :map help-mode-map
-         ("C-h" . windmove-left)
-         ("C-l" . windmove-right)
-         ("C-j" . windmove-down)
-         ("C-k" . windmove-up)
-         ("<left>" . tab-previous)
-         ("<right>" . tab-next)
          )
   )
 
@@ -399,13 +391,17 @@
 (start/leader-keys
   "w" '(evil-write :wk "Write this buffer"))
 
-;; This will cause windmove functions to create new windows if necessary
-(setq windmove-create-window t)
-;; C-h is the help key
-(define-key evil-normal-state-map (kbd "C-h") 'windmove-left)
-(define-key evil-normal-state-map (kbd "C-l") 'windmove-right)
-(define-key evil-normal-state-map (kbd "C-j") 'windmove-down)
-(define-key evil-normal-state-map (kbd "C-k") 'windmove-up)
+
+;; Note: C-h is the help key, it can still be used in insert mode
+(general-define-key
+ :keymaps 'override
+ :states '(normal motion visual emacs)
+ "C-h" #'windmove-left
+ "C-l" #'windmove-right
+ "C-j" #'windmove-down
+ "C-k" #'windmove-up
+ "<left>" #'tab-previous
+ "<right>" #'tab-next)
 
 (start/leader-keys
   "l" '(evil-window-move-far-right :wk "Move window to the right")
