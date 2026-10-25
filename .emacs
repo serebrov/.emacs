@@ -524,22 +524,65 @@ Like normal Emacs `C-k'.  Kill to end of line and put content in kill-ring."
 
 ;; Alternative for pdf-tools:
 ;; https://www.reddit.com/r/emacs/comments/1pgliu9/a_new_pdf_reader_for_emacs/
-;; https://codeberg.org/divyaranjan/emacs-reader
-;; (setq package-vc-allow-build-commands t)
-;; (use-package reader
-;;   :vc (:url "https://codeberg.org/divyaranjan/emacs-reader"
-;;        :make "all"))
+;; https://codeberg.org/MonadicSheep/emacs-reader
+;; On MacOS requires brew install gcc make mupdf
+;; Supports: PDF,EPUB,MOBI,FB2,XPS/OpenXPS,CBZ, open office and MS office.
+;; Key Bindings
+;;
+;; n for going to next page
+;; p for going to previous page
+;; C-n for scrolling down.
+;; C-p for scrolling up.
+;; C-b for scrolling left.
+;; C-f for scrolling right.
+;; Q for closing the Emacs Reader buffer (in Evil use in insert mode).
+;; M-< for going to the first page.
+;; M-> for going to the last page.
+;; M-g g for going to a particular page.
+;; M-v or Page Up for scrolling to the top of the page.
+;; C-v or Page Down for scrolling to the end of the page.
+;; SPC, S-SPC , and DEL make the above two commands keep scrolling the pages.
+;; =, +, and C-<wheel-up> for zooming into the page.
+;; - and C-<wheel-down> for zooming out of the page.
+;; H to make the page fit the height of the current window.
+;; W to make the page fit the width of the current window.
+;;
+;; Alternatives: pdf-tools (below), doc-view, nov.el.
+(use-package reader
+  :load-path "~/web/emacs/emacs-reader")
+;; :hook (after-init . ghostel-compile-global-mode))
+;; :bind (:map pdf-view-mode-map
+;;             ("C-h" . windmove-left)
+;;             ("C-l" . windmove-right)
+;;             ("C-j" . windmove-down)
+;;             ("C-k" . windmove-up)
+;;             ("C-u" . pdf-view-previous-page-command)
+;;             ("C-d" . pdf-view-next-page-command)
+;;             )
+(with-eval-after-load 'reader
+  ;; (define-key reader-mode-map (kbd "C-h") 'windmove-left)
+  ;; (define-key reader-mode-map (kbd "C-l") 'windmove-right)
+  ;; (define-key reader-mode-map (kbd "C-j") 'windmove-down)
+  ;; (define-key reader-mode-map (kbd "C-k") 'windmove-up)
+  ;; (define-key reader-mode-map (kbd "<left>") 'tab-previous)
+  ;; (define-key reader-mode-map (kbd "<right>") 'tab-next)
+  (define-key reader-mode-map (kbd "C-u") 'pdf-view-previous-page-command)
+  (define-key reader-mode-map (kbd "C-d") 'pdf-view-next-page-command)
+  )
 
-;; From https://www.reddit.com/r/emacs/comments/1kpjuha/comment/msyqk50/
-(use-package pdf-tools
-  :defer t
-  :magic ("%PDF" . pdf-view-mode) ;; ensure DocView is not used
-  :config
-  (pdf-tools-install :no-query)
-  (setq-default pdf-view-display-size 'fit-width)
-  (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
-  :custom
-  (pdf-annot-activate-created-annotations t "automatically annotate highlights"))
+;; (use-package reader
+;;   :vc (:url "https://codeberg.org/MonadicSheep/emacs-reader"))
+
+;; ;; From https://www.reddit.com/r/emacs/comments/1kpjuha/comment/msyqk50/
+;; (use-package pdf-tools
+;;   :defer t
+;;   :magic ("%PDF" . pdf-view-mode) ;; ensure DocView is not used
+;;   :config
+;;   (pdf-tools-install :no-query)
+;;   (setq-default pdf-view-display-size 'fit-width)
+;;   (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
+;;   :custom
+;;   (pdf-annot-activate-created-annotations t "automatically annotate highlights"))
 
 ;; (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
 ;;       TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))
