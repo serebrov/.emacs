@@ -464,6 +464,44 @@ Like normal Emacs `C-k'.  Kill to end of line and put content in kill-ring."
   (ghostel (universal-argument))
   )
 
+;; Helper to find a buffer in the current tab by partial name.
+(defun find-tab-buf (buf-name-to-find)
+  (let ( (buf-result nil) )
+    (dolist (win (window-list))
+      (let ((buf (window-buffer win))
+            (buf-name (buffer-name (window-buffer win)))
+            )
+        (if (string-match buf-name-to-find buf-name)
+            (setq buf-result buf))))
+    buf-result))
+
+;; Helper to get the current line or the selected region.
+(defun get-line-or-region ()
+  (if (use-region-p)
+      (list (region-beginning) (region-end))
+    (list (line-beginning-position) (line-end-position))))
+
+;; Send the current line or the selected region to the ghostel buffer
+;; in the current tab.
+(defun ghostel-send-text ()
+  (interactive)
+  (let ( (start-end (get-line-or-region) )
+         (term-buf (find-tab-buf "*ghostel*"))
+         )
+    (message (format "Found: %s" (buffer-name term-buf)))
+    (if term-buf
+        (let ( (buf-text (apply 'buffer-substring-no-properties start-end)) )
+          (with-current-buffer term-buf
+            (ghostel-paste-string buf-text)
+            (ghostel-send-key "return"))))))
+
+;; Run this to be able to send text to ghostel with Enter (in the current buffer).
+(defun term-setup-ghostel ()
+  "Create RET keybinding in the current buffer to send text to ghostel."
+  (interactive)
+  (evil-local-set-key 'normal (kbd "RET") #'ghostel-send-text)
+  (evil-local-set-key 'visual (kbd "RET") #'ghostel-send-text))
+
 ;; These are files of the ghostel package, not separate packages.
 (use-package ghostel-eshell
   :ensure nil
