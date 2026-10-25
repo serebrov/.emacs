@@ -117,7 +117,8 @@
          ("C-l" . windmove-right)
          ("C-j" . windmove-down)
          ("C-k" . windmove-up)
-         ("c-k" . windmove-up)
+         ("<left>" . tab-previous)
+         ("<right>" . tab-next)
          )
   )
 
@@ -983,9 +984,9 @@
   :bind
   (("C-." . embark-act)         ;; Context actions on target at point
    ("C-;" . embark-dwim)        ;; "Do what I mean" on target
-  :map minibuffer-local-map
-  ("C-c C-e" . embark-export)  ;; Export results to a buffer
-  ("C-c C-c" . embark-collect))) ;; Collect results in a buffer
+:map minibuffer-local-map
+("C-c C-e" . embark-export)  ;; Export results to a buffer
+("C-c C-c" . embark-collect))) ;; Collect results in a buffer
 
 (use-package embark-consult
   :after (embark consult)

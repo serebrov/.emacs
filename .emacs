@@ -430,6 +430,15 @@
          :map ghostel-semi-char-mode-map
          ("C-s"  . consult-line)
          ("M-<backspace>" . ghostel-backward-kill-word)
+         ("C-h"  . windmove-left)
+         ("C-l"  . windmove-right)
+         ("C-j"  . windmove-down)
+         ("C-k"  . windmove-up)
+         ("<left>" . (lambda () (interactive) (ghostel-send-key "left")))
+         ("<right>" . (lambda () (interactive) (ghostel-send-key "right")))
+         ;; TODO: good to only have these when in normal mode
+         ;; ("<left>" . tab-previous)
+         ;; ("<right>" . tab-next)
          ;; ;; I'm used to go up/down the shell history with M-n/p from eshell
          ;; ;; Simulate this behavior in ghostel by sending C-p and C-n
          ("M-p" . (lambda () (interactive) (ghostel-send-key "p" "ctrl")))
