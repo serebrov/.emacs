@@ -882,6 +882,21 @@ Like normal Emacs `C-k'.  Kill to end of line and put content in kill-ring."
 ;; in addition to a other features available via the "?" help menu.
 (use-package time-zones :ensure t)
 
+;; Reference
+;; https://wwwtech.de/articles/2016/jul/my-personal-mail-setup
+(use-package notmuch
+  :ensure t
+  :defer t
+  :config
+  ;; sort order: the newest messages first
+  (setq notmuch-search-oldest-first nil)
+  ;; tell notmuch not to show all alternative parts of the mail,
+  ;; this is often just some junk.
+  (setq notmuch-show-all-multipart/alternative-parts nil))
+;; (setq notmuch-show-logo nil)
+;; (setq notmuch-show-indent-messages t)
+;; (setq notmuch-show-text/html nil))
+
 ;; unofficial github copilot client
 ;; https://github.com/copilot-emacs/copilot.el
 ;; - Setup copilot.el as described in the next section.
