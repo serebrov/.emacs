@@ -72,6 +72,7 @@
 ;; more in the readme
 ;;
 ;; Start with M-x agent-shell
+(add-to-list 'exec-path "~/.nvm/versions/node/v24.22.1/bin/")
 (use-package acp
   :load-path "~/web/emacs/acp.el")
 (use-package shell-maker
@@ -86,6 +87,20 @@
 ;; ;; Add agent installation configs here
 ;; ((claude . "brew install claude-code")
 ;;  (claude-agent-acp . "npm install -g @agentclientprotocol/claude-agent-acp")))
+
+;; (use-package gptel
+;;   :config
+;;   (setq! gptel-api-key "gptel-api-key-from-auth-source")
+;;   (gptel-make-anthropic "Claude" :stream t :key "gptel-api-key-from-auth-source"))
+(use-package gptel
+  :ensure t
+  :config
+  (setq gptel-api-key #'gptel-api-key-from-auth-source)
+  (setq gptel-backend (gptel-make-anthropic "Claude"
+                        :key #'gptel-api-key-from-auth-source
+                        :stream t))
+  ;;(setq gptel-model 'claude-3-5-sonnet-latest)
+  )
 
 ;; Note: the below triggers an error on launch, saying
 ;; that there is no "init" function.

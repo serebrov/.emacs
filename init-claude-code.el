@@ -10,6 +10,15 @@
 ;;
 ;; claude-code-ide is current buffer-aware
 ;; use `M-x claude-code-ide-insert-at-mentioned` to send text to Claude Code.
+;;
+;; Important: if scrolling is not working,
+;; run /tui default to disable "full screen" mode.
+;;
+;; Useful differences vs running Claude Code in ghostel:
+;; - can see and read open buffers
+;; - can see Flymake/Flyacheck errors
+;; - can search for symbols and references
+;; - ...
 (use-package claude-code-ide
   :vc (:url "https://github.com/manzaltu/claude-code-ide.el" :rev :newest)
   :bind ("C-c C-'" . claude-code-ide-menu)
