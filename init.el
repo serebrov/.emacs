@@ -120,6 +120,34 @@
 ;; C-I and C-O to navigate back and forward (jump list).
 ;; zm, zr, za to manage folds.
 ;; gv to reselect the last visual selection.
+;;
+;; Note: to replace something with yanked text it's easy to use
+;; a change operation and then <C-R>0 to insert register '0' content
+;; in insert mode, like cw<C-R>0 - replace  a word with yanked text.
+;;
+;; Usage tip: highlight-select-change pattern
+;; - use `*` to highlight the word
+;; - select the area in visual mode
+;; - execute :'<,'>s//new_word/g or :d or :g, etc.
+;; See https://serebrov.github.io/html/2026-17-10-vim-highlight-select-change.html
+;;
+;; Usage tip: the =@= command is not just for macros. It actuall executes
+;; contents of the register as an ex command.
+;; Which means that we can:
+;; - type command in the regular buffer, copy to register and execute
+;; - record a macro, paste in the buffer, edit, copy to register and execute
+;;
+;; The =:r= command can be used to read the contents of the shell command
+;; into the buffer.
+;; For example: =r!locate emacs.org= will insert the path to the emacs.org
+;; file into the buffer.
+;;   /Users/myuser/.emacs.conf/emacs.org
+;; Now, if we edit it and add ":r " at the beginning, we can use the previous
+;; tip about the =@= command to execute it as an ex command, which will read
+;; the contents of the file
+;; - copy =:r /Users/seb/.emacs.conf/emacs.org= with ="cyy=
+;; - press =@c= to execute it
+;; See https://serebrov.github.io/html/2026-17-10-vim-more-convenient-macros.html
 (use-package evil
   :init
   (evil-mode)
@@ -582,8 +610,8 @@
 ;;
 (define-minor-mode dedicated-mode
   "Minor mode for dedicating windows.
-  This minor mode dedicates the current window to the current buffer.
-  The code is taken from here: https://github.com/skeeto/.emacs.d/blob/master/lisp/extras.el"
+This minor mode dedicates the current window to the current buffer.
+The code is taken from here: https://github.com/skeeto/.emacs.d/blob/master/lisp/extras.el"
   :init-value nil
   :lighter " [D]"
   (let* ((window (selected-window))

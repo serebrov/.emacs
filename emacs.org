@@ -36,6 +36,7 @@ Emacs manual:
  * Quick reference card: =M-x help-quick=
  * Info reader: =M-x info=, =C-h i=
  * Emacs manual: =M-x info-emacs-manual=, =C-h r=
+ * Find Emacs manual: =M-x info-display-manual=, =C-h R=
  * =RET= go to link; =l= to go back; =s= search
  * =m= [item] - pick a menu item; =i= jump to index entry
  * see more in the “Reading Help” section
@@ -71,6 +72,11 @@ Search:
  * =M-x apropos-command= [keyword], =C-h a= - search for commands with =keyword=
  * =M-x apropos-variable= [keyword] - search variables
  * =M-x apropos-value= [val] - which variables have =val= value?
+
+Search in all manuals with regexp (use ~M-: Info-directory-list RET~ to see where manuals are):
+#+begin_src sh
+zgrep -n "search-regexp" /opt/homebrew/share/info/emacs/*.info.gz
+#+end_src
 
 Search with consult and deadgrep:
  * =M-x consult-info= - search with consult, fuzzy completion
@@ -152,8 +158,10 @@ Quick jumps:
 
 Search:
 - Search in the document: =s=
+  - ~s RET~ or ~}~ for next match
 - Incremental search: =C-s= or =C-r=
-- Search in the index =i=
+- Search in the index =i= (=,= for the next match)
+  - All search results in as one node =I=
 - Search everywhere: M-x info-apropos
 
 Other:

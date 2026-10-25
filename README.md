@@ -52,12 +52,37 @@ Searching help with consult and deadgrep:
 # Config: Problems to solve
 
 Some problems with evil mode and my setup:
+- Emacs Lisp: How to know what functions return? How to inspect objects?
+  - For example, `ghostel-buffer-list` just says that it returns "buffers",
+  - but what is the "buffer"? is there a way to do `describe-something buffer`?
+  - or do I need to call it and inspect the live object in the debugger?
+  Some findings:
+  - M-x ielm for REPL
+  - M-x inspector-inspect-expression to view objects
+  - https://github.com/mmontone/emacs-inspector
+  - data-debug to view complex objects
+  - (data-debug-new-buffer (car (ghostel-buffer-list)))
+  - (data-debug-show-stuff (car (ghostel-buffer-list)) "stuff")
+- check if cg* is working
+  Add repeatable "change word" command:
+  - set cursor on a word, cg* - change it,
+  - now '.' will repeat the change on the next word, n - skip the next word
+  In Vim: nnoremap cg* *Ncgn
+  Note: Even better: just change something and then use `g.` to start repeating
+  the change on next occurences of the word.
+  https://www.reddit.com/r/neovim/comments/sf0hmc/im_really_proud_of_this_mapping_i_came_up_with/
+  the mapping lets me use . to repeat a regular c-prefixed command
+  as if it were performed using cgn.
+  For example, do `ciw` at some word and then go `g.` to change next such
+  word.
+  Vim mapping: nnoremap g. /\V\C<C-r>"<CR>cgn<C-a><Esc>
+- Add mapping: Make last word uppercase
+  Vim: inoremap <C-F> <Esc>gUiw`]a
 - word boundaries don't work the way I want to:
   this_works_fine second_word (this works fine, cursor jumps over `_`)
   this-works-not-fine second_word (I want `-` to be a word bounadry)
   this-works/not-fine second_word (and I want `/` to be a word boundary)
   this-works\fine second_word (this works fine)
-
 - what's wrong with *Help* and *Info*? I can't use splits and the buffer gets overwritten all the time
   - what I want is: open a help page an leave it, then split and explore independently or open another help page
   - what happens: I split and navigate to some link, the original buffer also navigates (but I wanted to see these two help pages side by side!)
@@ -120,6 +145,10 @@ Checking the `*Messages*` buffer:
 
 # Solved problems
 
+- Added mapping to reselect last edited text
+ " gv - select last visual area and go to visual mode
+  " Visually select the text that was last edited/pasted
+  nnoremap gV `[v`]
 - How to use `C-u` in evil mode?
   - C-u in evil is "scroll up".
   - An easy way to use the universal argument is to switch to the insert mode (then `C-u M-x ...` will add the universal argument.
