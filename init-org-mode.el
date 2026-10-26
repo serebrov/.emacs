@@ -137,7 +137,7 @@
 ;; Points to my fort with the fix for nodes with properties:
 ;; https://github.com/serebrov/org-opml
 ;; The fork is a local checkout, not an installed package.
-(setq org-opml-src "~/web/emacs/org-opml-v2/")
+(setq org-opml-src "~/web/emacs/org-mode-and-more/org-opml-v2/")
 (use-package ox-opml
   :ensure nil
   :load-path org-opml-src)

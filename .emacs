@@ -79,16 +79,20 @@
 ;; more in the readme
 ;;
 ;; Start with M-x agent-shell
-(add-to-list 'exec-path "~/.nvm/versions/node/v24.22.1/bin/")
+;;
+;; Note: not mentioned in the readme, but agent-shell saves transcripts for each
+;; session in .agent-shell/transcripts in the project directory (awesome!).
 (use-package acp
-  :load-path "~/web/emacs/acp.el")
+  :load-path "~/web/emacs/agent-shell-and-more/acp.el")
 (use-package shell-maker
-  :load-path "~/web/emacs/shell-maker")
+  :load-path "~/web/emacs/agent-shell-and-more/shell-maker")
 (use-package agent-shell
-  :load-path "~/web/emacs/agent-shell"
+  :load-path "~/web/emacs/agent-shell-and-more/agent-shell"
   :config
   (setq agent-shell-preferred-agent-config (agent-shell-anthropic-make-claude-code-config))
   )
+(with-eval-after-load 'agent-shell
+  (add-to-list 'exec-path "~/.nvm/versions/node/v24.22.1/bin/"))
 ;; :ensure t
 ;; :ensure-system-package
 ;; ;; Add agent installation configs here
