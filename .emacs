@@ -47,6 +47,13 @@
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 
+;; With recursive minibuffers it is possible to run M-x when
+;; running another M-x command.
+;; For example, ~M-x async-shell-command~, then enter a prompt
+;; and then run ~M-x gptel-menu to rewrite the prompt to a shell comand.
+(setq enable-recursive-minibuffers t)
+(minibuffer-depth-indicate-mode 1) ;; Show depth of recursive minibuffers in the prompt
+
 ;; Load nano-emacs
 ;; (load "~/web/emacs/nano-emacs/nano.el")
 
