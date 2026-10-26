@@ -110,8 +110,57 @@
   (setq gptel-backend (gptel-make-anthropic "Claude"
                         :key #'gptel-api-key-from-auth-source
                         :stream t))
+  ;; This should turn on LLM requests caching, important for gptel-agent.
+  (setq gptel-cache '(tool message))
   ;;(setq gptel-model 'claude-3-5-sonnet-latest)
   )
+
+;; The gptel-based agent: system prompt (some pre-defined agents) + tools
+;; + harness to run LLM API calls.
+;; Run M-x gptel-agent to start the agent session.
+;;
+;; Saving/restoring sessions: save the gptel-agent buffer to the file;
+;; later start new session and copy/paste from the file or do
+;; :r!path/to/file to read it into the buffer.
+;;
+;; Confirmations are configured by gptel-confirm-tool-calls
+;; It can be:
+;; - `t`: confirm every call
+;; - `nil`: never confirm
+;; - `auto`: allow read tools, ask for write tools
+;; Default is `auto` and tools are these:
+;;   Tool        confirm?
+;;   ----------  --------
+;;   Agent       yes
+;;   Insert      yes
+;;   Edit        yes
+;;   Write       yes
+;;   Mkdir       yes
+;;   Eval        yes
+;;   Bash        yes
+;;   TodoWrite   no
+;;   Glob        no
+;;   Grep        no
+;;   Read        no
+;;   WebSearch   no
+;;   WebFetch    no
+;;   Skill       no
+;;
+;; Confirmation settings can be changed:
+;; - Per session: in `gptel-menu`, press `-c` and select the mode.
+;; - Global: `(setq gptel-confirm-tool-calls 'auto)` in `.emacs`.
+;; - Per preset: add `confirm-tool-calls: auto` (or `true` or `false`) in the frontmatter.
+;;
+;; Presets: there are some pre-defined presets in `gptel-agent-dirs` (see `gptel-agent-update`).
+;; It is also possible to have own presets, see the `init-gptel-agents.el` configuration below.
+(use-package gptel-agent
+  :ensure t
+  :config (gptel-agent-update))         ;Read files from agents directories
+
+;; Presets from ~/.emacs.conf/gptel-agents/, start with M-x my/gptel-agent.
+;; The `base-agent` is just a set of tools, no prompts (so you can start the session with something
+;; similar to the system prompt and make sure no surprising prompts are loaded).
+(load "~/.emacs.conf/init-gptel-agents")
 
 ;; Note: the below triggers an error on launch, saying
 ;; that there is no "init" function.
