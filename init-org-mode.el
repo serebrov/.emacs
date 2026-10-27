@@ -14,7 +14,10 @@
 ;; See also: ./demo.org
 (defun my-org-files-list ()
   "Return a list of all org files in the notes directory."
-  (file-expand-wildcards "~/web/org/notes/*.org"))
+  (let ((org-files (file-expand-wildcards "~/web/org/notes/*.org")))
+    (add-to-list 'org-files "~/web/org/notes.org")
+    ))
+
 (use-package org
   ;; Note: we need `ensure nil` for all built-in packages or local packages
   ;; (such as org-opml) or packages that are included in other packages

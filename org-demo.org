@@ -82,6 +82,8 @@ It is [[info:org#Workflow states][possible]] to have more states than TODO and D
 
 And more features: add note/timestamp when changing states, set priorities, subtasks, checkboxes.
 
+Search tags with ~M-x org-agenda~ then ~m~, select tag name.
+
 ** TODO Organize party [75%] [3/4]
 - [-] call people [1/3]
   - [ ] Peter
