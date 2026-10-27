@@ -31,12 +31,11 @@
 ;;   so a malicious file in one of the projects execute its `pre:` code even when you run
 ;;   ~M-x my/gptel-agent~ in another project.
 ;;
-;; The ~(add-to-list 'my/gptel-preset-dirs ".gptel-agents/" t)~ addresses this risks (but make
-;; sure you don't add untrusted projects to the list).
+;; The ~(add-to-list 'my/gptel-preset-dirs ".gptel-agents/" t)~ addresses this risks
+;; (but make sure you don't add untrusted projects to the list).
 
 (require 'gptel)
 (require 'gptel-agent)
-(autoload 'markdown-ts-mode "markdown-ts-mode" nil t)
 
 (defvar my/gptel-preset-dirs '("~/.emacs.conf/gptel-agents/"
                                "~/.emacs.d/gptel-agents/")
@@ -79,29 +78,73 @@ Prefix argument shows a project prompt."
                         nil t nil nil "base-agent")))))
   (gptel-agent project-dir preset))
 
+;; Saving sessions:
+;; * `my/gptel-agent-save' to save the agent session to a file,
+;;    it uses the `my/gptel-session-dir' by default.
+;;    gptel adds its metadata to the file (preset, tools, response markers)
+;;    so it can later be restored.
+;; * `my/gptel-agent-resume' to load the saved session.
+;;
+;; The minor mode `my/gptel-keep-session-mode' aguments standard save
+;; commands to work correctly with gptel buffers, keeping them as
+;; agent sessions (without it, buffers turn into plain markdown or org files
+;; after saving). Works with ~M-x save-buffer~, ~M-x write-file~ and
+;; evil's ~:w~ and ~:saveas~.
 (defvar my/gptel-session-dir "~/.emacs.d/gptel-sessions/"
-  "Default directory for saved agent sessions.")
+  "Default directory for saved agent sessions, used by `my/gptel-agent-resume'.")
+
+(defun my/gptel-keep-session (orig-fun &rest args)
+  "Call ORIG-FUN with ARGS without resetting a gptel buffer.
+Around advice for `set-visited-file-name', which `write-file' and
+`save-buffer' (for a buffer without a file) call.  It re-runs
+`set-auto-mode', which drops `gptel-mode', the preset and the tools, and
+changes `default-directory' to the file's directory, which breaks relative
+paths in the agent's tools."
+  (if (bound-and-true-p gptel-mode)
+      (let ((dir default-directory))
+        (prog1 (cl-letf (((symbol-function 'normal-mode) #'ignore)
+                         ((symbol-function 'set-auto-mode) #'ignore))
+                 (apply orig-fun args))
+          (setq default-directory dir)))
+    (apply orig-fun args)))
+
+(defun my/gptel-save-state-last ()
+  "Make `gptel--save-state' the last function in the local `before-save-hook'.
+Hooks like `ws-butler' or `toc-org' change the buffer after gptel stored
+the response positions, which then point past the end of the saved file
+and make the restore fail."
+  (remove-hook 'before-save-hook #'gptel--save-state t)
+  (add-hook 'before-save-hook #'gptel--save-state 90 t))
+
+(define-minor-mode my/gptel-keep-session-mode
+  "A minor mode to keep gptel buffers in the agent session mode on save.
+When enabled, `save-buffer', `write-file', and evil's `:w' and `:saveas'
+work correctly in gptel buffers (and when disabled, the buffer turnes into
+a plain file buffer, without the agent session state)."
+  :global t
+  :group 'gptel
+  (cond (my/gptel-keep-session-mode
+         (advice-add 'set-visited-file-name :around #'my/gptel-keep-session)
+         (add-hook 'gptel-mode-hook #'my/gptel-save-state-last))
+        (t
+         (advice-remove 'set-visited-file-name #'my/gptel-keep-session)
+         (remove-hook 'gptel-mode-hook #'my/gptel-save-state-last))))
 
 (defun my/gptel-agent-save (file)
-  "Save the current agent buffer to FILE and keep it a live session.
-We need a special function because `write-file' re-runs `normal-mode',
-which replaces the `gptel-mode' and the file becomes normal buffer instead
-of the agent session. Adds gptel metadata to the saved file, restore it
-with `my/gptel-agent-resume'."
+  "Save the current agent buffer to FILE, by default in `my/gptel-session-dir'.
+The session can be restored with `my/gptel-agent-resume'."
   (interactive
-   (list (let ((dir (file-name-as-directory
-                     (expand-file-name my/gptel-session-dir))))
-           (make-directory dir t)
-           (read-file-name "Save session to: " dir nil nil
+   (let ((dir (file-name-as-directory (expand-file-name my/gptel-session-dir))))
+     (make-directory dir t)
+     (list (read-file-name "Save session to: " dir nil nil
                            (format-time-string "%Y-%m-%d-session.md")))))
-  (let ((dir default-directory))
-    (cl-letf (((symbol-function 'normal-mode) #'ignore)
-              ((symbol-function 'set-auto-mode) #'ignore))
-      (write-file file))
-    (setq default-directory dir)))
+  (unless (bound-and-true-p gptel-mode)
+    (user-error "Not a gptel session buffer"))
+  (my/gptel-save-state-last)
+  (my/gptel-keep-session #'write-file file))
 
 (defun my/gptel-agent-resume (file project-dir)
-  "Open the saved session FILE as a live agent buffer in PROJECT-DIR.
+  "Open the saved session FILE as a agent session buffer in PROJECT-DIR.
 Prefix argument shows a project prompt."
   (interactive
    (list (read-file-name "Resume session: " my/gptel-session-dir nil t)

@@ -112,6 +112,7 @@
                         :stream t))
   ;; This should turn on LLM requests caching, important for gptel-agent.
   (setq gptel-cache '(tool message))
+  (setq gptel-default-mode 'org-mode)
   ;;(setq gptel-model 'claude-3-5-sonnet-latest)
   )
 
@@ -153,6 +154,12 @@
 ;;
 ;; Presets: there are some pre-defined presets in `gptel-agent-dirs` (see `gptel-agent-update`).
 ;; It is also possible to have own presets, see the `init-gptel-agents.el` configuration below.
+;;
+;; Sessions are in the markdown buffer by default.
+;; To use org mode, I have the `(setq gptel-default-mode 'org-mode)` in gptel
+;; conffig.
+;; Alternatives: run `M-x org-mode` after starting the agent or save the session
+;; to .org file
 (use-package gptel-agent
   :ensure t
   :config (gptel-agent-update))         ;Read files from agents directories
@@ -161,6 +168,8 @@
 ;; The `base-agent` is just a set of tools, no prompts (so you can start the session with something
 ;; similar to the system prompt and make sure no surprising prompts are loaded).
 (load "~/.emacs.conf/init-gptel-agents")
+;; Keep the agent session live when it is saved with `:w', `:saveas' or `save-buffer'.
+(my/gptel-keep-session-mode 1)
 
 ;; Note: the below triggers an error on launch, saying
 ;; that there is no "init" function.
@@ -680,6 +689,9 @@ Like normal Emacs `C-k'.  Kill to end of line and put content in kill-ring."
 ;;
 ;;   2. Associate the mode with .md files:
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-ts-mode))
+;; markdown-ts-mode has no autoload in Emacs 31, so without this line the
+;; mode is void until something requires the library (gptel-agent breaks).
+(autoload 'markdown-ts-mode "markdown-ts-mode" nil t)
 ;;
 ;;   3. Verify tree-sitter is available:
 ;;   M-: (treesit-available-p) RET
