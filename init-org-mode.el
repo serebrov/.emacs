@@ -242,3 +242,24 @@
    '((mermaid . t)
      (scheme . t)
      (your-other-langs . t))))
+
+;; Org-transclusion lets you insert a copy of text content via a file link or ID
+;; link within an Org file. It lets you have the same content present in different
+;; buffers at the same time without copy-and-pasting it.
+(use-package org-transclusion
+  :ensure t
+  :after org
+  :bind (("C-c t a" . org-transclusion-add)
+         ("C-c t m" . org-transclusion-transient-menu)
+         ("C-c t t" . org-transclusion-mode))
+  :custom
+  ;; Without org-transclusion-indent-mode, org-indent-mode hides the fringe marks.
+  (org-transclusion-extensions '(org-transclusion-src-lines
+                                 org-transclusion-font-lock
+                                 org-transclusion-indent-mode))
+  :config
+  (set-face-attribute
+   'org-transclusion-fringe nil
+   :foreground "blue" :background "white")
+  ;; (set-face-attribute 'org-transclusion-source-fringe nil :foreground "green" :background "green")
+  )
