@@ -32,6 +32,11 @@
   ;; This is useful since some lines containing links can be very long and
   ;; uninteresting.  Also tables look terrible when wrapped.
   (org-startup-truncated t)
+  ;; Configure subscript to use `a_{b}` format (default `a_b` is catching too
+  ;; many false positives like the `henki-robotics/robotics_essentials_ros2`
+  ;; in the link.
+  (org-use-sub-superscripts '{})
+  (org-export-with-sub-superscripts '{})
   ;; Open links in the same buffer (default is find-file-other-window)
   (org-link-frame-setup '((file . find-file)))
   (org-capture-templates
