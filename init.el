@@ -302,6 +302,12 @@
     :global-prefix "C-SPC") ;; Set global leader key so we can access our keybindings from any state
 
   (start/leader-keys
+    ;; Space-Space works as a universal argument (for the evil normal mode).
+    ;; For example, the `C-u M-RET` in org mode to insert a new heading below the
+    ;; current one can be done as `SPC SPC M-RET`.
+    ;; Note that the other way to enter `C-u` in normal mode is to do it in the
+    ;; insert mode (because in the normal mode it is used for scrolling up).
+    "SPC" '(universal-argument :wk "Universal argument for the next command")
     "." '(find-file :wk "Find file")
     ;; "TAB" '(comment-line :wk "Comment lines")
     ;; "q" '(flymake-show-buffer-diagnostics :wk "Flymake buffer diagnostic")
