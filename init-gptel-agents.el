@@ -137,7 +137,10 @@ The session can be restored with `my/gptel-agent-resume'."
    (let ((dir (file-name-as-directory (expand-file-name my/gptel-session-dir))))
      (make-directory dir t)
      (list (read-file-name "Save session to: " dir nil nil
-                           (format-time-string "%Y-%m-%d-session.md")))))
+                           (format-time-string
+                            (if (derived-mode-p 'org-mode)
+                                "%Y-%m-%d-session.org"
+                              "%Y-%m-%d-session.md"))))))
   (unless (bound-and-true-p gptel-mode)
     (user-error "Not a gptel session buffer"))
   (my/gptel-save-state-last)
