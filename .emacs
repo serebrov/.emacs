@@ -90,6 +90,11 @@
   :load-path "~/web/emacs/agent-shell-and-more/agent-shell"
   :config
   (setq agent-shell-preferred-agent-config (agent-shell-anthropic-make-claude-code-config))
+  ;; Start Claude sessions in auto mode (fewer permission prompts).
+  ;; Other modes: "default", "acceptEdits", "plan", "bypassPermissions".
+  ;; For the running session:
+  ;; - M-x agent-shell-set-session-mode to select the mode
+  (setq agent-shell-anthropic-default-session-mode-id "auto")
   )
 (with-eval-after-load 'agent-shell
   (add-to-list 'exec-path "~/.nvm/versions/node/v24.22.1/bin/"))
@@ -118,7 +123,9 @@
 
 ;; The gptel-based agent: system prompt (some pre-defined agents) + tools
 ;; + harness to run LLM API calls.
-;; Run M-x gptel-agent to start the agent session.
+;;
+;; Run ~M-x gptel-agent~ to start the agent session.
+;; Use ~M-x gptel-send~ or ~C-c RET~ to send your input.
 ;;
 ;; Saving/restoring sessions: save the gptel-agent buffer to the file;
 ;; later start new session and copy/paste from the file or do
@@ -160,6 +167,9 @@
 ;; conffig.
 ;; Alternatives: run `M-x org-mode` after starting the agent or save the session
 ;; to .org file
+;;
+;; TODO: check the `gptel-org-branching-context`, there was something about
+;; how it can work in org sub-tree.
 (use-package gptel-agent
   :ensure t
   :config (gptel-agent-update))         ;Read files from agents directories
