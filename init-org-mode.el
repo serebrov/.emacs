@@ -229,3 +229,16 @@
 (use-package htmlize
   :ensure t
   :defer t)
+
+(use-package ob-mermaid
+  :ensure t
+  :config
+  ;; If mmdc is in your PATH, this is optional:
+  ;; (setq ob-mermaid-cli-path "mmdc")
+  ;; Or specify the full path if needed:
+  ;; (setq ob-mermaid-cli-path "/your-installation-path/node_modules/.bin/mmdc")
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((mermaid . t)
+     (scheme . t)
+     (your-other-langs . t))))
